@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="77758bbd-2bd7-4be2-88ce-3301114aa97a" name="Changes" comment="" />
+    <list default="true" id="77758bbd-2bd7-4be2-88ce-3301114aa97a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/service/PostService.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -63,6 +66,8 @@
       <workItem from="1680861836888" duration="133000" />
       <workItem from="1680862174244" duration="140000" />
       <workItem from="1680862383971" duration="9000" />
+      <workItem from="1680862582176" duration="407000" />
+      <workItem from="1680863059599" duration="566000" />
     </task>
     <servers />
   </component>

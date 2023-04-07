@@ -5,7 +5,7 @@ import com.umbrella.project_umbrella.domain.Comment.CommentRepository;
 import com.umbrella.project_umbrella.domain.Post.Post;
 import com.umbrella.project_umbrella.domain.Post.PostRepository;
 import com.umbrella.project_umbrella.domain.User.User;
-import com.umbrella.project_umbrella.domain.User.UserRepository;
+import com.umbrella.project_umbrella.repository.UserRepository;
 import com.umbrella.project_umbrella.dto.post.PostListResponseDto;
 import com.umbrella.project_umbrella.dto.post.PostResponseDto;
 import com.umbrella.project_umbrella.dto.post.PostSaveRequestDto;
