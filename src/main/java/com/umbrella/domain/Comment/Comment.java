@@ -2,6 +2,7 @@ package com.umbrella.domain.Comment;
 
 import com.umbrella.domain.Post.Post;
 import com.umbrella.domain.User.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -17,7 +18,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(columnDefinition = "TEXT" , nullable = false)
-    private String comment;
+    private String content; // 변수명 변경
 
     @Column
     @CreatedDate
@@ -29,10 +30,26 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "posts_id")
-    private Post posts;
+    private Post post;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @Builder
+    public Comment(Long id, String content, String createDate, String modifiedDate, Post post, User user) {
+        this.id = id;
+        this.content = content;
+        this.createDate = createDate;
+        this.modifiedDate = modifiedDate;
+        this.post = post;
+        this.user = user;
+    }
+
+    // 댓글 수정을 위한 setter
+    public void update(String content){
+        this.content = content;
+    }
+
 
 }
