@@ -5,7 +5,7 @@ import com.umbrella.constant.Gender;
 import com.umbrella.constant.Role;
 import com.umbrella.domain.User.User;
 import com.umbrella.exception.DuplicateEmailException;
-import com.umbrella.repository.UserRepository;
+import com.umbrella.domain.User.UserRepository;
 import com.umbrella.security.oAuth2.OAuth2UserInfo;
 import com.umbrella.security.oAuth2.factory.OAuth2UserInfoFactory;
 import com.umbrella.security.userDetails.UserContext;

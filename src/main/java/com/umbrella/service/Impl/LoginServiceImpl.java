@@ -1,7 +1,7 @@
 package com.umbrella.service.Impl;
 
 import com.umbrella.domain.User.User;
-import com.umbrella.repository.UserRepository;
+import com.umbrella.domain.User.UserRepository;
 import com.umbrella.security.userDetails.UserContext;
 import com.umbrella.service.LoginService;
 import lombok.RequiredArgsConstructor;

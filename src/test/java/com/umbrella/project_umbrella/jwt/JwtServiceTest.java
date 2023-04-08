@@ -1,10 +1,10 @@
 package com.umbrella.project_umbrella.jwt;
 
-import com.umbrella.project_umbrella.constant.Gender;
-import com.umbrella.project_umbrella.constant.Role;
-import com.umbrella.project_umbrella.domain.User.User;
-import com.umbrella.project_umbrella.repository.UserRepository;
-import com.umbrella.project_umbrella.service.JwtService;
+import com.umbrella.constant.Gender;
+import com.umbrella.constant.Role;
+import com.umbrella.domain.User.User;
+import com.umbrella.domain.User.UserRepository;
+import com.umbrella.service.JwtService;
 import io.jsonwebtoken.JwtException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

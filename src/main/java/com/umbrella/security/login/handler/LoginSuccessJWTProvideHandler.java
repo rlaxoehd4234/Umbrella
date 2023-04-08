@@ -1,6 +1,6 @@
 package com.umbrella.security.login.handler;
 
-import com.umbrella.repository.UserRepository;
+import com.umbrella.domain.User.UserRepository;
 import com.umbrella.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

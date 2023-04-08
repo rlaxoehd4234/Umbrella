@@ -1,0 +1,10 @@
+jwt:
+  secret: { secret-key }
+
+  access:
+    expiration: { access-expiration }
+    header: { access-header }
+
+  refresh:
+    expiration: { refresh-expiration }
+    header: { refresh-header }

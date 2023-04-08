@@ -6,7 +6,7 @@ import com.umbrella.dto.user.UserRequestSignUpDto;
 import com.umbrella.dto.user.UserUpdateDto;
 import com.umbrella.exception.DuplicateEmailException;
 import com.umbrella.exception.DuplicateNicknameException;
-import com.umbrella.repository.UserRepository;
+import com.umbrella.domain.User.UserRepository;
 import com.umbrella.security.utils.SecurityUtil;
 import com.umbrella.service.UserService;
 import lombok.RequiredArgsConstructor;

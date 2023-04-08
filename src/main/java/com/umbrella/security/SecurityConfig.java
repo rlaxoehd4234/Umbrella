@@ -1,7 +1,7 @@
 package com.umbrella.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.umbrella.repository.UserRepository;
+import com.umbrella.domain.User.UserRepository;
 import com.umbrella.security.login.cookie.CookieOAuth2AuthorizationRequestRepository;
 import com.umbrella.security.login.filter.JsonEmailPasswordAuthenticationFilter;
 import com.umbrella.security.login.filter.JwtAuthenticationProcessingFilter;
@@ -12,9 +12,7 @@ import com.umbrella.security.login.handler.OAuth2LoginSuccessHandler;
 import com.umbrella.service.CustomOAuth2UserService;
 import com.umbrella.service.JwtService;
 import com.umbrella.service.LoginService;
-import com.umbrella.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -23,18 +21,11 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
-
-import javax.persistence.EntityManager;
 
 @Configuration
 @RequiredArgsConstructor
