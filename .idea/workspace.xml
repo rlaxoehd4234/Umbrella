@@ -5,32 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="77758bbd-2bd7-4be2-88ce-3301114aa97a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/project_umbrella.main.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/domain/Comment/CommentRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/controller/PostController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/domain/User/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/security/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/security/login/filter/JwtAuthenticationProcessingFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/security/login/filter/JwtAuthenticationProcessingFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/security/login/handler/LoginSuccessJWTProvideHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/security/login/handler/LoginSuccessJWTProvideHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/service/Impl/CustomOAuth2UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/service/Impl/CustomOAuth2UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/service/Impl/JwtServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/service/Impl/JwtServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/service/Impl/LoginServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/service/Impl/LoginServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/service/Impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/service/Impl/UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/service/Impl/PostServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application-jwt.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application-jwt.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/umbrella/project_umbrella/controller/UserControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/umbrella/project_umbrella/controller/UserControllerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/umbrella/project_umbrella/jwt/JwtAuthenticationProcessingFilterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/umbrella/project_umbrella/jwt/JwtAuthenticationProcessingFilterTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/umbrella/project_umbrella/jwt/JwtServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/umbrella/project_umbrella/jwt/JwtServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/umbrella/project_umbrella/repository/UserRepositoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/umbrella/project_umbrella/repository/UserRepositoryTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/umbrella/project_umbrella/service/UserServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/umbrella/project_umbrella/service/UserServiceTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,21 +50,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/Users/gimtaedong/Desktop/Umbrella/Umbrella",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "spring.configuration.checksum": "630bd628991cfb61a5c6b1a3973750b8",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/gimtaedong/Desktop/Umbrella/Umbrella&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;630bd628991cfb61a5c6b1a3973750b8&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Application.ProjectUmbrellaApplication">
     <configuration name="ProjectUmbrellaApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.umbrella.ProjectUmbrellaApplication" />
@@ -228,6 +205,7 @@
       <workItem from="1680862582176" duration="407000" />
       <workItem from="1680863059599" duration="566000" />
       <workItem from="1680863751374" duration="2907000" />
+      <workItem from="1680933003483" duration="109000" />
     </task>
     <servers />
   </component>
