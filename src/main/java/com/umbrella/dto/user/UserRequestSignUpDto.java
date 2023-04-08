@@ -46,21 +46,21 @@ public class UserRequestSignUpDto {
     private Gender gender;
 
     public UserRequestSignUpDto(String email, String nickName, String password,
-                                String name, String birthDate, Gender gender) {
+                                String name, String birthDate, String genderValue) {
 
         Assert.hasText(email, "email must not be blank");
         Assert.hasText(nickName, "nickName must not be blank");
         Assert.hasText(password, "password must not be blank");
         Assert.hasText(name, "mName must not be blank");
         Assert.hasText(birthDate, "birthDate must not be null");
-        Assert.notNull(gender, "gender must not be null");
+        Assert.hasText(genderValue, "gender must not be blank");
 
         this.email = email;
         this.nickName = nickName;
         this.password = password;
         this.name = name;
         this.birthDate = birthDate;
-        this.gender = gender;
+        this.gender = getGender(genderValue);
     }
 
     @JsonPOJOBuilder(withPrefix = "")
@@ -88,5 +88,10 @@ public class UserRequestSignUpDto {
         }
 
         return age;
+    }
+
+    private Gender getGender(String genderValue) {
+        Gender gender = Gender.UNKNOWN;
+        return gender.from(genderValue);
     }
 }
