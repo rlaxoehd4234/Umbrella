@@ -1,11 +1,11 @@
-package com.umbrella.project_umbrella.domain.User;
+package com.umbrella.domain.User;
 
-import com.umbrella.project_umbrella.constant.AuthPlatform;
-import com.umbrella.project_umbrella.constant.Gender;
-import com.umbrella.project_umbrella.constant.Role;
-import com.umbrella.project_umbrella.domain.Comment.Comment;
-import com.umbrella.project_umbrella.domain.Post.Post;
-import com.umbrella.project_umbrella.dto.user.UserUpdateDto;
+import com.umbrella.constant.AuthPlatform;
+import com.umbrella.constant.Gender;
+import com.umbrella.constant.Role;
+import com.umbrella.domain.Comment.Comment;
+import com.umbrella.domain.Post.Post;
+import com.umbrella.dto.user.UserUpdateDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

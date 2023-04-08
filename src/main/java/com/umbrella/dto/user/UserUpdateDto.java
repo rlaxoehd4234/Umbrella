@@ -1,4 +1,4 @@
-package com.umbrella.project_umbrella.dto.user;
+package com.umbrella.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;

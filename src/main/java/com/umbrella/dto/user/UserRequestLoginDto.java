@@ -1,4 +1,4 @@
-package com.umbrella.project_umbrella.dto.user;
+package com.umbrella.dto.user;
 
 import lombok.Builder;
 import lombok.Getter;

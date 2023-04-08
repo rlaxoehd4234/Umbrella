@@ -6,7 +6,57 @@
   <component name="ChangeListManager">
     <list default="true" id="77758bbd-2bd7-4be2-88ce-3301114aa97a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/ProjectUmbrellaApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/ProjectUmbrellaApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/constant/AuthPlatform.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/constant/AuthPlatform.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/constant/Gender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/constant/Gender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/constant/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/constant/Role.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/controller/OAuth2Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/controller/OAuth2Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/controller/PostController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/domain/Comment/Comment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/domain/Comment/Comment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/domain/Post/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/domain/Post/Post.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/domain/Post/PostRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/domain/Post/PostRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/domain/User/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/domain/User/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/dto/post/PostListResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/dto/post/PostListResponseDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/dto/post/PostResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/dto/post/PostResponseDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/dto/post/PostSaveRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/dto/post/PostSaveRequestDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/dto/post/PostUpdateRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/dto/post/PostUpdateRequestDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/dto/user/UpdatePasswordDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/dto/user/UpdatePasswordDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/dto/user/UserInfoDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/dto/user/UserInfoDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/dto/user/UserRequestLoginDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/dto/user/UserRequestLoginDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/dto/user/UserRequestSignUpDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/dto/user/UserRequestSignUpDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/dto/user/UserUpdateDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/dto/user/UserUpdateDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/dto/user/WithdrawUserDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/dto/user/WithdrawUserDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/exception/DuplicateEmailException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/exception/DuplicateEmailException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/exception/DuplicateNicknameException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/exception/DuplicateNicknameException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/security/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/security/login/cookie/CookieOAuth2AuthorizationRequestRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/security/login/cookie/CookieOAuth2AuthorizationRequestRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/security/login/filter/JsonEmailPasswordAuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/security/login/filter/JsonEmailPasswordAuthenticationFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/security/login/filter/JwtAuthenticationProcessingFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/security/login/filter/JwtAuthenticationProcessingFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/security/login/handler/LoginFailureHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/security/login/handler/LoginFailureHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/security/login/handler/LoginSuccessJWTProvideHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/security/login/handler/LoginSuccessJWTProvideHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/security/login/handler/OAuth2LoginFailureHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/security/login/handler/OAuth2LoginFailureHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/security/login/handler/OAuth2LoginSuccessHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/security/login/handler/OAuth2LoginSuccessHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/security/oAuth2/Impl/GithubUserInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/security/oAuth2/Impl/GithubUserInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/security/oAuth2/Impl/GoogleUserInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/security/oAuth2/Impl/GoogleUserInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/security/oAuth2/Impl/KakaoUserInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/security/oAuth2/Impl/KakaoUserInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/security/oAuth2/Impl/NaverUserInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/security/oAuth2/Impl/NaverUserInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/security/oAuth2/OAuth2UserInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/security/oAuth2/OAuth2UserInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/security/oAuth2/factory/OAuth2UserInfoFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/security/oAuth2/factory/OAuth2UserInfoFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/security/userDetails/UserContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/security/userDetails/UserContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/security/utils/CookieUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/security/utils/CookieUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/security/utils/SecurityUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/security/utils/SecurityUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/service/CustomOAuth2UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/service/CustomOAuth2UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/service/Impl/CustomOAuth2UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/service/Impl/CustomOAuth2UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/service/Impl/JwtServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/service/Impl/JwtServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/service/Impl/LoginServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/service/Impl/LoginServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/service/Impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/service/Impl/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/service/JwtService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/service/JwtService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/service/LoginService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/service/LoginService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/service/PostService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/umbrella/tomcat/TomcatWebServerCustomizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/umbrella/tomcat/TomcatWebServerCustomizer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,6 +70,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JpbToolWindowState">
+    <option name="isToolWindowVisible" value="false" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -68,6 +121,7 @@
       <workItem from="1680862383971" duration="9000" />
       <workItem from="1680862582176" duration="407000" />
       <workItem from="1680863059599" duration="566000" />
+      <workItem from="1680863751374" duration="2907000" />
     </task>
     <servers />
   </component>

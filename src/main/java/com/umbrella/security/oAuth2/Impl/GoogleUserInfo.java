@@ -1,6 +1,6 @@
-package com.umbrella.project_umbrella.security.oAuth2.Impl;
+package com.umbrella.security.oAuth2.Impl;
 
-import com.umbrella.project_umbrella.security.oAuth2.OAuth2UserInfo;
+import com.umbrella.security.oAuth2.OAuth2UserInfo;
 
 import java.util.Map;
 

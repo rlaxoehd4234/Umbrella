@@ -1,7 +1,7 @@
-package com.umbrella.project_umbrella.security.login.handler;
+package com.umbrella.security.login.handler;
 
-import com.umbrella.project_umbrella.security.login.cookie.CookieOAuth2AuthorizationRequestRepository;
-import com.umbrella.project_umbrella.security.utils.CookieUtil;
+import com.umbrella.security.login.cookie.CookieOAuth2AuthorizationRequestRepository;
+import com.umbrella.security.utils.CookieUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.umbrella.project_umbrella.security.login.cookie.CookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
+import static com.umbrella.security.login.cookie.CookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
 
 public class OAuth2LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 

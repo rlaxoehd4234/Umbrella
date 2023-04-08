@@ -1,4 +1,4 @@
-package com.umbrella.project_umbrella.service;
+package com.umbrella.service;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 

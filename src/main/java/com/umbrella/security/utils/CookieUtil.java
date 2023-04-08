@@ -1,4 +1,4 @@
-package com.umbrella.project_umbrella.security.utils;
+package com.umbrella.security.utils;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.SerializationUtils;

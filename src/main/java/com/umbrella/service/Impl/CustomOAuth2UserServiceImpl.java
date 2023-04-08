@@ -1,15 +1,15 @@
-package com.umbrella.project_umbrella.service.Impl;
+package com.umbrella.service.Impl;
 
-import com.umbrella.project_umbrella.constant.AuthPlatform;
-import com.umbrella.project_umbrella.constant.Gender;
-import com.umbrella.project_umbrella.constant.Role;
-import com.umbrella.project_umbrella.domain.User.User;
-import com.umbrella.project_umbrella.exception.DuplicateEmailException;
-import com.umbrella.project_umbrella.repository.UserRepository;
-import com.umbrella.project_umbrella.security.oAuth2.OAuth2UserInfo;
-import com.umbrella.project_umbrella.security.oAuth2.factory.OAuth2UserInfoFactory;
-import com.umbrella.project_umbrella.security.userDetails.UserContext;
-import com.umbrella.project_umbrella.service.CustomOAuth2UserService;
+import com.umbrella.constant.AuthPlatform;
+import com.umbrella.constant.Gender;
+import com.umbrella.constant.Role;
+import com.umbrella.domain.User.User;
+import com.umbrella.exception.DuplicateEmailException;
+import com.umbrella.repository.UserRepository;
+import com.umbrella.security.oAuth2.OAuth2UserInfo;
+import com.umbrella.security.oAuth2.factory.OAuth2UserInfoFactory;
+import com.umbrella.security.userDetails.UserContext;
+import com.umbrella.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;

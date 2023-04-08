@@ -1,4 +1,4 @@
-package com.umbrella.project_umbrella.security.login.handler;
+package com.umbrella.security.login.handler;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;

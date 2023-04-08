@@ -1,14 +1,14 @@
-package com.umbrella.project_umbrella.service.Impl;
+package com.umbrella.service.Impl;
 
-import com.umbrella.project_umbrella.domain.User.User;
-import com.umbrella.project_umbrella.dto.user.UserInfoDto;
-import com.umbrella.project_umbrella.dto.user.UserRequestSignUpDto;
-import com.umbrella.project_umbrella.dto.user.UserUpdateDto;
-import com.umbrella.project_umbrella.exception.DuplicateEmailException;
-import com.umbrella.project_umbrella.exception.DuplicateNicknameException;
-import com.umbrella.project_umbrella.repository.UserRepository;
-import com.umbrella.project_umbrella.security.utils.SecurityUtil;
-import com.umbrella.project_umbrella.service.UserService;
+import com.umbrella.domain.User.User;
+import com.umbrella.dto.user.UserInfoDto;
+import com.umbrella.dto.user.UserRequestSignUpDto;
+import com.umbrella.dto.user.UserUpdateDto;
+import com.umbrella.exception.DuplicateEmailException;
+import com.umbrella.exception.DuplicateNicknameException;
+import com.umbrella.repository.UserRepository;
+import com.umbrella.security.utils.SecurityUtil;
+import com.umbrella.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.password.PasswordEncoder;

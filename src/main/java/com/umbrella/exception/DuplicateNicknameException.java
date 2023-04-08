@@ -1,4 +1,4 @@
-package com.umbrella.project_umbrella.exception;
+package com.umbrella.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

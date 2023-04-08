@@ -1,4 +1,4 @@
-package com.umbrella.project_umbrella.constant;
+package com.umbrella.constant;
 
 import lombok.Getter;
 

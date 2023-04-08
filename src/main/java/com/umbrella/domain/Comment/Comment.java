@@ -1,7 +1,7 @@
-package com.umbrella.project_umbrella.domain.Comment;
+package com.umbrella.domain.Comment;
 
-import com.umbrella.project_umbrella.domain.Post.Post;
-import com.umbrella.project_umbrella.domain.User.User;
+import com.umbrella.domain.Post.Post;
+import com.umbrella.domain.User.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;

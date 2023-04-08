@@ -1,4 +1,4 @@
-package com.umbrella.project_umbrella.security.oAuth2;
+package com.umbrella.security.oAuth2;
 
 import java.util.Map;
 

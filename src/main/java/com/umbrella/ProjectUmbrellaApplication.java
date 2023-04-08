@@ -1,4 +1,4 @@
-package com.umbrella.project_umbrella;
+package com.umbrella;
 // 2023-01-29 First Start
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

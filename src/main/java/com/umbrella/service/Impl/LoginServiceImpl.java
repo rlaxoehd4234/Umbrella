@@ -1,9 +1,9 @@
-package com.umbrella.project_umbrella.service.Impl;
+package com.umbrella.service.Impl;
 
-import com.umbrella.project_umbrella.domain.User.User;
-import com.umbrella.project_umbrella.repository.UserRepository;
-import com.umbrella.project_umbrella.security.userDetails.UserContext;
-import com.umbrella.project_umbrella.service.LoginService;
+import com.umbrella.domain.User.User;
+import com.umbrella.repository.UserRepository;
+import com.umbrella.security.userDetails.UserContext;
+import com.umbrella.service.LoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

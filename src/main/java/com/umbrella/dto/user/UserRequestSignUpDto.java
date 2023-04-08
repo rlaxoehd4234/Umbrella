@@ -1,11 +1,11 @@
-package com.umbrella.project_umbrella.dto.user;
+package com.umbrella.dto.user;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import com.umbrella.project_umbrella.constant.AuthPlatform;
-import com.umbrella.project_umbrella.constant.Gender;
-import com.umbrella.project_umbrella.constant.Role;
+import com.umbrella.constant.AuthPlatform;
+import com.umbrella.constant.Gender;
+import com.umbrella.constant.Role;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

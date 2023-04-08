@@ -1,9 +1,6 @@
-package com.umbrella.project_umbrella.dto.post;
+package com.umbrella.dto.post;
 
-import com.umbrella.project_umbrella.domain.Comment.Comment;
-import com.umbrella.project_umbrella.domain.Post.Post;
-import com.umbrella.project_umbrella.domain.User.User;
-import lombok.Builder;
+import com.umbrella.domain.Post.Post;
 import lombok.Getter;
 
 import java.util.List;

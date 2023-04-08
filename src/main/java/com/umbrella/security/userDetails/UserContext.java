@@ -1,7 +1,7 @@
-package com.umbrella.project_umbrella.security.userDetails;
+package com.umbrella.security.userDetails;
 
-import com.umbrella.project_umbrella.constant.Role;
-import com.umbrella.project_umbrella.domain.User.User;
+import com.umbrella.constant.Role;
+import com.umbrella.domain.User.User;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

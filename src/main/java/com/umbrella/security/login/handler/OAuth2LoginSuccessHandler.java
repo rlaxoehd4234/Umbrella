@@ -1,8 +1,8 @@
-package com.umbrella.project_umbrella.security.login.handler;
+package com.umbrella.security.login.handler;
 
-import com.umbrella.project_umbrella.security.login.cookie.CookieOAuth2AuthorizationRequestRepository;
-import com.umbrella.project_umbrella.security.utils.CookieUtil;
-import com.umbrella.project_umbrella.service.JwtService;
+import com.umbrella.security.login.cookie.CookieOAuth2AuthorizationRequestRepository;
+import com.umbrella.security.utils.CookieUtil;
+import com.umbrella.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Optional;
 
-import static com.umbrella.project_umbrella.security.login.cookie.CookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
+import static com.umbrella.security.login.cookie.CookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
 
 @Log4j2
 @RequiredArgsConstructor

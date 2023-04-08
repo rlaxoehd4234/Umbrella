@@ -1,8 +1,8 @@
-package com.umbrella.project_umbrella.service;
+package com.umbrella.service;
 
-import com.umbrella.project_umbrella.dto.user.UserInfoDto;
-import com.umbrella.project_umbrella.dto.user.UserRequestSignUpDto;
-import com.umbrella.project_umbrella.dto.user.UserUpdateDto;
+import com.umbrella.dto.user.UserInfoDto;
+import com.umbrella.dto.user.UserRequestSignUpDto;
+import com.umbrella.dto.user.UserUpdateDto;
 
 public interface UserService {
 

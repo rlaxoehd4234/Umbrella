@@ -1,8 +1,8 @@
-package com.umbrella.project_umbrella.controller;
+package com.umbrella.controller;
 
-import com.umbrella.project_umbrella.dto.user.*;
-import com.umbrella.project_umbrella.service.LoginService;
-import com.umbrella.project_umbrella.service.UserService;
+import com.umbrella.dto.user.*;
+import com.umbrella.service.LoginService;
+import com.umbrella.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

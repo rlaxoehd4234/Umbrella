@@ -1,7 +1,7 @@
-package com.umbrella.project_umbrella.security.login.handler;
+package com.umbrella.security.login.handler;
 
-import com.umbrella.project_umbrella.repository.UserRepository;
-import com.umbrella.project_umbrella.service.JwtService;
+import com.umbrella.repository.UserRepository;
+import com.umbrella.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;

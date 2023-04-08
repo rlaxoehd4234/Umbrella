@@ -1,7 +1,7 @@
-package com.umbrella.project_umbrella.security.login.cookie;
+package com.umbrella.security.login.cookie;
 
 import com.nimbusds.oauth2.sdk.util.StringUtils;
-import com.umbrella.project_umbrella.security.utils.CookieUtil;
+import com.umbrella.security.utils.CookieUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;

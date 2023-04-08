@@ -1,10 +1,10 @@
-package com.umbrella.project_umbrella.controller;
+package com.umbrella.controller;
 
-import com.umbrella.project_umbrella.dto.post.PostListResponseDto;
-import com.umbrella.project_umbrella.dto.post.PostResponseDto;
-import com.umbrella.project_umbrella.dto.post.PostSaveRequestDto;
-import com.umbrella.project_umbrella.dto.post.PostUpdateRequestDto;
-import com.umbrella.project_umbrella.service.PostService;
+import com.umbrella.dto.post.PostListResponseDto;
+import com.umbrella.dto.post.PostResponseDto;
+import com.umbrella.dto.post.PostSaveRequestDto;
+import com.umbrella.dto.post.PostUpdateRequestDto;
+import com.umbrella.service.PostService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

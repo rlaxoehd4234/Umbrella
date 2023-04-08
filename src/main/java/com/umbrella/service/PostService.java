@@ -1,15 +1,15 @@
-package com.umbrella.project_umbrella.service;
+package com.umbrella.service;
 
 
-import com.umbrella.project_umbrella.domain.Comment.CommentRepository;
-import com.umbrella.project_umbrella.domain.Post.Post;
-import com.umbrella.project_umbrella.domain.Post.PostRepository;
-import com.umbrella.project_umbrella.domain.User.User;
-import com.umbrella.project_umbrella.repository.UserRepository;
-import com.umbrella.project_umbrella.dto.post.PostListResponseDto;
-import com.umbrella.project_umbrella.dto.post.PostResponseDto;
-import com.umbrella.project_umbrella.dto.post.PostSaveRequestDto;
-import com.umbrella.project_umbrella.dto.post.PostUpdateRequestDto;
+import com.umbrella.domain.Comment.CommentRepository;
+import com.umbrella.domain.Post.Post;
+import com.umbrella.domain.Post.PostRepository;
+import com.umbrella.domain.User.User;
+import com.umbrella.repository.UserRepository;
+import com.umbrella.dto.post.PostListResponseDto;
+import com.umbrella.dto.post.PostResponseDto;
+import com.umbrella.dto.post.PostSaveRequestDto;
+import com.umbrella.dto.post.PostUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

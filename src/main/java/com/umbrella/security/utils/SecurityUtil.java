@@ -1,6 +1,6 @@
-package com.umbrella.project_umbrella.security.utils;
+package com.umbrella.security.utils;
 
-import com.umbrella.project_umbrella.security.userDetails.UserContext;
+import com.umbrella.security.userDetails.UserContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 

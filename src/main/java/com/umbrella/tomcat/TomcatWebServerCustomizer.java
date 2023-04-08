@@ -1,4 +1,4 @@
-package com.umbrella.project_umbrella.tomcat;
+package com.umbrella.tomcat;
 
 import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;

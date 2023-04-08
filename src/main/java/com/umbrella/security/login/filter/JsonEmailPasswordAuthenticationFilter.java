@@ -1,7 +1,7 @@
-package com.umbrella.project_umbrella.security.login.filter;
+package com.umbrella.security.login.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.umbrella.project_umbrella.dto.user.UserRequestLoginDto;
+import com.umbrella.dto.user.UserRequestLoginDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

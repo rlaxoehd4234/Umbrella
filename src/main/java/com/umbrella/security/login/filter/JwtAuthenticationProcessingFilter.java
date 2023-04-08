@@ -1,11 +1,11 @@
-package com.umbrella.project_umbrella.security.login.filter;
+package com.umbrella.security.login.filter;
 
-import com.umbrella.project_umbrella.domain.User.User;
-import com.umbrella.project_umbrella.repository.UserRepository;
-import com.umbrella.project_umbrella.security.userDetails.UserContext;
-import com.umbrella.project_umbrella.security.utils.CookieUtil;
-import com.umbrella.project_umbrella.service.Impl.JwtServiceImpl;
-import com.umbrella.project_umbrella.service.JwtService;
+import com.umbrella.domain.User.User;
+import com.umbrella.repository.UserRepository;
+import com.umbrella.security.userDetails.UserContext;
+import com.umbrella.security.utils.CookieUtil;
+import com.umbrella.service.Impl.JwtServiceImpl;
+import com.umbrella.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

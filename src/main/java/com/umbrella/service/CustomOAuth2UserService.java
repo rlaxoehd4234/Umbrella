@@ -1,4 +1,4 @@
-package com.umbrella.project_umbrella.service;
+package com.umbrella.service;
 
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;

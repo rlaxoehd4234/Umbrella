@@ -1,4 +1,4 @@
-package com.umbrella.project_umbrella.controller;
+package com.umbrella.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

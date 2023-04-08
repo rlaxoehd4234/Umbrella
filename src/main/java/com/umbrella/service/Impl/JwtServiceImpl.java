@@ -1,8 +1,8 @@
-package com.umbrella.project_umbrella.service.Impl;
+package com.umbrella.service.Impl;
 
-import com.umbrella.project_umbrella.domain.User.User;
-import com.umbrella.project_umbrella.repository.UserRepository;
-import com.umbrella.project_umbrella.service.JwtService;
+import com.umbrella.domain.User.User;
+import com.umbrella.repository.UserRepository;
+import com.umbrella.service.JwtService;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;

@@ -1,11 +1,11 @@
-package com.umbrella.project_umbrella.security.oAuth2.factory;
+package com.umbrella.security.oAuth2.factory;
 
-import com.umbrella.project_umbrella.constant.AuthPlatform;
-import com.umbrella.project_umbrella.security.oAuth2.Impl.GithubUserInfo;
-import com.umbrella.project_umbrella.security.oAuth2.Impl.GoogleUserInfo;
-import com.umbrella.project_umbrella.security.oAuth2.Impl.KakaoUserInfo;
-import com.umbrella.project_umbrella.security.oAuth2.Impl.NaverUserInfo;
-import com.umbrella.project_umbrella.security.oAuth2.OAuth2UserInfo;
+import com.umbrella.constant.AuthPlatform;
+import com.umbrella.security.oAuth2.Impl.GithubUserInfo;
+import com.umbrella.security.oAuth2.Impl.GoogleUserInfo;
+import com.umbrella.security.oAuth2.Impl.KakaoUserInfo;
+import com.umbrella.security.oAuth2.Impl.NaverUserInfo;
+import com.umbrella.security.oAuth2.OAuth2UserInfo;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
