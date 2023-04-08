@@ -1,4 +1,4 @@
-package com.umbrella.repository;
+package com.umbrella.domain.User;
 
 import com.umbrella.domain.User.User;
 import org.springframework.data.jpa.repository.JpaRepository;

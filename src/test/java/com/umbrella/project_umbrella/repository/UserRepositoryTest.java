@@ -1,15 +1,15 @@
 package com.umbrella.project_umbrella.repository;
 
-import com.umbrella.project_umbrella.constant.Gender;
-import com.umbrella.project_umbrella.constant.Role;
-import com.umbrella.project_umbrella.domain.User.User;
-import com.umbrella.project_umbrella.dto.user.UserUpdateDto;
+import com.umbrella.constant.Gender;
+import com.umbrella.constant.Role;
+import com.umbrella.domain.User.User;
+import com.umbrella.dto.user.UserUpdateDto;
+import com.umbrella.domain.User.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;

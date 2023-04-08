@@ -4,7 +4,7 @@ import com.umbrella.dto.post.PostListResponseDto;
 import com.umbrella.dto.post.PostResponseDto;
 import com.umbrella.dto.post.PostSaveRequestDto;
 import com.umbrella.dto.post.PostUpdateRequestDto;
-import com.umbrella.service.PostService;
+import com.umbrella.service.Impl.PostServiceImpl;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,7 +14,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @Getter
@@ -22,7 +21,7 @@ import java.util.List;
 @RequestMapping("/posts")
 public class PostController {
 
-    private final PostService postService;
+    private final PostServiceImpl postService;
 
     @PostMapping
     public Long save(@Valid @RequestBody PostSaveRequestDto requestDto){ // 게시물 & 댓글 가져오기

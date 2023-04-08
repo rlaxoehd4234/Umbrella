@@ -1,10 +1,8 @@
 package com.umbrella.security.login.filter;
 
 import com.umbrella.domain.User.User;
-import com.umbrella.repository.UserRepository;
+import com.umbrella.domain.User.UserRepository;
 import com.umbrella.security.userDetails.UserContext;
-import com.umbrella.security.utils.CookieUtil;
-import com.umbrella.service.Impl.JwtServiceImpl;
 import com.umbrella.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +16,6 @@ import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;

@@ -1,11 +1,11 @@
 package com.umbrella.project_umbrella.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.umbrella.project_umbrella.constant.Gender;
-import com.umbrella.project_umbrella.domain.User.User;
-import com.umbrella.project_umbrella.dto.user.UserRequestSignUpDto;
-import com.umbrella.project_umbrella.repository.UserRepository;
-import com.umbrella.project_umbrella.service.UserService;
+import com.umbrella.constant.Gender;
+import com.umbrella.domain.User.User;
+import com.umbrella.dto.user.UserRequestSignUpDto;
+import com.umbrella.domain.User.UserRepository;
+import com.umbrella.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
