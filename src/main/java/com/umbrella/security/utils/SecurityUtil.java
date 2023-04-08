@@ -8,12 +8,16 @@ import org.springframework.stereotype.Component;
 public class SecurityUtil {
 
     public String getLoginUserEmail() {
-        UserContext userContext = (UserContext) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserContext userContext = getPrincipalInAuthentication();
         return userContext.getUsername();
     }
 
     public Long getLoginUserId() {
-        UserContext userContext = (UserContext) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userContext.getId();
+        UserContext userContext = getPrincipalInAuthentication();
+        return userContext.getUser().getId();
+    }
+
+    private UserContext getPrincipalInAuthentication() {
+        return (UserContext) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }
