@@ -66,8 +66,10 @@ public class UserServiceTest {
 
     private String birthDate = "20010304";
 
+    private String GENDER = "MALE";
+
     private UserRequestSignUpDto createUserSignUpDto() {
-        return new UserRequestSignUpDto("test@test.com", "테스트계정", password, "홍길동", birthDate, Gender.MALE);
+        return new UserRequestSignUpDto("test@test.com", "테스트계정", password, "홍길동", birthDate, GENDER);
     }
 
     private UserRequestSignUpDto setAuthenticationInContext() {
@@ -174,32 +176,31 @@ public class UserServiceTest {
                 passwordEncoder.encode(password),
                 "홍길동",
                 birthDate,
-                Gender.MALE));
+                GENDER));
         assertThrows(IllegalArgumentException.class, () -> new UserRequestSignUpDto("test02@test.com",
                 null,
                 passwordEncoder.encode(password),
                 "홍길동",
                 birthDate,
-                Gender.MALE));
+                GENDER));
         assertThrows(IllegalArgumentException.class, () -> new UserRequestSignUpDto("test03@test.com",
                 "테스트계정03",
                 null,
                 "홍길동",
                 birthDate,
-                Gender.MALE));
+                GENDER));
         assertThrows(IllegalArgumentException.class, () -> new UserRequestSignUpDto("test04@test.com",
                 "테스트계정04",
                 passwordEncoder.encode(password),
                 null,
                 birthDate,
-                Gender.MALE));
+                GENDER));
         assertThrows(IllegalArgumentException.class, () -> new UserRequestSignUpDto("test05@test.com",
                 "테스트계정05",
                 passwordEncoder.encode(password),
                 "홍길동",
                 null,
-                Gender.MALE
-                ));
+                GENDER));
         assertThrows(IllegalArgumentException.class, () -> new UserRequestSignUpDto("test06@test.com",
                 "테스트계정06",
                 passwordEncoder.encode(password),

@@ -127,7 +127,7 @@ public class JwtAuthenticationProcessingFilterTest {
     }
 
     @Test
-    @DisplayName("[FAILED]_유효한_엑세스_토큰만_존재")
+    @DisplayName("[SUCCESS]_유효한_엑세스_토큰만_존재")
     public void validAccessTokenTest() throws Exception {
         // given
         Map accessAndRefreshToken = getAccessAndRefreshToken();
@@ -150,8 +150,8 @@ public class JwtAuthenticationProcessingFilterTest {
         System.out.println("ACCESS TOKEN : " + accessToken);
 
         // when, then
-        mockMvc.perform(get(URL_ADDRESS).header(accessHeader, BEARER + accessToken))
-                .andExpectAll(status().isNotFound());
+        mockMvc.perform(get(URL_ADDRESS).header(accessHeader, BEARER + accessToken + "wrongData"))
+                .andExpectAll(status().isForbidden());
     }
 
     @Test

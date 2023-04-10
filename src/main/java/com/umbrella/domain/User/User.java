@@ -35,7 +35,7 @@ public class User {
     private String name;
     @Column
     private int age;
-    @Column // 0 이면 남자, 1 이면 여자, 2 면 UNKNOWN -> OAuth2 서버측에서 성별 값을 전달받지 못했을 경우
+    @Column // UNKNOWN -> OAuth2 서버측에서 성별 값을 전달받지 못했을 경우
     private Gender gender;
     @Column
     @Enumerated(EnumType.STRING)
