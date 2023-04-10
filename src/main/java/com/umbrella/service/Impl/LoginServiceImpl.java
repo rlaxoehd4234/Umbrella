@@ -12,8 +12,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +30,7 @@ public class LoginServiceImpl implements LoginService {
 
         String role = user.getRole().name();
 
-        List<GrantedAuthority> authorities = new ArrayList<>();
+        Set<GrantedAuthority> authorities = new HashSet<>();
         Assert.isTrue(!role.startsWith("ROLE_"),
                 () -> role + " cannot start with ROLE_ (it is automatically added)");
         authorities.add(new SimpleGrantedAuthority("ROLE_" + role));

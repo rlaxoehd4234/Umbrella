@@ -24,7 +24,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -92,7 +94,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
         String role = user.getRole().name();
 
-        List<GrantedAuthority> authorities = new ArrayList<>();
+        Set<GrantedAuthority> authorities = new HashSet<>();
         Assert.isTrue(!role.startsWith("ROLE_"),
                 () -> role + " cannot start with ROLE_ (it is automatically added)");
         authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
