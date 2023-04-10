@@ -2,37 +2,33 @@ package com.umbrella.security.userDetails;
 
 import com.umbrella.constant.Role;
 import com.umbrella.domain.User.User;
+import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.util.Assert;
 
+import java.io.Serializable;
 import java.util.*;
 
 public class UserContext implements UserDetails, OAuth2User {
 
+    @Getter
     private User user;
 
     @Getter
-    private Long id;
-
     private Map<String, Object> attributes;
 
     public UserContext(User user) {
         this.user = user;
-        this.id = user.getId();
     }
 
     public UserContext(User user, Map<String, Object> attributes) {
         this.user = user;
-        this.id = user.getId();
         this.attributes = attributes;
-    }
-
-    @Override
-    public Map<String, Object> getAttributes() {
-        return this.attributes;
     }
 
     @Override
@@ -77,5 +73,4 @@ public class UserContext implements UserDetails, OAuth2User {
     public boolean isEnabled() {
         return true;
     }
-
 }

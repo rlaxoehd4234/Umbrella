@@ -59,6 +59,7 @@ public class UserControllerTest {
     private String password = "codePirates0205!@#";
     private String nickName = "테스트계정";
     private String name = "홍길동";
+    private String GENDER = "MALE";
     private String birthDate = "20010304";
     private int age = 23;
 
@@ -90,10 +91,14 @@ public class UserControllerTest {
         return result.getResponse().getHeader(accessHeader);
     }
 
+    private UserRequestSignUpDto createSignUpDto() {
+        return new UserRequestSignUpDto(email, nickName, password, name, birthDate, GENDER);
+    }
+
     @Test
     @DisplayName("[SUCCESS]_회원가입")
     public void signUpTest() throws Exception {
-        String signUpData = objectMapper.writeValueAsString(new UserRequestSignUpDto(email, nickName, password, name, birthDate, Gender.MALE));
+        String signUpData = objectMapper.writeValueAsString(createSignUpDto());
 
         // when
          signUp(signUpData);
@@ -116,27 +121,29 @@ public class UserControllerTest {
         // given, when, then
         assertThrows(IllegalArgumentException.class,
                 () -> objectMapper.writeValueAsString(new UserRequestSignUpDto(null, password, name,
-                                                                                nickName, birthDate, Gender.MALE)));
+                                                                                nickName, birthDate, GENDER)));
         assertThrows(IllegalArgumentException.class,
                 () -> objectMapper.writeValueAsString(new UserRequestSignUpDto(email, null, name,
-                                                                                nickName, birthDate, Gender.MALE)));
+                                                                                nickName, birthDate, GENDER)));
         assertThrows(IllegalArgumentException.class,
                 () -> objectMapper.writeValueAsString(new UserRequestSignUpDto(email, password, null,
-                                                                                nickName, birthDate, Gender.MALE)));
+                                                                                nickName, birthDate, GENDER)));
         assertThrows(IllegalArgumentException.class,
                 () -> objectMapper.writeValueAsString(new UserRequestSignUpDto(email, password, name,
-                                                                        null, birthDate, Gender.MALE)));
+                                                                        null, birthDate, GENDER)));
         assertThrows(IllegalArgumentException.class,
                 () -> objectMapper.writeValueAsString(new UserRequestSignUpDto(email, password, name,
-                                                                                nickName, null, Gender.MALE)));
+                                                                                nickName, null, GENDER)));
+        assertThrows(IllegalArgumentException.class,
+                () -> objectMapper.writeValueAsString(new UserRequestSignUpDto(email, password, name,
+                        nickName, birthDate, null)));
     }
 
     @Test
     @DisplayName("[SUCCESS]_회원정보_수정")
     public void updateUserInfoTest() throws Exception {
         // given
-        String signUpData = objectMapper.writeValueAsString(new UserRequestSignUpDto(email, nickName, password,
-                                                                                        name, birthDate, Gender.MALE));
+        String signUpData = objectMapper.writeValueAsString(createSignUpDto());
 
         signUp(signUpData);
 
@@ -171,8 +178,7 @@ public class UserControllerTest {
     @DisplayName("[SUCCESS]_회원정보_이름_수정")
     public void updateUserNameTest() throws Exception {
         // given
-        String signUpData = objectMapper.writeValueAsString(new UserRequestSignUpDto(email, nickName, password,
-                                                                                        name, birthDate, Gender.MALE));
+        String signUpData = objectMapper.writeValueAsString(createSignUpDto());
 
         signUp(signUpData);
 
@@ -205,8 +211,7 @@ public class UserControllerTest {
     @DisplayName("[SUCCESS]_비밀번호_수정")
     public void updatePasswordTest() throws Exception {
         // given
-        String signUpData = objectMapper.writeValueAsString(new UserRequestSignUpDto(email, nickName, password,
-                                                                                            name, birthDate, Gender.MALE));
+        String signUpData = objectMapper.writeValueAsString(createSignUpDto());
 
         signUp(signUpData);
 
@@ -238,8 +243,7 @@ public class UserControllerTest {
     @DisplayName("[FAILED]_올바르지_않은_형태의_비밀번호_수정")
     public void updatePasswordExceptionTest01() throws Exception {
         // given
-        String signUpData = objectMapper.writeValueAsString(new UserRequestSignUpDto(email, nickName, password,
-                                                                                        name, birthDate, Gender.MALE));
+        String signUpData = objectMapper.writeValueAsString(createSignUpDto());
 
         signUp(signUpData);
 
@@ -271,8 +275,7 @@ public class UserControllerTest {
     @DisplayName("[FAILED]_비밀번호_수정_기존_비밀번호_틀림")
     public void updatePasswordExceptionTest02() throws Exception {
         // given
-        String signUpData = objectMapper.writeValueAsString(new UserRequestSignUpDto(email, nickName, password,
-                                                                                            name, birthDate, Gender.MALE));
+        String signUpData = objectMapper.writeValueAsString(createSignUpDto());
 
         signUp(signUpData);
 
@@ -304,8 +307,7 @@ public class UserControllerTest {
     @DisplayName("[SUCCESS]_회원탈퇴")
     public void withdrawUserTest() throws Exception {
         // given
-        String signUpData = objectMapper.writeValueAsString(new UserRequestSignUpDto(email, nickName, password,
-                                                                                            name, birthDate, Gender.MALE));
+        String signUpData = objectMapper.writeValueAsString(createSignUpDto());
 
         signUp(signUpData);
 
@@ -334,8 +336,7 @@ public class UserControllerTest {
     @DisplayName("[FAILED]_회원탈퇴_실패_비밀번호_틀림")
     public void withdrawUserExceptionTest01() throws Exception {
         // given
-        String signUpData = objectMapper.writeValueAsString(new UserRequestSignUpDto(email, nickName, password,
-                                                                                        name, birthDate, Gender.MALE));
+        String signUpData = objectMapper.writeValueAsString(createSignUpDto());
 
         signUp(signUpData);
 
@@ -361,8 +362,7 @@ public class UserControllerTest {
     @DisplayName("[FAILED]_회원탈퇴_실패_권한없음")
     public void withdrawUserExceptionTest02() throws Exception {
         //given
-        String signUpData = objectMapper.writeValueAsString(new UserRequestSignUpDto(email, nickName, password,
-                                                                                        name, birthDate, Gender.MALE));
+        String signUpData = objectMapper.writeValueAsString(createSignUpDto());
 
         signUp(signUpData);
 
@@ -392,8 +392,7 @@ public class UserControllerTest {
     @DisplayName("[SUCCESS]_회원정보_읽어오기")
     public void getUserInfoTest() throws Exception {
         // given
-        String signUpData = objectMapper.writeValueAsString(new UserRequestSignUpDto(email, nickName, password,
-                                                                                            name, birthDate, Gender.MALE));
+        String signUpData = objectMapper.writeValueAsString(createSignUpDto());
 
         signUp(signUpData);
 
@@ -425,8 +424,7 @@ public class UserControllerTest {
     @DisplayName("[FAILED]_존재하지_않는_회원정보_읽어오기")
     public void getUserInfoExceptionTest01() throws Exception {
         // given
-        String signUpData = objectMapper.writeValueAsString(new UserRequestSignUpDto(email, nickName, password,
-                                                                                            name, birthDate, Gender.MALE));
+        String signUpData = objectMapper.writeValueAsString(createSignUpDto());
 
         signUp(signUpData);
 
@@ -446,8 +444,7 @@ public class UserControllerTest {
     @DisplayName("[FAILED]_만료된_토큰으로_회원정보_읽어오기")
     public void getUserInfoExceptionTest02() throws Exception {
         // given
-        String signUpData = objectMapper.writeValueAsString(new UserRequestSignUpDto(email, nickName, password,
-                                                                                            name, birthDate, Gender.MALE));
+        String signUpData = objectMapper.writeValueAsString(createSignUpDto());
 
         signUp(signUpData);
 
@@ -467,8 +464,7 @@ public class UserControllerTest {
     @DisplayName("[SUCCESS]_내_정보_읽어오기")
     public void getMyInfoTest() throws Exception {
         // given
-        String signUpData = objectMapper.writeValueAsString(new UserRequestSignUpDto(email, nickName, password,
-                                                                                                name, birthDate, Gender.MALE));
+        String signUpData = objectMapper.writeValueAsString(createSignUpDto());
 
         signUp(signUpData);
 
@@ -498,8 +494,7 @@ public class UserControllerTest {
     @DisplayName("[FAILED]_내_정보_읽어오기")
     public void getMyInfoExceptionTest() throws Exception {
         // given
-        String signUpData = objectMapper.writeValueAsString(new UserRequestSignUpDto(email, nickName, password,
-                                                                                            name, birthDate, Gender.MALE));
+        String signUpData = objectMapper.writeValueAsString(createSignUpDto());
 
         signUp(signUpData);
 
