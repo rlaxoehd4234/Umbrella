@@ -26,11 +26,6 @@ public class UserController {
         userService.signUp(userSignUpDto);
     }
 
-    @PostMapping(value = "/login")
-    public void login(@Valid @RequestBody UserRequestLoginDto userLoginDto) {
-        loginService.loadUserByUsername(userLoginDto.getEmail());
-    }
-
     @PutMapping(value = "/user/update/info")
 //    @ResponseStatus(HttpStatus.OK)
     public void updateUserInfo(@Valid @RequestBody UserUpdateDto userUpdateDto) {

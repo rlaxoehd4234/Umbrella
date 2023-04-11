@@ -40,4 +40,4 @@ spring:
 app:
   auth:
     cookie:
-      refresh-cookie-key: "refresh-cookie-key"
+      refresh-cookie-key: "refresh"

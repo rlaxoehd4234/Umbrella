@@ -11,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +35,7 @@ public class JwtServiceImpl implements JwtService {
     private final Key secretKey;
 
     private final String COOKIE_REFRESH_TOKEN_KEY;
+
 
     public JwtServiceImpl(UserRepository userRepository, @Value("${jwt.secret}") String secret,
                           @Value("${app.auth.cookie.refresh-cookie-key}") String cookieKey) {
@@ -112,12 +114,12 @@ public class JwtServiceImpl implements JwtService {
         ResponseCookie cookie = ResponseCookie.from(COOKIE_REFRESH_TOKEN_KEY, refreshToken)
                 .httpOnly(true)
                 .secure(true)
-                .sameSite("Lax")
+                .sameSite("None")
                 .maxAge(refreshTokenExpiration)
                 .path("/")
                 .build();
 
-        response.addHeader("Set-Cookie", cookie.toString());
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
     }
 
     @Override
@@ -149,11 +151,7 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public Optional<String> extractEmail(String token) {
         try {
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(secretKey)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
+            Claims claims = extractClaim(token);
 
             return Optional.ofNullable(claims.get(EMAIL_CLAIM, String.class));
         } catch (Exception e) {
@@ -165,11 +163,7 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public Optional<String> extractSubject(String token) {
         try {
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(secretKey)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
+            Claims claims = extractClaim(token);
 
             return Optional.ofNullable(claims.getSubject());
         } catch (Exception e) {
@@ -206,4 +200,11 @@ public class JwtServiceImpl implements JwtService {
         }
     }
 
+    private Claims extractClaim(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
 }

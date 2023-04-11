@@ -9,6 +9,7 @@ import com.umbrella.domain.User.UserRepository;
 import com.umbrella.security.oAuth2.OAuth2UserInfo;
 import com.umbrella.security.oAuth2.factory.OAuth2UserInfoFactory;
 import com.umbrella.security.userDetails.UserContext;
+import com.umbrella.security.utils.RoleUtil;
 import com.umbrella.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -18,9 +19,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +28,8 @@ public class CustomOAuth2UserServiceImpl implements CustomOAuth2UserService {
     private final UserRepository userRepository;
 
     private final OAuth2UserInfoFactory oAuth2UserInfoFactory;
+
+    private final RoleUtil roleUtil;
 
     private static final int OAUTH_USER_AGE = -1;
 
@@ -55,11 +56,18 @@ public class CustomOAuth2UserServiceImpl implements CustomOAuth2UserService {
         if (findUser.isPresent()) {
             if (!String.valueOf(findUser.get().getPlatform()).equals(oAuth2UserInfo.getProvider().toUpperCase())) {
                 throw new DuplicateEmailException("This email has already been registered!");
-            }
-        }
+            } else {
+                User user = findUser.get();
 
-        return findUser.map(user -> new UserContext(user, oAuth2User.getAttributes()))
-                .orElseGet(() -> new UserContext(createUser(oAuth2UserInfo, password), oAuth2User.getAttributes()));
+                return new UserContext(user.getEmail(), user.getPassword(), user.getId(), user.getNickName(),
+                        roleUtil.addAuthoritiesForContext(user), oAuth2User.getAttributes());
+            }
+        } else {
+            User createdUser = createUser(oAuth2UserInfo, password);
+
+            return new UserContext(createdUser.getEmail(), createdUser.getPassword(), createdUser.getId(), createdUser.getNickName(),
+                    roleUtil.addAuthoritiesForContext(createdUser), oAuth2User.getAttributes());
+        }
     }
 
     private User createUser(OAuth2UserInfo userInfo, String password) {
