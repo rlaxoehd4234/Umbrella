@@ -68,18 +68,6 @@ public class User {
         this.platform = platform;
     }
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Post> postList = new ArrayList<>();
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> commentList = new ArrayList<>();
-
-    public void addPost(Post post) {
-        postList.add(post);
-    }
-    public void addComment(Comment comment) {
-        commentList.add(comment);
-    }
-
     public void updateUser(UserUpdateDto userUpdateDto) {
         userUpdateDto.getNickName().ifPresent(
                 nickName -> this.nickName = nickName

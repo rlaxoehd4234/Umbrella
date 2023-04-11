@@ -9,6 +9,7 @@ import com.umbrella.security.login.handler.LoginFailureHandler;
 import com.umbrella.security.login.handler.LoginSuccessJWTProvideHandler;
 import com.umbrella.security.login.handler.OAuth2LoginFailureHandler;
 import com.umbrella.security.login.handler.OAuth2LoginSuccessHandler;
+import com.umbrella.security.utils.RoleUtil;
 import com.umbrella.service.CustomOAuth2UserService;
 import com.umbrella.service.JwtService;
 import com.umbrella.service.LoginService;
@@ -26,6 +27,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @RequiredArgsConstructor
@@ -42,6 +46,8 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
 
     private final CookieOAuth2AuthorizationRequestRepository cookieOAuth2AuthorizationRequestRepository;
+
+    private final RoleUtil roleUtil;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -70,6 +76,8 @@ public class SecurityConfig {
                                         .successHandler((oAuth2LoginSuccessHandler()))
                                         .failureHandler(oAuth2LoginFailureHandler())
                     )
+        .and()
+                .cors().configurationSource(corsConfigurationSource())
         .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.FORBIDDEN));
@@ -116,7 +124,7 @@ public class SecurityConfig {
     @Bean
     public JwtAuthenticationProcessingFilter jwtAuthenticationProcessingFilter() {
         JwtAuthenticationProcessingFilter jwtAuthenticationProcessingFilter
-                                    = new JwtAuthenticationProcessingFilter(jwtService, userRepository);
+                                    = new JwtAuthenticationProcessingFilter(jwtService, userRepository, roleUtil);
 
         return jwtAuthenticationProcessingFilter;
     }
@@ -131,5 +139,20 @@ public class SecurityConfig {
     public OAuth2LoginFailureHandler oAuth2LoginFailureHandler() {
         OAuth2LoginFailureHandler oAuth2LoginFailureHandler = new OAuth2LoginFailureHandler();
         return oAuth2LoginFailureHandler;
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.addAllowedOriginPattern("*");
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
+        configuration.addExposedHeader("*");
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }

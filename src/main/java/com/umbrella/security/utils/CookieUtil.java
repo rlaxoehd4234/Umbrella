@@ -1,5 +1,6 @@
 package com.umbrella.security.utils;
 
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 import org.springframework.util.SerializationUtils;
 
