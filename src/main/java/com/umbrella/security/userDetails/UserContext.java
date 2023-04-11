@@ -20,57 +20,120 @@ public class UserContext implements UserDetails, OAuth2User {
     private User user;
 
     @Getter
+    private String password;
+
+    @Getter
+    private final Long userId;
+
+    @Getter
+    private final String username;
+
+    @Getter
+    private final String nickName;
+
+    @Getter
+    private final Set<GrantedAuthority> authorities;
+
+    private final boolean accountNonExpired;
+
+    private final boolean accountNonLocked;
+
+    private final boolean credentialsNonExpired;
+
+    private final boolean enabled;
+
+    @Getter
     private Map<String, Object> attributes;
 
-    public UserContext(User user) {
-        this.user = user;
+    public UserContext(String username, String password, Long userId, String nickName, Set<GrantedAuthority> authorities,
+                       boolean accountNonExpired, boolean accountNonLocked, boolean credentialsNonExpired, boolean enabled) {
+        this.username = username;
+        this.password = password;
+        this.userId = userId;
+        this.nickName = nickName;
+        this.authorities = Collections.unmodifiableSet(sortAuthorities(authorities));
+        this.accountNonExpired = accountNonExpired;
+        this.accountNonLocked = accountNonLocked;
+        this.credentialsNonExpired = credentialsNonExpired;
+        this.enabled = enabled;
     }
 
-    public UserContext(User user, Map<String, Object> attributes) {
-        this.user = user;
+    public UserContext(String username, String password, Long userId, String nickName, Set<GrantedAuthority> authorities) {
+        this(username, password, userId, nickName, authorities, true, true, true, true);
+    }
+
+    public UserContext(String username, String password, Long userId, String nickName,
+                       Set<GrantedAuthority> authorities, Map<String, Object> attributes,
+                       boolean accountNonExpired, boolean accountNonLocked, boolean credentialsNonExpired, boolean enabled) {
+        this.username = username;
+        this.password = password;
+        this.userId = userId;
+        this.nickName = nickName;
+        this.authorities = authorities;
         this.attributes = attributes;
+        this.accountNonExpired = accountNonExpired;
+        this.accountNonLocked = accountNonLocked;
+        this.credentialsNonExpired = credentialsNonExpired;
+        this.enabled = enabled;
+    }
+
+    public UserContext(String username, String password, Long userId, String nickName, Set<GrantedAuthority> authorities, Map<String, Object> attributes) {
+        this(username, password, userId, nickName, authorities, attributes, true, true, true, true);
     }
 
     @Override
     public String getName() {
-        return (String) attributes.get("name");
+        return String.valueOf(attributes.get("name"));
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> collect = new HashSet<>();
-        user.addUserAuthorities();
-        collect.add((GrantedAuthority) () -> user.getRole().toString());
-        return collect;
-    }
-
-    @Override
-    public String getPassword() {
-        return user.getPassword();
-    }
-
-    @Override
-    public String getUsername() {
-        return user.getEmail();
+        return this.authorities;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return this.accountNonExpired;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return this.accountNonLocked;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return this.credentialsNonExpired;
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.enabled;
+    }
+
+    private static SortedSet<GrantedAuthority> sortAuthorities(Collection<? extends GrantedAuthority> authorities) {
+        Assert.notNull(authorities, "Cannot pass a null GrantedAuthority collection");
+
+        SortedSet<GrantedAuthority> sortedAuthorities = new TreeSet<>(new AuthorityComparator());
+        for (GrantedAuthority grantedAuthority : authorities) {
+            Assert.notNull(grantedAuthority, "GrantedAuthority list cannot contain any null elements");
+            sortedAuthorities.add(grantedAuthority);
+        }
+        return sortedAuthorities;
+    }
+
+    private static class AuthorityComparator implements Comparator<GrantedAuthority>, Serializable {
+        private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
+
+        @Override
+        public int compare(GrantedAuthority g1, GrantedAuthority g2) {
+            if (g2.getAuthority() == null) {
+                return -1;
+            }
+            if (g1.getAuthority() == null) {
+                return 1;
+            }
+            return g1.getAuthority().compareTo(g2.getAuthority());
+        }
     }
 }

@@ -5,6 +5,7 @@ import com.umbrella.constant.Gender;
 import com.umbrella.domain.User.User;
 import com.umbrella.dto.user.UserRequestSignUpDto;
 import com.umbrella.domain.User.UserRepository;
+import com.umbrella.security.utils.CookieUtil;
 import com.umbrella.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.Cookie;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,6 +73,9 @@ public class UserControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @Value("${app.auth.cookie.refresh-cookie-key}")
+    private String COOKIE_REFRESH_TOKEN_KEY;
+
     @Value("${jwt.access.header}")
     private String accessHeader;
 
@@ -88,7 +93,26 @@ public class UserControllerTest {
                         .content(objectMapper.writeValueAsString(loginMap))
         ).andExpect(status().isOk()).andReturn();
 
+        String requestCookie = result.getResponse().getCookie(COOKIE_REFRESH_TOKEN_KEY).getValue();
+
         return result.getResponse().getHeader(accessHeader);
+    }
+
+    private Cookie setRefreshTokenInCookie() throws Exception {
+        Map<String, String> loginMap = new HashMap<>();
+
+        loginMap.put("email", email);
+        loginMap.put("password", password);
+
+        MvcResult result = mockMvc.perform(
+                post("/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(loginMap))
+        ).andExpect(status().isOk()).andReturn();
+
+        String refreshToken = result.getResponse().getCookie(COOKIE_REFRESH_TOKEN_KEY).getValue();
+        Cookie requestCookie = new Cookie(COOKIE_REFRESH_TOKEN_KEY, refreshToken);
+        return requestCookie;
     }
 
     private UserRequestSignUpDto createSignUpDto() {
@@ -155,10 +179,12 @@ public class UserControllerTest {
         updateUserMap.put("age", age + 1);
 
         String updateUserData = objectMapper.writeValueAsString(updateUserMap);
+        Cookie requestCookie = setRefreshTokenInCookie();
 
         // when
         mockMvc.perform(
                 put("/user/update/info")
+                        .cookie(requestCookie)
                         .header(accessHeader, BEARER + accessToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updateUserData)

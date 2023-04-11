@@ -10,6 +10,7 @@ import com.umbrella.dto.user.UserUpdateDto;
 import com.umbrella.exception.DuplicateEmailException;
 import com.umbrella.domain.User.UserRepository;
 import com.umbrella.security.userDetails.UserContext;
+import com.umbrella.security.utils.RoleUtil;
 import com.umbrella.security.utils.SecurityUtil;
 import com.umbrella.service.UserService;
 import org.junit.jupiter.api.AfterEach;
@@ -19,8 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
 import org.springframework.security.core.context.SecurityContext;
@@ -29,13 +28,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -59,6 +55,9 @@ public class UserServiceTest {
 
     @Autowired
     SecurityUtil securityUtil;
+
+    @Autowired
+    RoleUtil roleUtil;
 
     private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
@@ -89,14 +88,8 @@ public class UserServiceTest {
                 .role(Role.USER)
                 .build();
 
-        String role = user.getRole().name();
-
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        Assert.isTrue(!role.startsWith("ROLE_"),
-                () -> role + " cannot start with ROLE_ (it is automatically added)");
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
-
-        UserDetails authenticatedUser = new UserContext(user);
+        UserDetails authenticatedUser = new UserContext(user.getEmail(), user.getPassword(), user.getId(), user.getNickName(),
+                roleUtil.addAuthoritiesForContext(user));
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(authenticatedUser, null,
                 authoritiesMapper.mapAuthorities(authenticatedUser.getAuthorities()));

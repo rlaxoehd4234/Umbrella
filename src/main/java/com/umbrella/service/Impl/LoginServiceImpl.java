@@ -3,23 +3,20 @@ package com.umbrella.service.Impl;
 import com.umbrella.domain.User.User;
 import com.umbrella.domain.User.UserRepository;
 import com.umbrella.security.userDetails.UserContext;
+import com.umbrella.security.utils.RoleUtil;
 import com.umbrella.service.LoginService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class LoginServiceImpl implements LoginService {
 
     private final UserRepository userRepository;
+
+    private final RoleUtil roleUtil;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -28,13 +25,6 @@ public class LoginServiceImpl implements LoginService {
                             () -> new UsernameNotFoundException("해당 이메일을 가진 계정이 존재하지 않습니다.")
                         );
 
-        String role = user.getRole().name();
-
-        Set<GrantedAuthority> authorities = new HashSet<>();
-        Assert.isTrue(!role.startsWith("ROLE_"),
-                () -> role + " cannot start with ROLE_ (it is automatically added)");
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
-
-        return new UserContext(user);
+        return new UserContext(user.getEmail(), user.getPassword(), user.getId(), user.getNickName(), roleUtil.addAuthoritiesForContext(user));
     }
 }
