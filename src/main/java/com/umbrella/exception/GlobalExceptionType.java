@@ -1,2 +1,3 @@
-package com.umbrella.exception;public enum GlobalExceptionType {
+package com.umbrella.exception;
+public enum GlobalExceptionType {
 }
