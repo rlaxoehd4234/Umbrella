@@ -41,10 +41,11 @@ public class Post {
 
 
     @Builder
-    public Post(String writer, String title, String content){
+    public Post(String writer, String title, String content, User user){
         this.writer = writer;
         this.content = content;
         this.title = title;
+        this.user = user;
     }
 
 
