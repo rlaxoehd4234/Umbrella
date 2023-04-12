@@ -1,15 +1,14 @@
 package com.umbrella.controller;
 
-import com.umbrella.dto.post.PostListResponseDto;
-import com.umbrella.dto.post.PostResponseDto;
-import com.umbrella.dto.post.PostSaveRequestDto;
-import com.umbrella.dto.post.PostUpdateRequestDto;
+import com.umbrella.dto.post.*;
 import com.umbrella.service.Impl.PostServiceImpl;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +23,7 @@ public class PostController {
     private final PostServiceImpl postService;
 
     @PostMapping
-    public Long save(@Valid @RequestBody PostSaveRequestDto requestDto){ // 게시물 & 댓글 가져오기
+    public Long save(@Valid @RequestBody PostSaveRequestDto requestDto) { // 게시물 & 댓글 가져오기
         return postService.save(requestDto);
     }
 
@@ -52,6 +51,6 @@ public class PostController {
         return postService.findSearchPost(title ,pageable);
     }
     //추후 검색 기능 추가시 추가..
-    
+
 
 }

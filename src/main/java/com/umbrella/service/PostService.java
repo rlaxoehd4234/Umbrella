@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface PostService {
 
-    Long save(PostSaveRequestDto requestDto);
+    Long save(PostSaveRequestDto requestDto) throws IllegalAccessException;
 
     Long update(Long id, PostUpdateRequestDto requestDto);
 
