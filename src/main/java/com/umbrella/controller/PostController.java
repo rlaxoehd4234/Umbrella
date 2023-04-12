@@ -23,7 +23,7 @@ public class PostController {
     private final PostServiceImpl postService;
 
     @PostMapping
-    public Long save(@Valid @RequestBody PostSaveRequestDto requestDto){ // 게시물 & 댓글 가져오기
+    public Long save(@Valid @RequestBody PostSaveRequestDto requestDto) { // 게시물 & 댓글 가져오기
         return postService.save(requestDto);
     }
 

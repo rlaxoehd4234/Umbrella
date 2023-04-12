@@ -1,2 +1,10 @@
-package com.umbrella.exception;public class ExceptionDto {
+package com.umbrella.exception;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
+public class ExceptionDto {
+        private int errorCode;
 }
