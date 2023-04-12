@@ -6,10 +6,8 @@ import com.umbrella.domain.Post.Post;
 import com.umbrella.domain.Post.PostRepository;
 import com.umbrella.domain.User.User;
 import com.umbrella.domain.User.UserRepository;
-import com.umbrella.domain.exception.PostException;
-import com.umbrella.domain.exception.PostExceptionType;
-import com.umbrella.domain.exception.UserException;
-import com.umbrella.domain.exception.UserExceptionType;
+import com.umbrella.dto.exception.PostException;
+import com.umbrella.dto.exception.PostExceptionType;
 import com.umbrella.dto.post.*;
 import com.umbrella.security.utils.SecurityUtil;
 import com.umbrella.service.PostService;
@@ -20,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
+import java.util.Optional;
 
 
 @Service
@@ -35,17 +34,17 @@ public class PostServiceImpl implements PostService {
 
 
     // 저장 메서드
-    public Long save(PostSaveRequestDto requestDto)  {
-
+    public Long save(PostSaveRequestDto requestDto) throws IllegalAccessException {
         Long Id = securityUtil.getLoginUserId();
-        User findUser = userRepository.findById(Id).orElseThrow(() -> new UserException(UserExceptionType.NOT_FOUND_USER));
+        Optional<User> findUser = Optional.ofNullable(userRepository.findById(Id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는유저 입니다.")));
+
         validateUser(findUser);
 
         Post post = Post.builder()
                 .content(requestDto.getContent())
-                .writer(findUser.getName())
+                .writer(findUser.orElseThrow().getNickName())
                 .title(requestDto.getTitle())
-                .user(findUser)
+                .user(findUser.orElseThrow())
                 .build();
 
         return postRepository.save(post).getId();
@@ -54,8 +53,9 @@ public class PostServiceImpl implements PostService {
 
     // 수정 메서드
     public Long update(Long id, PostUpdateRequestDto requestDto){
+        Optional<User> user = userRepository.findById(securityUtil.getLoginUserId());
+        validateUser(user);
         Post post = validatePost(id);
-        validateUser(post.getUser());
         post.update(requestDto.getTitle(), requestDto.getContent());
 
         return id;
@@ -63,6 +63,7 @@ public class PostServiceImpl implements PostService {
 
     // 삭제 메서드
     public Long delete(Long id){
+        // 요청하는 유저의 아이디가 일치하는지에 대한 검증 로직 추가
         Post post = validatePost(id);
         postRepository.delete(post);
 
@@ -79,6 +80,7 @@ public class PostServiceImpl implements PostService {
     // 게시글 전체 리턴 메서드
     @Transactional(readOnly = true)
     public Page<PostListResponseDto> findAllPosts(Pageable pageable){
+
         Page<Post> page = postRepository.findAll(pageable);
         Page<PostListResponseDto> map = page.map(PostListResponseDto::new);
 
@@ -87,17 +89,17 @@ public class PostServiceImpl implements PostService {
 
 
     public Page<PostListResponseDto> findSearchPost(String title, Pageable pageable) {
+
         Page<Post> page = postRepository.findByTitleContaining(title, pageable);
         Page<PostListResponseDto> map = page.map(PostListResponseDto::new);
 
         return map;
     }
 
-    public void validateUser(User user)  {
-        Long Id = securityUtil.getLoginUserId();
-        User findUser = userRepository.findById(Id).orElseThrow(() -> new UserException(UserExceptionType.UN_AUTHORIZE_ERROR));
-        if(!Objects.equals(user.getId(), findUser.getId())){
-            throw new UserException(UserExceptionType.UN_AUTHORIZE_ERROR);
+    public void validateUser(Optional<User> user)  {
+        if(!Objects.equals(securityUtil.getLoginUserId(), user.get().getId()){
+            return new
+
         }
     }
 

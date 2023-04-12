@@ -1,14 +1,2 @@
-package com.umbrella.domain.exception;
-
-import com.umbrella.exception.BaseException;
-import com.umbrella.exception.BaseExceptionType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-@Getter
-@AllArgsConstructor
-public class CommentException extends BaseException {
-
-    private BaseExceptionType exceptionType;
-
+package com.umbrella.domain.exception;public class CommentException {
 }
