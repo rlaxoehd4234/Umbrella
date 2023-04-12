@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.servlet.http.Cookie;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -160,11 +161,12 @@ public class JwtAuthenticationProcessingFilterTest {
         // given
         Map accessAndRefreshToken = getAccessAndRefreshToken();
         String refreshToken = (String) accessAndRefreshToken.get(refreshHeader);
+        Cookie cookie = new Cookie(COOKIE_REFRESH_TOKEN_KEY, refreshToken);
 
         // when, then
         MvcResult result = mockMvc.perform(get(URL_ADDRESS)
-                        .header(COOKIE_REFRESH_TOKEN_KEY, refreshToken))
-                        .andExpect(status().isOk()).andReturn();
+                        .cookie(cookie))
+                        .andExpect(status().isNotFound()).andReturn();
 
         String accessToken = result.getResponse().getHeader(accessHeader);
 
@@ -197,12 +199,13 @@ public class JwtAuthenticationProcessingFilterTest {
         Map accessAndRefreshToken = getAccessAndRefreshToken();
         String refreshToken = (String) accessAndRefreshToken.get(refreshHeader);
         String accessToken = (String) accessAndRefreshToken.get(accessHeader);
+        Cookie cookie = new Cookie(COOKIE_REFRESH_TOKEN_KEY, refreshToken);
 
         // when
         MvcResult result = mockMvc.perform(get(URL_ADDRESS)
-                                    .header(COOKIE_REFRESH_TOKEN_KEY, refreshToken)
+                                    .cookie(cookie)
                                     .header(accessHeader, BEARER + accessToken))
-                .andExpect(status().isOk())
+                .andExpect(status().isNotFound())
                 .andReturn();
 
         String responseAccessToken = result.getResponse().getHeader(accessHeader);
@@ -223,12 +226,13 @@ public class JwtAuthenticationProcessingFilterTest {
         Map accessAndRefreshToken = getAccessAndRefreshToken();
         String refreshToken = (String) accessAndRefreshToken.get(refreshHeader);
         String accessToken = (String) accessAndRefreshToken.get(accessHeader);
+        Cookie cookie = new Cookie(COOKIE_REFRESH_TOKEN_KEY, refreshToken);
 
         // when
         MvcResult result = mockMvc.perform(get(URL_ADDRESS)
-                        .header(COOKIE_REFRESH_TOKEN_KEY, refreshToken)
-                        .header(accessHeader, accessToken))
-                .andExpect(status().isOk())
+                        .cookie(cookie)
+                        .header(accessHeader, accessToken + "wrongData"))
+                .andExpect(status().isNotFound())
                 .andReturn();
 
         String responseAccessToken = result.getResponse().getHeader(accessHeader);

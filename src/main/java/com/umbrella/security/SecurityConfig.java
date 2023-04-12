@@ -26,6 +26,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -62,7 +63,7 @@ public class SecurityConfig {
                 .antMatchers("/oauth2/**", "/auth/**").permitAll()
                 .anyRequest().authenticated()
         .and()
-                .addFilterAfter(jsonEmailPasswordAuthenticationFilter(), LogoutFilter.class)
+                .addFilterAfter(jsonEmailPasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationProcessingFilter(), JsonEmailPasswordAuthenticationFilter.class)
                 .oauth2Login()
                     .authorizationEndpoint()

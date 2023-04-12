@@ -21,6 +21,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -56,18 +57,26 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
         if (extractRefreshToken != null) {
             checkRefreshTokenAndReIssueAccessToken(request, response, extractRefreshToken);
-            return;
+            filterChain.doFilter(request, response);
         }
 
         checkAccessTokenAndAuthentication(request, response, filterChain);
     }
 
-    private void checkRefreshTokenAndReIssueAccessToken(HttpServletRequest request, HttpServletResponse response, String refreshToken) {
-        userRepository.findByRefreshToken(refreshToken).ifPresent(
-                user -> jwtService.sendAccessToken(response, jwtService.createAccessToken(
-                        user.getEmail())
-                )
-        );
+    private void checkRefreshTokenAndReIssueAccessToken(HttpServletRequest request, HttpServletResponse response, String refreshToken) throws ServletException, IOException {
+        Optional<User> findUser = userRepository.findByRefreshToken(refreshToken);
+        String extractAccessToken = jwtService.extractAccessToken(request)
+                .filter(jwtService::isTokenValid)
+                .orElse(null);
+
+        if (findUser.isPresent()) {
+            if (extractAccessToken != null) {
+                jwtService.sendAccessToken(response, extractAccessToken);
+            }
+            else {
+                jwtService.sendAccessToken(response, jwtService.createAccessToken(findUser.get().getEmail()));
+            }
+        }
     }
 
     private void checkAccessTokenAndAuthentication(HttpServletRequest request,

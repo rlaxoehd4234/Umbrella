@@ -2,6 +2,7 @@ package com.umbrella.service.Impl;
 
 import com.umbrella.domain.User.User;
 import com.umbrella.domain.User.UserRepository;
+import com.umbrella.security.utils.CookieUtil;
 import com.umbrella.service.JwtService;
 
 import io.jsonwebtoken.*;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -36,13 +38,16 @@ public class JwtServiceImpl implements JwtService {
 
     private final String COOKIE_REFRESH_TOKEN_KEY;
 
+    private final CookieUtil cookieUtil;
+
 
     public JwtServiceImpl(UserRepository userRepository, @Value("${jwt.secret}") String secret,
-                          @Value("${app.auth.cookie.refresh-cookie-key}") String cookieKey) {
+                          @Value("${app.auth.cookie.refresh-cookie-key}") String cookieKey, CookieUtil cookieUtil) {
         this.userRepository = userRepository;
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         this.secretKey = Keys.hmacShaKeyFor(keyBytes);
         this.COOKIE_REFRESH_TOKEN_KEY = cookieKey;
+        this.cookieUtil = cookieUtil;
     }
 
     @Value("${jwt.access.expiration}")
@@ -124,6 +129,7 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public void sendAccessToken(HttpServletResponse response, String accessToken) {
+        response.setContentType("application/json;charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_OK);
 
         setAccessTokenHeader(response, accessToken);
@@ -136,16 +142,15 @@ public class JwtServiceImpl implements JwtService {
                 .map(accessToken -> accessToken.replace(BEARER, ""));
     }
 
-//    @Override // RefreshToken In Json Body
-//    public Optional<String> extractRefreshToken(HttpServletRequest request) throws IOException, ServletException {
-//        return Optional.ofNullable(request.getHeader(refreshHeader))
-//                .filter(refreshToken -> refreshToken.startsWith(BEARER))
-//                .map(refreshToken -> refreshToken.replace(BEARER, ""));
-//    }
-
     @Override
     public Optional<String> extractRefreshToken(HttpServletRequest request) throws IOException, ServletException {
-        return Optional.ofNullable(request.getHeader(COOKIE_REFRESH_TOKEN_KEY));
+        Optional<Cookie> cookie = cookieUtil.getCookie(request, COOKIE_REFRESH_TOKEN_KEY);
+
+        if (cookie.isPresent()) {
+            return Optional.ofNullable(cookie.get().getValue());
+        }
+
+        return Optional.empty();
     }
 
     @Override
