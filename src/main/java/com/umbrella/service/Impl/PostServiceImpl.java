@@ -37,8 +37,7 @@ public class PostServiceImpl implements PostService {
 
     // 저장 메서드
     public Long save(PostSaveRequestDto requestDto){
-        Long Id = securityUtil.getLoginUserId();
-        User findUser = userRepository.findById(Id).orElseThrow(() -> new UserException(UserExceptionType.NOT_FOUND_ERROR));
+        User findUser = userRepository.findById(securityUtil.getLoginUserId()).orElseThrow(() -> new UserException(UserExceptionType.NOT_FOUND_ERROR));
         validateUser(findUser);
 
         Post post = Post.builder()
