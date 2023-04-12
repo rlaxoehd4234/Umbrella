@@ -1,16 +1,13 @@
-package com.umbrella.dto.exception;
+package com.umbrella.domain.exception;
 
 import com.umbrella.exception.BaseException;
 import com.umbrella.exception.BaseExceptionType;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@AllArgsConstructor
+@Getter
 public class PostException extends BaseException {
-    private BaseExceptionType baseExceptionType;
+    private BaseExceptionType exceptionType;
 
-    public PostException(BaseExceptionType baseExceptionType){
-        this.baseExceptionType = baseExceptionType;
-    }
-    @Override
-    public BaseExceptionType getExceptionType() {
-        return baseExceptionType;
-    }
 }
