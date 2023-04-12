@@ -1,12 +1,14 @@
 package com.umbrella.project_umbrella.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.umbrella.constant.Gender;
+import com.umbrella.constant.Role;
 import com.umbrella.domain.User.User;
 import com.umbrella.dto.user.UserRequestSignUpDto;
 import com.umbrella.domain.User.UserRepository;
-import com.umbrella.security.utils.CookieUtil;
+import com.umbrella.security.utils.SecurityUtil;
 import com.umbrella.service.UserService;
+import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithSecurityContext;
+import org.springframework.security.test.context.support.WithSecurityContextFactory;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,8 +35,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.Cookie;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -52,6 +65,9 @@ public class UserControllerTest {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    SecurityUtil securityUtil;
 
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -81,7 +97,7 @@ public class UserControllerTest {
 
     private static final String BEARER = "Bearer ";
 
-    private String getAccessToken() throws Exception {
+    private MvcResult login() throws Exception {
         Map<String, String> loginMap = new HashMap<>();
 
         loginMap.put("email", email);
@@ -93,25 +109,21 @@ public class UserControllerTest {
                         .content(objectMapper.writeValueAsString(loginMap))
         ).andExpect(status().isOk()).andReturn();
 
-        String requestCookie = result.getResponse().getCookie(COOKIE_REFRESH_TOKEN_KEY).getValue();
+        return result;
+    }
 
-        return result.getResponse().getHeader(accessHeader);
+    private String[] getAccessTokenAndRefreshToken() throws Exception {
+        MvcResult result = login();
+        String refreshToken = result.getResponse().getCookie(COOKIE_REFRESH_TOKEN_KEY).getValue();
+        String accessToken = result.getResponse().getHeader(accessHeader);
+
+        return new String[] {refreshToken, accessToken};
     }
 
     private Cookie setRefreshTokenInCookie() throws Exception {
-        Map<String, String> loginMap = new HashMap<>();
+        String[] tokens = getAccessTokenAndRefreshToken();
+        Cookie requestCookie = new Cookie(COOKIE_REFRESH_TOKEN_KEY, tokens[0]);
 
-        loginMap.put("email", email);
-        loginMap.put("password", password);
-
-        MvcResult result = mockMvc.perform(
-                post("/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(loginMap))
-        ).andExpect(status().isOk()).andReturn();
-
-        String refreshToken = result.getResponse().getCookie(COOKIE_REFRESH_TOKEN_KEY).getValue();
-        Cookie requestCookie = new Cookie(COOKIE_REFRESH_TOKEN_KEY, refreshToken);
         return requestCookie;
     }
 
@@ -171,7 +183,8 @@ public class UserControllerTest {
 
         signUp(signUpData);
 
-        String accessToken = getAccessToken();
+        String[] tokens = getAccessTokenAndRefreshToken();
+        String accessToken = tokens[1];
         Map<String, Object> updateUserMap = new HashMap<>();
 
         updateUserMap.put("name", "임꺽정");
@@ -179,7 +192,7 @@ public class UserControllerTest {
         updateUserMap.put("age", age + 1);
 
         String updateUserData = objectMapper.writeValueAsString(updateUserMap);
-        Cookie requestCookie = setRefreshTokenInCookie();
+        Cookie requestCookie = new Cookie(COOKIE_REFRESH_TOKEN_KEY, tokens[0]);
 
         // when
         mockMvc.perform(
@@ -208,7 +221,7 @@ public class UserControllerTest {
 
         signUp(signUpData);
 
-        String accessToken = getAccessToken();
+        String accessToken = getAccessTokenAndRefreshToken()[1];
         Map<String, Object> updateUserMap = new HashMap<>();
 
         updateUserMap.put("name", "임꺽정");
@@ -218,6 +231,7 @@ public class UserControllerTest {
         // when
         mockMvc.perform(
                 put("/user/update/info")
+                        .cookie(setRefreshTokenInCookie())
                         .header(accessHeader, BEARER + accessToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updateUserData)
@@ -241,7 +255,7 @@ public class UserControllerTest {
 
         signUp(signUpData);
 
-        String accessToken = getAccessToken();
+        String accessToken = getAccessTokenAndRefreshToken()[1];
 
         Map<String, Object> passwordUpdateMap = new HashMap<>();
         passwordUpdateMap.put("checkPassword", password);
@@ -251,7 +265,8 @@ public class UserControllerTest {
 
         // when
         mockMvc.perform(
-                put("/user/update/password")
+                patch("/user/update/password")
+                        .cookie(setRefreshTokenInCookie())
                         .header(accessHeader, BEARER + accessToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updatePasswordData)
@@ -273,7 +288,7 @@ public class UserControllerTest {
 
         signUp(signUpData);
 
-        String accessToken = getAccessToken();
+        String accessToken = getAccessTokenAndRefreshToken()[1];
 
         Map<String, Object> passwordUpdateMap = new HashMap<>();
         passwordUpdateMap.put("checkPassword", password);
@@ -283,7 +298,8 @@ public class UserControllerTest {
 
         // when
         mockMvc.perform(
-                put("/user/update/password")
+                patch("/user/update/password")
+                        .cookie(setRefreshTokenInCookie())
                         .header(accessHeader, BEARER + accessToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updatePasswordData)
@@ -305,7 +321,7 @@ public class UserControllerTest {
 
         signUp(signUpData);
 
-        String accessToken = getAccessToken();
+        String accessToken = getAccessTokenAndRefreshToken()[1];
 
         Map<String, Object> passwordUpdateMap = new HashMap<>();
         passwordUpdateMap.put("checkPassword", password + "wrong");
@@ -315,7 +331,8 @@ public class UserControllerTest {
 
         // when
         mockMvc.perform(
-                put("/user/update/password")
+                patch("/user/update/password")
+                        .cookie(setRefreshTokenInCookie())
                         .header(accessHeader, BEARER + accessToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updatePasswordData)
@@ -337,7 +354,7 @@ public class UserControllerTest {
 
         signUp(signUpData);
 
-        String accessToken = getAccessToken();
+        String accessToken = getAccessTokenAndRefreshToken()[1];
 
         Map<String, Object> passwordUpdateMap = new HashMap<>();
         passwordUpdateMap.put("password", password);
@@ -347,6 +364,7 @@ public class UserControllerTest {
         // when
         mockMvc.perform(
                 delete("/user/withdraw")
+                        .cookie(setRefreshTokenInCookie())
                         .header(accessHeader, BEARER + accessToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updatePasswordData)
@@ -366,7 +384,7 @@ public class UserControllerTest {
 
         signUp(signUpData);
 
-        String accessToken = getAccessToken();
+        String accessToken = getAccessTokenAndRefreshToken()[1];
 
         Map<String, Object> passwordCheckeMap = new HashMap<>();
         passwordCheckeMap.put("password", password + "wrong");
@@ -377,6 +395,7 @@ public class UserControllerTest {
         assertThatThrownBy(
                 () -> mockMvc.perform(
                         delete("/user/withdraw")
+                                .cookie(setRefreshTokenInCookie())
                                 .header(accessHeader, BEARER + accessToken)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(updatePasswordData)
@@ -392,7 +411,7 @@ public class UserControllerTest {
 
         signUp(signUpData);
 
-        String accessToken = getAccessToken();
+        String accessToken = getAccessTokenAndRefreshToken()[1];
 
         Map<String, Object> passwordUpdateMap = new HashMap<>();
         passwordUpdateMap.put("password", password);
@@ -422,7 +441,7 @@ public class UserControllerTest {
 
         signUp(signUpData);
 
-        String accessToken = getAccessToken();
+        String accessToken = getAccessTokenAndRefreshToken()[1];
 
         Long userId = userRepository.findAll().get(0).getId();
 
@@ -430,6 +449,7 @@ public class UserControllerTest {
         MvcResult result = mockMvc.perform(
                 get("/user/" + userId + "/info")
                         .characterEncoding("utf-8")
+                        .cookie(setRefreshTokenInCookie())
                         .header(accessHeader, BEARER + accessToken)
         ).andExpect(status().isOk()).andReturn();
 
@@ -454,13 +474,14 @@ public class UserControllerTest {
 
         signUp(signUpData);
 
-        String accessToken = getAccessToken();
+        String accessToken = getAccessTokenAndRefreshToken()[1];
 
         // when, then
         assertThatThrownBy(
                 () -> mockMvc.perform(
                 get("/user/" + 9999 + "/info")
                         .characterEncoding("utf-8")
+                        .cookie(setRefreshTokenInCookie())
                         .header(accessHeader, BEARER + accessToken)
         ).andExpect(status().isBadRequest()).andReturn())
                 .hasCause(new IllegalArgumentException("해당 정보를 가진 회원이 존재하지 않습니다."));
@@ -474,7 +495,7 @@ public class UserControllerTest {
 
         signUp(signUpData);
 
-        String accessToken = getAccessToken();
+        String accessToken = getAccessTokenAndRefreshToken()[1];
 
         Long userId = userRepository.findAll().get(0).getId();
 
@@ -487,6 +508,27 @@ public class UserControllerTest {
     }
 
     @Test
+    @DisplayName("[SUCCESS]_만료된_엑세스_토큰_리프레쉬_토큰으로_갱신하고_회원정보_읽어오기")
+    public void getUserInfoTest02() throws Exception {
+        // given
+        String signUpData = objectMapper.writeValueAsString(createSignUpDto());
+
+        signUp(signUpData);
+
+        String accessToken = getAccessTokenAndRefreshToken()[1];
+
+        Long userId = userRepository.findAll().get(0).getId();
+
+        // when, then
+        mockMvc.perform(
+                get("/user/" + userId + "/info")
+                        .characterEncoding("utf-8")
+                        .cookie(setRefreshTokenInCookie())
+                        .header(accessHeader, BEARER + accessToken + "wrong")
+        ).andExpect(status().isOk()).andReturn() ;
+    }
+
+    @Test
     @DisplayName("[SUCCESS]_내_정보_읽어오기")
     public void getMyInfoTest() throws Exception {
         // given
@@ -494,19 +536,20 @@ public class UserControllerTest {
 
         signUp(signUpData);
 
-        String accessToken = getAccessToken();
-
+        String accessToken = getAccessTokenAndRefreshToken()[1];
+        Cookie requestCookie = setRefreshTokenInCookie();
         // when
         MvcResult result = mockMvc.perform(
                 get("/user/info")
                         .characterEncoding("utf-8")
+                        .cookie(setRefreshTokenInCookie())
                         .header(accessHeader, BEARER + accessToken)
         ).andExpect(status().isOk()).andReturn();
 
-        result.getResponse().setCharacterEncoding("utf-8");
-
+        MockHttpServletResponse response = result.getResponse();
+        response.setCharacterEncoding("utf-8");
         // then
-        Map<String, Object> readUserInfoMap = objectMapper.readValue(result.getResponse().getContentAsString(), Map.class);
+        Map<String, Object> readUserInfoMap = objectMapper.readValue(response.getContentAsString(), Map.class);
         User findUser = userRepository.findByEmail(email).orElseThrow(
                 () -> new EntityNotFoundException("회원이 존재하지 않습니다.")
         );
@@ -524,7 +567,7 @@ public class UserControllerTest {
 
         signUp(signUpData);
 
-        String accessToken = getAccessToken();
+        String accessToken = getAccessTokenAndRefreshToken()[1];
 
         // when, then
         mockMvc.perform(
@@ -532,5 +575,25 @@ public class UserControllerTest {
                         .characterEncoding("utf-8")
                         .header(accessHeader, BEARER + accessToken + "wrong")
         ).andExpect(status().isForbidden()).andReturn();
+    }
+
+    @Test
+    @DisplayName("[SUCCESS]_RefreshTokenInCookie_Test")
+    public void refreshTokenInCookieTest() throws Exception {
+        // given
+        String signUpData = objectMapper.writeValueAsString(createSignUpDto());
+
+        signUp(signUpData);
+
+        String accessToken = getAccessTokenAndRefreshToken()[1];
+        Cookie refreshTokenInCookie = setRefreshTokenInCookie();
+
+        // when, then
+        MvcResult result = mockMvc.perform(
+                get("/user/info")
+                        .characterEncoding("utf-8")
+                        .cookie(refreshTokenInCookie)
+                        .header(accessHeader, BEARER + accessToken)
+        ).andExpect(status().isOk()).andReturn();
     }
 }

@@ -1,5 +1,6 @@
 package com.umbrella.security.login.handler;
 
+import com.umbrella.domain.User.User;
 import com.umbrella.domain.User.UserRepository;
 import com.umbrella.service.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -8,10 +9,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -30,17 +33,19 @@ public class LoginSuccessJWTProvideHandler extends SimpleUrlAuthenticationSucces
         String accessToken = jwtService.createAccessToken(email);
         String refreshToken = jwtService.createRefreshToken(email);
 
-//        jwtService.sendAccessAndRefreshToken(response, accessToken, refreshToken);    // RefreshToken In Json Body
         jwtService.setRefreshTokenInCookie(response, refreshToken);
         jwtService.sendAccessToken(response, accessToken);
 
-        userRepository.findByEmail(email).ifPresent(
-                user -> user.updateRefreshToken(refreshToken)
+        User foundUser = userRepository.findByEmail(email).orElseThrow(
+                () -> new EntityNotFoundException("찾을 수 없는 계정입니다.")
         );
+
+        foundUser.updateRefreshToken(refreshToken);
 
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType(APPLICATION_JSON);
         response.getWriter().write("성공적으로 로그인이 완료되었습니다!");
+        response.getWriter().write(foundUser.getNickName());
 
         log.info( "로그인에 성공합니다. email: {}", email);
         log.info( "AccessToken 을 발급합니다. AccessToken: {}", accessToken);

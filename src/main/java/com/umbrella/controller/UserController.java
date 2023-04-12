@@ -21,25 +21,24 @@ public class UserController {
     private final LoginService loginService;
 
     @PostMapping(value = "/signUp")
-//    @ResponseStatus(HttpStatus.OK)
     public void signUp(@Valid @RequestBody UserRequestSignUpDto userSignUpDto) {
         userService.signUp(userSignUpDto);
     }
 
     @PutMapping(value = "/user/update/info")
-//    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.OK)
     public void updateUserInfo(@Valid @RequestBody UserUpdateDto userUpdateDto) {
         userService.update(userUpdateDto);
     }
 
-    @PutMapping(value = "/user/update/password")
-//    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping(value = "/user/update/password")
+    @ResponseStatus(HttpStatus.OK)
     public void updateUserPassword(@Valid @RequestBody UpdatePasswordDto updatePasswordDto) {
         userService.updatePassword(updatePasswordDto.getCheckPassword(), updatePasswordDto.getNewPassword());
     }
 
     @DeleteMapping(value = "/user/withdraw")
-//    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.OK)
     public void withdraw(@Valid @RequestBody WithdrawUserDto withdrawUserDto) {
         userService.withdraw(withdrawUserDto.getPassword());
     }

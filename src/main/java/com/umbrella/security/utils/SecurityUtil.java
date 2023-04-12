@@ -14,7 +14,7 @@ public class SecurityUtil {
 
     public Long getLoginUserId() {
         UserContext userContext = getPrincipalInAuthentication();
-        return userContext.getUser().getId();
+        return userContext.getId();
     }
 
     private UserContext getPrincipalInAuthentication() {

@@ -17,13 +17,10 @@ import java.util.*;
 public class UserContext implements UserDetails, OAuth2User {
 
     @Getter
-    private User user;
-
-    @Getter
     private String password;
 
     @Getter
-    private final Long userId;
+    private final Long id;
 
     @Getter
     private final String username;
@@ -45,11 +42,11 @@ public class UserContext implements UserDetails, OAuth2User {
     @Getter
     private Map<String, Object> attributes;
 
-    public UserContext(String username, String password, Long userId, String nickName, Set<GrantedAuthority> authorities,
+    public UserContext(String username, String password, Long id, String nickName, Set<GrantedAuthority> authorities,
                        boolean accountNonExpired, boolean accountNonLocked, boolean credentialsNonExpired, boolean enabled) {
         this.username = username;
         this.password = password;
-        this.userId = userId;
+        this.id = id;
         this.nickName = nickName;
         this.authorities = Collections.unmodifiableSet(sortAuthorities(authorities));
         this.accountNonExpired = accountNonExpired;
@@ -58,16 +55,16 @@ public class UserContext implements UserDetails, OAuth2User {
         this.enabled = enabled;
     }
 
-    public UserContext(String username, String password, Long userId, String nickName, Set<GrantedAuthority> authorities) {
-        this(username, password, userId, nickName, authorities, true, true, true, true);
+    public UserContext(String username, String password, Long id, String nickName, Set<GrantedAuthority> authorities) {
+        this(username, password, id, nickName, authorities, true, true, true, true);
     }
 
-    public UserContext(String username, String password, Long userId, String nickName,
+    public UserContext(String username, String password, Long id, String nickName,
                        Set<GrantedAuthority> authorities, Map<String, Object> attributes,
                        boolean accountNonExpired, boolean accountNonLocked, boolean credentialsNonExpired, boolean enabled) {
         this.username = username;
         this.password = password;
-        this.userId = userId;
+        this.id = id;
         this.nickName = nickName;
         this.authorities = authorities;
         this.attributes = attributes;
@@ -77,18 +74,13 @@ public class UserContext implements UserDetails, OAuth2User {
         this.enabled = enabled;
     }
 
-    public UserContext(String username, String password, Long userId, String nickName, Set<GrantedAuthority> authorities, Map<String, Object> attributes) {
-        this(username, password, userId, nickName, authorities, attributes, true, true, true, true);
+    public UserContext(String username, String password, Long id, String nickName, Set<GrantedAuthority> authorities, Map<String, Object> attributes) {
+        this(username, password, id, nickName, authorities, attributes, true, true, true, true);
     }
 
     @Override
     public String getName() {
         return String.valueOf(attributes.get("name"));
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.authorities;
     }
 
     @Override
