@@ -4,23 +4,23 @@ spring:
       client:
         registration:
           google:
-            client-id: { google-client-id }
-            client-secret: { google-client-secret }
-            scope: { google-scope }
+            client-id: 1034478446062-t8g2n3p6peugp65gqlknurjtk6g1hdk4.apps.googleusercontent.com
+            client-secret: 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
+            scope: profile, email
           github:
-            client-id: { github-client-id }
-            client-secret: { github-client-secret }
+            client-id: a8cf5060b620711b3a97
+            client-secret: ab999a2c007545e5b3a45365beb583a9208ab604
           naver:
-            client-id: { naver-client-id }
-            client-secret: { naver-client-secret }
-            scope: { naver-scope }
+            client-id: inPe6oE1BQjiKUYwQcmV
+            client-secret: w1Gqv13MVo
+            scope: name, email, nickname, gender, birthday, birthyear
             client-name: Naver
             authorization-grant-type: authorization_code
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
           kakao:
-            client-id: { kakao-client-id }
-            client-secret: { kakao-client-secret }
-            scope: { kakao-scope }
+            client-id: 86ead32bca13a782eecf97ea7d5aab9f
+            client-secret: VUPqtpF7LjtTUkYNDdWcphZrBTLcCqkS
+            scope: profile_nickname, account_email, gender, birthday
             client-name: Kakao
             authorization-grant-type: authorization_code
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
@@ -40,4 +40,4 @@ spring:
 app:
   auth:
     cookie:
-      refresh-cookie-key: { refresh-cookie-key }
+      refresh-cookie-key: "refresh"

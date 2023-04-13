@@ -5,6 +5,7 @@ import com.umbrella.domain.User.UserRepository;
 import com.umbrella.security.login.cookie.CookieOAuth2AuthorizationRequestRepository;
 import com.umbrella.security.login.filter.JsonEmailPasswordAuthenticationFilter;
 import com.umbrella.security.login.filter.JwtAuthenticationProcessingFilter;
+import com.umbrella.security.login.filter.JwtExceptionFilter;
 import com.umbrella.security.login.handler.LoginFailureHandler;
 import com.umbrella.security.login.handler.LoginSuccessJWTProvideHandler;
 import com.umbrella.security.login.handler.OAuth2LoginFailureHandler;
@@ -65,6 +66,7 @@ public class SecurityConfig {
         .and()
                 .addFilterAfter(jsonEmailPasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationProcessingFilter(), JsonEmailPasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtExceptionFilter(), JwtAuthenticationProcessingFilter.class)
                 .oauth2Login()
                     .authorizationEndpoint()
                     .authorizationRequestRepository(cookieOAuth2AuthorizationRequestRepository)
@@ -128,6 +130,11 @@ public class SecurityConfig {
                                     = new JwtAuthenticationProcessingFilter(jwtService, userRepository, roleUtil);
 
         return jwtAuthenticationProcessingFilter;
+    }
+
+    @Bean
+    public JwtExceptionFilter jwtExceptionFilter() {
+        return new JwtExceptionFilter();
     }
 
     @Bean
