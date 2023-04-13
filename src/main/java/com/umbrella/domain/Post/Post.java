@@ -4,6 +4,8 @@ import com.umbrella.domain.User.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -15,7 +17,7 @@ public class Post {
 
     @Id
     @GeneratedValue
-    @Column(nullable = true)
+    @Column(nullable = false)
     private Long id;
 
     @NotNull
@@ -33,6 +35,8 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ColumnDefault("0")
+    private Integer viewCount;
 
     public Post(Long id, String title) {
         this.id = id;
@@ -52,5 +56,11 @@ public class Post {
     public void update(String title, String content){
         this.title = title;
         this.content = content;
+    }
+    public void addHeart(){
+        viewCount++;
+    }
+    public void popHeart() {
+        viewCount--;
     }
 }
