@@ -42,7 +42,8 @@ public class JwtServiceImpl implements JwtService {
 
 
     public JwtServiceImpl(UserRepository userRepository, @Value("${jwt.secret}") String secret,
-                          @Value("${app.auth.cookie.refresh-cookie-key}") String cookieKey, CookieUtil cookieUtil) {
+                          @Value("${app.auth.cookie.refresh-cookie-key}") String cookieKey,
+                          CookieUtil cookieUtil) {
         this.userRepository = userRepository;
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         this.secretKey = Keys.hmacShaKeyFor(keyBytes);
@@ -130,8 +131,6 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public void sendAccessToken(HttpServletResponse response, String accessToken) {
         response.setContentType("application/json;charset=UTF-8");
-        response.setStatus(HttpServletResponse.SC_OK);
-
         setAccessTokenHeader(response, accessToken);
     }
 
@@ -188,20 +187,17 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-        public boolean isTokenValid(String token) {
+    public int isTokenValid(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(secretKey)
                     .build().parseClaimsJws(token);
-
-            return true;
+            return 1;
         } catch (ExpiredJwtException e) {
             log.error("만료된 토큰입니다.", e);
-
-            return false;
-        } catch (Exception e) {
+            return 0;
+        } catch (JwtException | IllegalArgumentException e) {
             log.error("유효하지 않은 토큰입니다.", e);
-
-            return false;
+            return -1;
         }
     }
 

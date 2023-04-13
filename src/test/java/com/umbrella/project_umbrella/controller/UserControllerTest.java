@@ -508,7 +508,7 @@ public class UserControllerTest {
     }
 
     @Test
-    @DisplayName("[SUCCESS]_만료된_엑세스_토큰_리프레쉬_토큰으로_갱신하고_회원정보_읽어오기")
+    @DisplayName("[FAILED]_만료된_엑세스_토큰으로_갱신하고_회원정보_읽어오기")
     public void getUserInfoTest02() throws Exception {
         // given
         String signUpData = objectMapper.writeValueAsString(createSignUpDto());
@@ -525,7 +525,7 @@ public class UserControllerTest {
                         .characterEncoding("utf-8")
                         .cookie(setRefreshTokenInCookie())
                         .header(accessHeader, BEARER + accessToken + "wrong")
-        ).andExpect(status().isOk()).andReturn() ;
+        ).andExpect(status().isForbidden()).andReturn() ;
     }
 
     @Test
