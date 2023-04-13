@@ -36,13 +36,13 @@ public class CommentServiceImpl {
 
     // 댓글 조회
     // /post/{post-id}/comments
-    public List<CommentResponseDto> findComments(CommentRequestDto commentRequestDto, Long postId){
-        PageRequest pageRequest = makePageRequest(commentRequestDto);
+    public List<CommentResponseDto> findComments(Integer pageNumber, Long postId){
+        PageRequest pageRequest = makePageRequest(pageNumber);
         return returnResponseDtoList(pageRequest, postId);
     }
 
     // 댓글 생성
-    public List<CommentResponseDto> create(Long postId, CommentRequestDto commentRequestDto){
+    public List<CommentResponseDto> create(CommentRequestDto commentRequestDto, Long postId){
 
         User user = userRepository.findById(securityUtil.getLoginUserId())
                 .orElseThrow(() -> new UserException(UserExceptionType.NOT_FOUND_ERROR)); // 생성 검증 완료
@@ -60,39 +60,39 @@ public class CommentServiceImpl {
 
         Comment savedComment = commentRepository.save(comment);
 
-        return findComments(commentRequestDto, savedComment.getPost().getId());
+        return findComments(commentRequestDto.getPageNumber(), savedComment.getPost().getId());
     }
 
 
     // 댓글 수정
     // post/{post-id}/comments/{comment-id}
-    public List<CommentResponseDto> update(CommentRequestDto commentRequestDto, Long commentId){
+    public List<CommentResponseDto> update(CommentRequestDto commentRequestDto, Long postId, Long commentId){
 
         Comment comment = validateComment(commentId);
         validateUser(comment.getUser()); // 유저 검증
 
         comment.update(commentRequestDto.getContent());
-        Comment savedComment = commentRepository.save(comment);
+        commentRepository.save(comment);
 
-        return findComments(commentRequestDto, savedComment.getPost().getId());
+        return findComments(commentRequestDto.getPageNumber(), postId);
     }
 
     //댓글 삭제
     //  post/{post-id}/comments/{comment-id}
-    public List<CommentResponseDto> Delete(CommentRequestDto commentRequestDto, Long commentId){
+    public List<CommentResponseDto> delete(CommentRequestDto commentRequestDto, Long postId, Long commentId){
 
         Comment comment = validateComment(commentId);
 
         validateUser(comment.getUser()); // 삭제 검증 완료
         commentRepository.delete(comment);
 
-        return findComments(commentRequestDto, comment.getPost().getId());
+        return findComments(commentRequestDto.getPageNumber(), postId);
     }
 
 
-    private PageRequest makePageRequest(CommentRequestDto commentRequestDto){
+    private PageRequest makePageRequest(Integer pageNumber){ // PageRequest Integer 도 지원해줌
         return PageRequest
-                .of(commentRequestDto.getPageNumber(), 10, Sort.by(Sort.Direction.ASC, "createDate"));
+                .of(pageNumber, 10, Sort.by(Sort.Direction.ASC, "createDate"));
     }
 
     @Transactional(readOnly = true)
@@ -121,13 +121,11 @@ public class CommentServiceImpl {
     // 생성 권한
 
     // 삭제 수정 권한
-
     private void validateUser(User user){
         if(!Objects.equals(user.getId(), securityUtil.getLoginUserId())){
             throw new UserException(UserExceptionType.UN_AUTHORIZE_ERROR);
         }
     }
-
 
     // 엔티티 없는 경우 에러 던지기
     private Comment validateComment(Long commentId){
