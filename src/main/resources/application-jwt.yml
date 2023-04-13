@@ -1,10 +1,10 @@
 jwt:
-  secret: { secret-key }
+  secret: 767b00f050929a4278a94287c4725dca0904661e7e0632db68552edc239d263b2f864e7cbcdaaaa73b900e82d55933f8802991d24616235e85145ea4d2713b8c
 
   access:
-    expiration: { access-expiration }
-    header: { access-header }
+    expiration: 1800 # 30분
+    header: Authorization
 
   refresh:
-    expiration: { refresh-expiration }
-    header: { refresh-header }
+    expiration: 864000 # 10일
+    header: Authorization-refresh

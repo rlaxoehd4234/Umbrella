@@ -5,6 +5,7 @@ import com.umbrella.domain.User.UserRepository;
 import com.umbrella.security.userDetails.UserContext;
 import com.umbrella.security.utils.RoleUtil;
 import com.umbrella.service.JwtService;
+import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,7 @@ import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMap
 import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -24,6 +26,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
@@ -33,7 +36,15 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
     private final RoleUtil roleUtil;
 
-    private static final String[] NO_CHECK_URL = {"/login", "/signUp"};
+    private static final String[] NO_CHECK_URI_LIST = {"/login", "/signUp"};
+
+    private static final int PASS = 1;
+
+    private static final int REISSUE = 0;
+
+    private static final String REFRESH_TOKEN_ERROR_M = "유효하지 않은 리프레쉬 토큰입니다!";
+
+    private static final String ACCESS_TOKEN_ERROR_M = "유효하지 않은 엑세스 토큰입니다!";
 
     @Value("${jwt.access.header}")
     private String accessHeader;
@@ -44,57 +55,49 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        for (String noCheck : NO_CHECK_URL) {
-            if (request.getRequestURI().equals(noCheck)) {
+        for (String NO_CHECK_URI : NO_CHECK_URI_LIST) {
+            if (request.getRequestURI().equals(NO_CHECK_URI)) {
                 filterChain.doFilter(request, response);
                 return;
             }
         }
 
-        String extractRefreshToken = jwtService.extractRefreshToken(request)
-                .filter(jwtService::isTokenValid)
-                .orElse(null);
-
-        if (extractRefreshToken != null) {
-            checkRefreshTokenAndReIssueAccessToken(request, response, extractRefreshToken);
-            filterChain.doFilter(request, response);
-        }
-
-        checkAccessTokenAndAuthentication(request, response, filterChain);
-    }
-
-    private void checkRefreshTokenAndReIssueAccessToken(HttpServletRequest request, HttpServletResponse response, String refreshToken) throws ServletException, IOException {
-        Optional<User> findUser = userRepository.findByRefreshToken(refreshToken);
-        String extractAccessToken = jwtService.extractAccessToken(request)
-                .filter(jwtService::isTokenValid)
-                .orElse(null);
-
-        if (findUser.isPresent()) {
-            if (extractAccessToken != null) {
-                jwtService.sendAccessToken(response, extractAccessToken);
-            }
-            else {
-                jwtService.sendAccessToken(response, jwtService.createAccessToken(findUser.get().getEmail()));
-            }
-        }
-    }
-
-    private void checkAccessTokenAndAuthentication(HttpServletRequest request,
-                                                   HttpServletResponse response,
-                                                   FilterChain filterChain
-                                                   ) throws ServletException, IOException {
-        jwtService.extractAccessToken(request).filter(
-                jwtService::isTokenValid
-        ).ifPresent(
-                accessToken -> jwtService.extractEmail(accessToken)
-                        .ifPresent(
-                            email -> userRepository.findByEmail(email).ifPresent(
-                                    this::saveAuthentication
-                        )
-                )
+        Optional<String> extractRefreshToken = jwtService.extractRefreshToken(request);
+        String extractAccessToken = jwtService.extractAccessToken(request).orElseThrow(
+                () -> new JwtException(ACCESS_TOKEN_ERROR_M)
         );
 
-        filterChain.doFilter(request, response);
+        if (extractRefreshToken.isPresent()) {
+            String email = String.valueOf(jwtService.extractSubject(extractRefreshToken.get()));
+            if (jwtService.isTokenValid(extractRefreshToken.get()) == PASS) {
+                checkAccessToken(response, extractAccessToken, email);
+                checkAndSaveAuthentication(request, response, filterChain,
+                        jwtService.extractEmail(extractAccessToken).get());
+            } else {
+                throw new JwtException(REFRESH_TOKEN_ERROR_M);
+            }
+        } else {
+            throw new JwtException(REFRESH_TOKEN_ERROR_M);
+        }
+    }
+
+    private void checkAccessToken(HttpServletResponse response, String extractAccessToken, String email) {
+        if (jwtService.isTokenValid(extractAccessToken) == PASS) {
+            jwtService.sendAccessToken(response, extractAccessToken);
+        } else if (jwtService.isTokenValid(extractAccessToken) == REISSUE) {
+            jwtService.sendAccessToken(response, jwtService.createAccessToken(email));
+        } else {
+            throw new JwtException(ACCESS_TOKEN_ERROR_M);
+        }
+    }
+
+    private void checkAndSaveAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain,
+                                            String email) throws ServletException, IOException {
+        userRepository.findByEmail(email).ifPresent(
+            this::saveAuthentication
+        );
+
+        doFilter(request, response, filterChain);
     }
 
     private void saveAuthentication(User user) {

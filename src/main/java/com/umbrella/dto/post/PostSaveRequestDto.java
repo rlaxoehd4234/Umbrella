@@ -9,8 +9,6 @@ import javax.validation.constraints.Size;
 
 @Getter
 public class PostSaveRequestDto {
-
-
     @NotBlank
     private String title;
     @NotBlank
@@ -18,6 +16,7 @@ public class PostSaveRequestDto {
     private String content;
     @NotBlank
     private String writer;
+
 
 
     @Builder

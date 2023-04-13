@@ -11,7 +11,6 @@ import java.util.Set;
 
 @Component
 public class RoleUtil {
-
     public Set<GrantedAuthority> addAuthoritiesForContext(User targetUser) {
         String role = targetUser.getRole().name();
 
