@@ -7,6 +7,7 @@ import com.umbrella.domain.User.UserRepository;
 import com.umbrella.service.JwtService;
 import io.jsonwebtoken.JwtException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -266,22 +267,23 @@ public class JwtServiceTest {
         assertThat(extractEmail).isEqualTo(email);
     }
 
-//    @Test
-//    @DisplayName("[SUCCESS]_리프레쉬_토큰_추출")
-//    public void extractRefreshTokenTest() throws IOException, ServletException {
-//        // given
-//        String accessToken = jwtService.createAccessToken(email);
-//        String refreshToken = jwtService.createRefreshToken(email);
-//
-//        HttpServletRequest httpServletRequest = setRequest(accessToken, refreshToken);
-//
-//        // when
-//        String extractedRefreshToken = String.valueOf(jwtService.extractRefreshToken(httpServletRequest));
-//
-//        // then
-//        assertThat(extractedRefreshToken).isEqualTo(refreshToken);
-//        assertThat(jwtService.extractEmail(refreshToken)).isEmpty();
-//    }
+    @Test
+    @DisplayName("[SUCCESS]_리프레쉬_토큰_추출")
+    @Disabled
+    public void extractRefreshTokenTest() throws IOException, ServletException {
+        // given
+        String accessToken = jwtService.createAccessToken(email);
+        String refreshToken = jwtService.createRefreshToken(email);
+
+        HttpServletRequest httpServletRequest = setRequest(accessToken, refreshToken);
+
+        // when
+        String extractedRefreshToken = String.valueOf(jwtService.extractRefreshToken(httpServletRequest));
+
+        // then
+        assertThat(extractedRefreshToken).isEqualTo(refreshToken);
+        assertThat(jwtService.extractEmail(refreshToken)).isEmpty();
+    }
 
     @Test
     @DisplayName("[SUCCESS]_엑세스_토큰_클레임_추출")

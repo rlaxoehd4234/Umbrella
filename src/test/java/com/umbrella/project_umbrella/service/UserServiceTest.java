@@ -9,11 +9,13 @@ import com.umbrella.dto.user.UserRequestSignUpDto;
 import com.umbrella.dto.user.UserUpdateDto;
 import com.umbrella.exception.DuplicateEmailException;
 import com.umbrella.domain.User.UserRepository;
+import com.umbrella.exception.DuplicateNicknameException;
 import com.umbrella.security.userDetails.UserContext;
 import com.umbrella.security.utils.RoleUtil;
 import com.umbrella.security.utils.SecurityUtil;
 import com.umbrella.service.UserService;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -145,20 +147,21 @@ public class UserServiceTest {
                 .isEqualTo("동일한 이메일을 사용하는 계정이 이미 존재합니다.");
     }
 
-//    @Test
-//    @DisplayName("[FAILED]_회원가입_실패_닉네임_중복")
-//    public void signUpExceptionTest02() {
-//        // given
-//        UserRequestSignUpDto userSignUpDto = createUserSignUpDto();
-//
-//        userService.signUp(userSignUpDto);
-//        em.flush();
-//        em.clear();
-//
-//        // when, then
-//        assertThat(assertThrows(DuplicateNicknameException.class, () -> userService.signUp(userSignUpDto)).getMessage())
-//                .isEqualTo("동일한 닉네임을 사용하는 계정이 이미 존재합니다.");
-//    }
+    @Test
+    @DisplayName("[FAILED]_회원가입_실패_닉네임_중복")
+    @Disabled
+    public void signUpExceptionTest02() {
+        // given
+        UserRequestSignUpDto userSignUpDto = createUserSignUpDto();
+
+        userService.signUp(userSignUpDto);
+        em.flush();
+        em.clear();
+
+        // when, then
+        assertThat(assertThrows(DuplicateNicknameException.class, () -> userService.signUp(userSignUpDto)).getMessage())
+                .isEqualTo("동일한 닉네임을 사용하는 계정이 이미 존재합니다.");
+    }
 
     @Test
     @DisplayName("[FAILED]_회원가입_실패_존재하지_않는_필드")
