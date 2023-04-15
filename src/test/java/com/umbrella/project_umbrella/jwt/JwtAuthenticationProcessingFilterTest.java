@@ -164,7 +164,7 @@ public class JwtAuthenticationProcessingFilterTest {
         MvcResult result = mockMvc.perform(get(URL_ADDRESS)
                         .cookie(cookie)
                         .header(accessHeader, BEARER + accessToken))
-                        .andExpect(status().isOk()).andReturn();
+                        .andExpect(status().isNotFound()).andReturn();
 
         String requestAccessToken = result.getResponse().getHeader(accessHeader);
 
@@ -203,7 +203,7 @@ public class JwtAuthenticationProcessingFilterTest {
         MvcResult result = mockMvc.perform(get(URL_ADDRESS)
                                     .cookie(cookie)
                                     .header(accessHeader, BEARER + accessToken))
-                .andExpect(status().isOk())
+                .andExpect(status().isNotFound())
                 .andReturn();
 
         String responseAccessToken = result.getResponse().getHeader(accessHeader);

@@ -1,12 +1,8 @@
 package com.umbrella.security.userDetails;
 
-import com.umbrella.constant.Role;
-import com.umbrella.domain.User.User;
-import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.util.Assert;

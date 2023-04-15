@@ -2,7 +2,10 @@ package com.umbrella.constant;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.umbrella.domain.exception.UserException;
 import lombok.Getter;
+
+import static com.umbrella.domain.exception.UserExceptionType.UNSUPPORTED_GENDER_ERROR;
 
 public enum Gender {
     MALE("MALE"), FEMALE("FEMALE"), UNKNOWN("UNKNOWN");
@@ -25,7 +28,6 @@ public enum Gender {
                 return status;
             }
         }
-
-        throw new IllegalArgumentException("유효하지 않은 성별입니다.");
+        throw new UserException(UNSUPPORTED_GENDER_ERROR);
     }
 }
