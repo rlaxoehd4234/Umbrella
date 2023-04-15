@@ -1,10 +1,12 @@
 package com.umbrella.security.login.handler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.umbrella.domain.User.User;
 import com.umbrella.domain.User.UserRepository;
 import com.umbrella.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -14,7 +16,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -22,8 +25,7 @@ public class LoginSuccessJWTProvideHandler extends SimpleUrlAuthenticationSucces
 
     private final JwtService jwtService;
     private final UserRepository userRepository;
-
-    private final String APPLICATION_JSON = "application/json";
+    private final ObjectMapper objectMapper;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -42,10 +44,17 @@ public class LoginSuccessJWTProvideHandler extends SimpleUrlAuthenticationSucces
 
         foundUser.updateRefreshToken(refreshToken);
 
+        Map<String, Object> responseMap = new HashMap<>();
+
+        responseMap.put("nick_name", foundUser.getNickName());
+
         response.setStatus(HttpServletResponse.SC_OK);
-        response.setContentType(APPLICATION_JSON);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().write("성공적으로 로그인이 완료되었습니다!");
-        response.getWriter().write(foundUser.getNickName());
+        response.getWriter().write("\n");
+        response.getWriter().write(objectMapper.writeValueAsString(responseMap));
+        response.getWriter().flush();
+        response.getWriter().close();
 
         log.info( "로그인에 성공합니다. email: {}", email);
         log.info( "AccessToken 을 발급합니다. AccessToken: {}", accessToken);

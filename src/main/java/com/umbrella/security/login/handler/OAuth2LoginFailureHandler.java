@@ -2,11 +2,9 @@ package com.umbrella.security.login.handler;
 
 import com.umbrella.security.login.cookie.CookieOAuth2AuthorizationRequestRepository;
 import com.umbrella.security.utils.CookieUtil;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
-import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.ServletException;
