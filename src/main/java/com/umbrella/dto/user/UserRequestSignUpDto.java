@@ -2,16 +2,11 @@ package com.umbrella.dto.user;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import com.umbrella.constant.AuthPlatform;
 import com.umbrella.constant.Gender;
-import com.umbrella.constant.Role;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Range;
-import org.springframework.util.Assert;
 
 import javax.validation.constraints.*;
 import java.util.Calendar;
@@ -21,41 +16,27 @@ import java.util.Calendar;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserRequestSignUpDto {
 
-    @Email
-    @NotBlank(message = "이메일은 필수 입력 값입니다.")
+    @Email(message = "올바른 형식의 이메일 주소여야 합니다")
     private String email;
 
-    @NotBlank(message = "닉네임은 필수 입력 값입니다.")
     private String nickName;
 
-    @NotBlank(message = "비밀번호는 필수 입력 값입니다.")
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,30}$")
-    // 비밀번호는 8 ~ 30 자리이면서 1개 이상의 알파벳, 숫자, 특수문자를 포함해야 합니다.
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,30}$",
+            message = "비밀번호는 8 ~ 30 자리이면서 1개 이상의 알파벳, 숫자, 특수문자를 포함해야 합니다.")
     private String password;
 
-    @NotBlank(message = "실명은 필수 입력 값입니다.")
-    @Size(min = 2)
-    @Pattern(regexp = "^[A-Za-z가-힣]+$")
-    // 사용자 이름은 2자 이상이면서 한글 혹은 알파벳으로만 이루어져있어야 합니다.
+    @Size(min = 2, max = 100, message = "이름의 길이는 2에서 100 사이여야 합니다.")
+    @Pattern(regexp = "^[A-Za-z가-힣]+$", message = "사용자 이름은 2자 이상이면서 한글 혹은 알파벳으로만 이루어져있어야 합니다.")
     private String name;
 
-    @NotBlank(message = "생년월일은 필수 입력 값입니다.")
+    @Size(min = 8, max = 8, message = "생년월일은 8자리가 입력되어야 합니다.")
     private String  birthDate;
 
-    @NotNull(message = "성별은 필수 입력 값입니다.")
     private Gender gender;
 
     @Builder
     public UserRequestSignUpDto(String email, String nickName, String password,
                                 String name, String birthDate, String genderValue) {
-
-        Assert.hasText(email, "email must not be blank");
-        Assert.hasText(nickName, "nickName must not be blank");
-        Assert.hasText(password, "password must not be blank");
-        Assert.hasText(name, "mName must not be blank");
-        Assert.hasText(birthDate, "birthDate must not be null");
-        Assert.hasText(genderValue, "gender must not be blank");
-
         this.email = email;
         this.nickName = nickName;
         this.password = password;
