@@ -12,9 +12,9 @@ import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 @Getter
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class UserUpdateDto {
 
+    @JsonProperty("nick_name")
     private Optional<String> nickName;
 
     private Optional<String> name;

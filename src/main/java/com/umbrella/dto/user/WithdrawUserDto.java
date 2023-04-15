@@ -11,8 +11,6 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 
 @Getter
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class WithdrawUserDto {
 
     @NotBlank(message = "비밀번호는 필수 입력 값입니다.")

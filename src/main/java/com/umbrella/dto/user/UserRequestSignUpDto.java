@@ -45,6 +45,7 @@ public class UserRequestSignUpDto {
     @NotNull(message = "성별은 필수 입력 값입니다.")
     private Gender gender;
 
+    @Builder
     public UserRequestSignUpDto(String email, String nickName, String password,
                                 String name, String birthDate, String genderValue) {
 
@@ -61,10 +62,6 @@ public class UserRequestSignUpDto {
         this.name = name;
         this.birthDate = birthDate;
         this.gender = getGender(genderValue);
-    }
-
-    @JsonPOJOBuilder(withPrefix = "")
-    public static class UserSignUpDtoBuilder {
     }
 
     public int calculateAge() {

@@ -1,19 +1,18 @@
 package com.umbrella.dto.user;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.umbrella.domain.User.User;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class UserInfoDto {
 
     private final String email;
 
     private final String name;
 
+    @JsonProperty("nick_name")
     private final String nickName;
 
     private final Integer age;

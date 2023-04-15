@@ -1,14 +1,12 @@
 package com.umbrella.project_umbrella.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.umbrella.constant.Role;
+
 import com.umbrella.domain.User.User;
 import com.umbrella.dto.user.UserRequestSignUpDto;
 import com.umbrella.domain.User.UserRepository;
 import com.umbrella.security.utils.SecurityUtil;
 import com.umbrella.service.UserService;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,16 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithSecurityContext;
-import org.springframework.security.test.context.support.WithSecurityContextFactory;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,15 +24,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.Cookie;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -447,7 +433,7 @@ public class UserControllerTest {
 
         // when
         MvcResult result = mockMvc.perform(
-                get("/user/" + userId + "/info")
+                post("/user/" + userId + "/info")
                         .characterEncoding("utf-8")
                         .cookie(setRefreshTokenInCookie())
                         .header(accessHeader, BEARER + accessToken)
@@ -479,7 +465,7 @@ public class UserControllerTest {
         // when, then
         assertThatThrownBy(
                 () -> mockMvc.perform(
-                get("/user/" + 9999 + "/info")
+                post("/user/" + 9999 + "/info")
                         .characterEncoding("utf-8")
                         .cookie(setRefreshTokenInCookie())
                         .header(accessHeader, BEARER + accessToken)
