@@ -32,26 +32,27 @@ public class ExceptionAdvice {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity DtoIllegalArgumentHandler(IllegalArgumentException exception){
-        if (exception.getMessage().equals(EMAIL_ERROR_MESSAGE)) {
-            return new ResponseEntity(new ExceptionDto(BLANK_EMAIL_ERROR.getErrorCode(), BLANK_EMAIL_ERROR.getErrorMessage()),
-                    BLANK_EMAIL_ERROR.getHttpStatus());
-        } else if (exception.getMessage().equals(NICKNAME_ERROR_MESSAGE)) {
-            return new ResponseEntity(new ExceptionDto(BLANK_NICKNAME_ERROR.getErrorCode(), BLANK_NICKNAME_ERROR.getErrorMessage()),
-                    BLANK_NICKNAME_ERROR.getHttpStatus());
-        } else if (exception.getMessage().equals(PASSWORD_ERROR_MESSAGE)) {
-            return new ResponseEntity(new ExceptionDto(BLANK_PASSWORD_ERROR.getErrorCode(), BLANK_PASSWORD_ERROR.getErrorMessage()),
-                    BLANK_PASSWORD_ERROR.getHttpStatus());
-        } else if (exception.getMessage().equals(NAME_ERROR_MESSAGE)) {
-            return new ResponseEntity(new ExceptionDto(BLANK_NAME_ERROR.getErrorCode(), BLANK_NAME_ERROR.getErrorMessage()),
-                    BLANK_NAME_ERROR.getHttpStatus());
-        } else if (exception.getMessage().equals(BIRTHDATE_ERROR_MESSAGE)) {
-            return new ResponseEntity(new ExceptionDto(BLANK_BIRTHDATE_ERROR.getErrorCode(), BLANK_BIRTHDATE_ERROR.getErrorMessage()),
-                    BLANK_BIRTHDATE_ERROR.getHttpStatus());
-        } else if (exception.getMessage().equals(GENDER_ERROR_MESSAGE)) {
-            return new ResponseEntity(new ExceptionDto(BLANK_GENDER_ERROR.getErrorCode(), BLANK_GENDER_ERROR.getErrorMessage()),
-                    BLANK_GENDER_ERROR.getHttpStatus());
-        } else {
-            return new ResponseEntity(new ExceptionDto(699, "잘못된 인자가 삽입되었습니다."), HttpStatus.BAD_REQUEST);
+        switch (exception.getMessage()) {
+            case (EMAIL_ERROR_MESSAGE):
+                return new ResponseEntity(new ExceptionDto(BLANK_EMAIL_ERROR.getErrorCode(), BLANK_EMAIL_ERROR.getErrorMessage()),
+                        BLANK_EMAIL_ERROR.getHttpStatus());
+            case (NICKNAME_ERROR_MESSAGE):
+                return new ResponseEntity(new ExceptionDto(BLANK_NICKNAME_ERROR.getErrorCode(), BLANK_NICKNAME_ERROR.getErrorMessage()),
+                        BLANK_NICKNAME_ERROR.getHttpStatus());
+            case (PASSWORD_ERROR_MESSAGE):
+                return new ResponseEntity(new ExceptionDto(BLANK_PASSWORD_ERROR.getErrorCode(), BLANK_PASSWORD_ERROR.getErrorMessage()),
+                        BLANK_PASSWORD_ERROR.getHttpStatus());
+            case (NAME_ERROR_MESSAGE):
+                return new ResponseEntity(new ExceptionDto(BLANK_NAME_ERROR.getErrorCode(), BLANK_NAME_ERROR.getErrorMessage()),
+                        BLANK_NAME_ERROR.getHttpStatus());
+            case (BIRTHDATE_ERROR_MESSAGE):
+                return new ResponseEntity(new ExceptionDto(BLANK_BIRTHDATE_ERROR.getErrorCode(), BLANK_BIRTHDATE_ERROR.getErrorMessage()),
+                        BLANK_BIRTHDATE_ERROR.getHttpStatus());
+            case (GENDER_ERROR_MESSAGE):
+                return new ResponseEntity(new ExceptionDto(BLANK_GENDER_ERROR.getErrorCode(), BLANK_GENDER_ERROR.getErrorMessage()),
+                        BLANK_GENDER_ERROR.getHttpStatus());
+            default:
+                return new ResponseEntity(new ExceptionDto(699, "잘못된 인자가 삽입되었습니다."), HttpStatus.BAD_REQUEST);
         }
     }
 
