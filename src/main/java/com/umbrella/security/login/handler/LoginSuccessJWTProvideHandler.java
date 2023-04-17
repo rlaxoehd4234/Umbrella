@@ -10,12 +10,14 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,21 +40,19 @@ public class LoginSuccessJWTProvideHandler extends SimpleUrlAuthenticationSucces
         jwtService.setRefreshTokenInCookie(response, refreshToken);
         jwtService.sendAccessToken(response, accessToken);
 
-        User foundUser = userRepository.findByEmail(email).orElseThrow(
-                () -> new EntityNotFoundException("찾을 수 없는 계정입니다.")
-        );
+        User foundUser = userRepository.findByEmail(email)
+                .orElseThrow( () -> new EntityNotFoundException("찾을 수 없는 계정입니다.") );
 
         foundUser.updateRefreshToken(refreshToken);
 
         Map<String, Object> responseMap = new HashMap<>();
-
         responseMap.put("nick_name", foundUser.getNickName());
+        String responseBody = objectMapper.writeValueAsString(responseMap) + "\n성공적으로 로그인이 완료되었습니다!";
 
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.getWriter().write("성공적으로 로그인이 완료되었습니다!");
-        response.getWriter().write("\n");
-        response.getWriter().write(objectMapper.writeValueAsString(responseMap));
+        response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
+        response.getWriter().write(responseBody);
         response.getWriter().flush();
         response.getWriter().close();
 

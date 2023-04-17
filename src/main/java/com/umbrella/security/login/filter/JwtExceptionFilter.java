@@ -1,7 +1,9 @@
 package com.umbrella.security.login.filter;
 
-import io.jsonwebtoken.ExpiredJwtException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.umbrella.exception.ExceptionDto;
 import io.jsonwebtoken.JwtException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -21,17 +23,17 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         try {
             filterChain.doFilter(request, response);
-        } catch (ExpiredJwtException e) {
-            responseJwtError(response, e.getMessage());
         } catch (JwtException | IllegalArgumentException e) {
-            responseJwtError(response, e.getMessage());
+            handleJwtException(response, e.getMessage());
         }
     }
 
-    private void responseJwtError(HttpServletResponse response, String message) throws IOException {
-        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        response.setContentType(String.valueOf(MediaType.APPLICATION_JSON_VALUE));
+    private void handleJwtException(HttpServletResponse response, String message) throws IOException {
+        ExceptionDto exceptionDto = new ExceptionDto(HttpStatus.FORBIDDEN.value(), message);
+
+        response.setStatus(HttpStatus.FORBIDDEN.value());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(message);
+        response.getWriter().write(new ObjectMapper().writeValueAsString(exceptionDto));
     }
 }
