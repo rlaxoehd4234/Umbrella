@@ -25,9 +25,7 @@ public class JsonEmailPasswordAuthenticationFilter extends AbstractAuthenticatio
     private final ObjectMapper objectMapper;
 
     private static final String DEFAULT_LOGIN_REQUEST_URL = "/login";
-
     private static final String HTTP_METHOD = "POST";
-
     private static final String CONTENT_TYPE = "application/json";
 
     public JsonEmailPasswordAuthenticationFilter(ObjectMapper objectMapper) {
@@ -36,16 +34,14 @@ public class JsonEmailPasswordAuthenticationFilter extends AbstractAuthenticatio
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request,
-                                                HttpServletResponse response) throws AuthenticationException,
-                                                                                        IOException, ServletException
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+            throws AuthenticationException, IOException, ServletException
     {
-        if (!request.getMethod().equals(HTTP_METHOD)) {
-            log.error("POST 요청이 아닙니다.");
+        if (!HTTP_METHOD.equals(request.getMethod())) {
             throw new AuthenticationServiceException("Authentication method not supported : " + request.getMethod());
-        } else if (!request.getContentType().equals(CONTENT_TYPE)) {
-            log.error("JSON 형식의 요청이 아닙니다.");
-            log.error("Content Type : " + request.getContentType());
+        }
+
+        if (!CONTENT_TYPE.equals(request.getContentType())) {
             throw new AuthenticationServiceException("Authentication method not supported : " + request.getContentType());
         }
 
@@ -57,10 +53,10 @@ public class JsonEmailPasswordAuthenticationFilter extends AbstractAuthenticatio
 
         setDetails(request, authToken);
 
-        return this.getAuthenticationManager().authenticate(authToken);
+        return getAuthenticationManager().authenticate(authToken);
     }
 
     protected void setDetails(HttpServletRequest request, UsernamePasswordAuthenticationToken authToken) {
-        authToken.setDetails(this.authenticationDetailsSource.buildDetails(request));
+        authToken.setDetails(authenticationDetailsSource.buildDetails(request));
     }
 }

@@ -23,6 +23,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Optional;
 
 @Slf4j
@@ -31,19 +32,15 @@ import java.util.Optional;
 public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-
     private final UserRepository userRepository;
-
     private final RoleUtil roleUtil;
 
     private static final String[] NO_CHECK_URI_LIST = {"/login", "/signUp"};
 
     private static final int PASS = 1;
-
     private static final int REISSUE = 0;
 
     private static final String REFRESH_TOKEN_ERROR_M = "유효하지 않은 리프레쉬 토큰입니다!";
-
     private static final String ACCESS_TOKEN_ERROR_M = "유효하지 않은 엑세스 토큰입니다!";
 
     @Value("${jwt.access.header}")
@@ -55,11 +52,11 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        for (String NO_CHECK_URI : NO_CHECK_URI_LIST) {
-            if (request.getRequestURI().equals(NO_CHECK_URI)) {
-                filterChain.doFilter(request, response);
-                return;
-            }
+        String requestURI = request.getRequestURI();
+
+        if (Arrays.stream(NO_CHECK_URI_LIST).anyMatch(uri -> uri.equals(requestURI))) {
+            filterChain.doFilter(request, response);
+            return;
         }
 
         Optional<String> extractRefreshToken = jwtService.extractRefreshToken(request);
@@ -79,36 +76,52 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         } else {
             throw new JwtException(REFRESH_TOKEN_ERROR_M);
         }
-    }
-
-    private void checkAccessToken(HttpServletResponse response, String extractAccessToken, String email) {
-        if (jwtService.isTokenValid(extractAccessToken) == PASS) {
-            jwtService.sendAccessToken(response, extractAccessToken);
-        } else if (jwtService.isTokenValid(extractAccessToken) == REISSUE) {
-            jwtService.sendAccessToken(response, jwtService.createAccessToken(email));
-        } else {
-            throw new JwtException(ACCESS_TOKEN_ERROR_M);
-        }
-    }
-
-    private void checkAndSaveAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain,
-                                            String email) throws ServletException, IOException {
-        userRepository.findByEmail(email).ifPresent(
-            this::saveAuthentication
-        );
 
         doFilter(request, response, filterChain);
     }
 
+    private void checkAccessToken(HttpServletResponse response, String accessToken, String email) {
+        switch (jwtService.isTokenValid(accessToken)) {
+            case PASS:
+                jwtService.sendAccessToken(response, accessToken);
+                break;
+            case REISSUE:
+                jwtService.sendAccessToken(response, jwtService.createAccessToken(email));
+                break;
+            default:
+                throw new JwtException(ACCESS_TOKEN_ERROR_M);
+        }
+    }
+
+    private void checkAndSaveAuthentication(HttpServletRequest request,
+                                            HttpServletResponse response,
+                                            FilterChain filterChain,
+                                            String email) throws ServletException, IOException {
+        userRepository.findByEmail(email).ifPresent(this::saveAuthentication);
+    }
+
     private void saveAuthentication(User user) {
-        UserContext authenticatedUser = new UserContext(user.getEmail(), user.getPassword(), user.getId(), user.getNickName(),
-                roleUtil.addAuthoritiesForContext(user));
+        UserContext authenticatedUser = new UserContext(
+                user.getEmail(),
+                user.getPassword(),
+                user.getId(),
+                user.getNickName(),
+                roleUtil.addAuthoritiesForContext(user)
+        );
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(authenticatedUser, null,
-                authoritiesMapper.mapAuthorities(authenticatedUser.getAuthorities()));
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                authenticatedUser,
+                null,
+                authoritiesMapper.mapAuthorities(authenticatedUser.getAuthorities())
+        );
 
+        SecurityContext securityContext = createSecurityContext(authentication);
+        SecurityContextHolder.setContext(securityContext);
+    }
+
+    private SecurityContext createSecurityContext(Authentication authentication) {
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
         securityContext.setAuthentication(authentication);
-        SecurityContextHolder.setContext(securityContext);
+        return securityContext;
     }
 }

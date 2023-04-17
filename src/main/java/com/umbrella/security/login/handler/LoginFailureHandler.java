@@ -1,7 +1,6 @@
 package com.umbrella.security.login.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
@@ -14,9 +13,6 @@ import java.util.Map;
 
 public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
-    @Autowired
-    ObjectMapper objectMapper;
-
     private static final String CONTENT_TYPE = "application/json; charset=utf8";
 
     @Override
@@ -28,7 +24,7 @@ public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
         response.setContentType(CONTENT_TYPE);
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
+        response.getWriter().write(new ObjectMapper().writeValueAsString(errorResponse));
         response.getWriter().flush();
         response.getWriter().close();
     }
