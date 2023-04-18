@@ -1,5 +1,9 @@
 package com.umbrella.exception;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.umbrella.domain.exception.UserException;
+import com.umbrella.domain.exception.UserExceptionType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -9,7 +13,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.umbrella.domain.exception.UserExceptionType.*;
 
@@ -31,42 +37,40 @@ public class ExceptionAdvice {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity DtoIllegalArgumentHandler(IllegalArgumentException exception){
-        switch (exception.getMessage()) {
-            case (EMAIL_ERROR_MESSAGE):
-                return new ResponseEntity(new ExceptionDto(BLANK_EMAIL_ERROR.getErrorCode(), BLANK_EMAIL_ERROR.getErrorMessage()),
-                        BLANK_EMAIL_ERROR.getHttpStatus());
-            case (NICKNAME_ERROR_MESSAGE):
-                return new ResponseEntity(new ExceptionDto(BLANK_NICKNAME_ERROR.getErrorCode(), BLANK_NICKNAME_ERROR.getErrorMessage()),
-                        BLANK_NICKNAME_ERROR.getHttpStatus());
-            case (PASSWORD_ERROR_MESSAGE):
-                return new ResponseEntity(new ExceptionDto(BLANK_PASSWORD_ERROR.getErrorCode(), BLANK_PASSWORD_ERROR.getErrorMessage()),
-                        BLANK_PASSWORD_ERROR.getHttpStatus());
-            case (NAME_ERROR_MESSAGE):
-                return new ResponseEntity(new ExceptionDto(BLANK_NAME_ERROR.getErrorCode(), BLANK_NAME_ERROR.getErrorMessage()),
-                        BLANK_NAME_ERROR.getHttpStatus());
-            case (BIRTHDATE_ERROR_MESSAGE):
-                return new ResponseEntity(new ExceptionDto(BLANK_BIRTHDATE_ERROR.getErrorCode(), BLANK_BIRTHDATE_ERROR.getErrorMessage()),
-                        BLANK_BIRTHDATE_ERROR.getHttpStatus());
-            case (GENDER_ERROR_MESSAGE):
-                return new ResponseEntity(new ExceptionDto(BLANK_GENDER_ERROR.getErrorCode(), BLANK_GENDER_ERROR.getErrorMessage()),
-                        BLANK_GENDER_ERROR.getHttpStatus());
-            default:
-                return new ResponseEntity(new ExceptionDto(699, "잘못된 인자가 삽입되었습니다."), HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity DtoIllegalArgumentHandler(IllegalArgumentException exception) {
+        Map<String, UserExceptionType> errorMap = new HashMap<>();
+        errorMap.put(EMAIL_ERROR_MESSAGE, BLANK_EMAIL_ERROR);
+        errorMap.put(NICKNAME_ERROR_MESSAGE, BLANK_NICKNAME_ERROR);
+        errorMap.put(PASSWORD_ERROR_MESSAGE, BLANK_PASSWORD_ERROR);
+        errorMap.put(NAME_ERROR_MESSAGE, BLANK_NAME_ERROR);
+        errorMap.put(BIRTHDATE_ERROR_MESSAGE, BLANK_BIRTHDATE_ERROR);
+        errorMap.put(GENDER_ERROR_MESSAGE, BLANK_GENDER_ERROR);
+
+        UserExceptionType exceptionMap = errorMap.getOrDefault(exception.getMessage(), DEFAULT_ERROR);
+
+        return ResponseEntity.status(exceptionMap.getHttpStatus())
+                .body(new ExceptionDto(exceptionMap.getErrorCode(), exceptionMap.getErrorMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Object> handleValidationException(MethodArgumentNotValidException ex) {
-        BindingResult bindingResult = ex.getBindingResult();
+    public ResponseEntity<Object> handleValidationException(MethodArgumentNotValidException exception) {
+        BindingResult bindingResult = exception.getBindingResult();
         List<String> errorMessages = new ArrayList<>();
 
         for (FieldError error : bindingResult.getFieldErrors()) {
-            errorMessages.add(error.getField() + " : " + error.getDefaultMessage());
+            errorMessages.add(error.getDefaultMessage());
         }
 
-        ExceptionDto errorResponse = new ExceptionDto(HttpStatus.BAD_REQUEST.value(), String.valueOf(errorMessages));
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("errorCode", HttpStatus.BAD_REQUEST.value());
+        errorResponse.put("errorMessage", errorMessages);
 
-        return ResponseEntity.badRequest().body(errorResponse);
+        try {
+            String responseBody = new ObjectMapper().writeValueAsString(errorResponse);
+            return ResponseEntity.badRequest().body(responseBody);
+        } catch (JsonProcessingException ex) {
+            // TODO : Exception Handling
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 }
