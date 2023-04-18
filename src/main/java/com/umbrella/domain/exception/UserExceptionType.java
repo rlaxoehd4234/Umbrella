@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 public enum UserExceptionType implements BaseExceptionType {
 
     /* SignUp DTO & Login DTO & Update Password DTO & Withdraw DTO Exceptions */
+    DEFAULT_ERROR(699 ,HttpStatus.BAD_REQUEST, "잘못된 인자가 삽입되었습니다."),
     BLANK_PASSWORD_ERROR(600, HttpStatus.BAD_REQUEST, "비밀번호는 필수 입력 값입니다."),
     BLANK_EMAIL_ERROR(601, HttpStatus.BAD_REQUEST, "이메일은 필수 입력 값입니다."),
     BLANK_NICKNAME_ERROR(602, HttpStatus.BAD_REQUEST, "닉네임은 필수 입력 값입니다."),
@@ -18,6 +19,7 @@ public enum UserExceptionType implements BaseExceptionType {
     BLANK_BIRTHDATE_ERROR(604, HttpStatus.BAD_REQUEST, "생년월일은 필수 입력 값입니다."),
     BLANK_GENDER_ERROR(605, HttpStatus.BAD_REQUEST, "성별은 필수 입력 값입니다."),
     UNSUPPORTED_GENDER_ERROR(606, HttpStatus.BAD_REQUEST, "지원하지 않는 성별입니다."),
+
 
     /* UserService Exceptions & Custom OAuth2 User Service */
     DUPLICATE_EMAIL_ERROR(607, HttpStatus.BAD_REQUEST, "동일한 이메일을 사용하는 계정이 이미 존재합니다."),
