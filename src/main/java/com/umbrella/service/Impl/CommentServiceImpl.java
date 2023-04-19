@@ -13,7 +13,6 @@ import com.umbrella.security.utils.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,7 +44,8 @@ public class CommentServiceImpl {
     public List<CommentResponseDto> create(CommentRequestDto commentRequestDto, Long postId){
 
         User user = userRepository.findById(securityUtil.getLoginUserId())
-                .orElseThrow(() -> new UserException(UserExceptionType.NOT_FOUND_ERROR)); // 생성 검증 완료
+                .orElseThrow(() -> new UserException(UserExceptionType.NOT_FOUND_ERROR));
+        // 생성 검증 완료 -> 로그인하지 않은 유저는~ 으로 변경할 필요가 있음
 
 
         Post post = postRepository.findById(postId)
