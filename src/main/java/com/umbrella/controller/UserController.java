@@ -18,7 +18,6 @@ import javax.validation.Valid;
 public class UserController {
 
     private final UserService userService;
-    private final LoginService loginService;
 
     @PostMapping(value = "/signUp")
     public ResponseEntity signUp(@Valid @RequestBody UserRequestSignUpDto userSignUpDto) {

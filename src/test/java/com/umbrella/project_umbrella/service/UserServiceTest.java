@@ -8,9 +8,7 @@ import com.umbrella.domain.exception.UserException;
 import com.umbrella.dto.user.UserInfoDto;
 import com.umbrella.dto.user.UserRequestSignUpDto;
 import com.umbrella.dto.user.UserUpdateDto;
-import com.umbrella.exception.DuplicateEmailException;
 import com.umbrella.domain.User.UserRepository;
-import com.umbrella.exception.DuplicateNicknameException;
 import com.umbrella.security.userDetails.UserContext;
 import com.umbrella.security.utils.RoleUtil;
 import com.umbrella.security.utils.SecurityUtil;
@@ -160,7 +158,7 @@ public class UserServiceTest {
         em.clear();
 
         // when, then
-        assertThat(assertThrows(DuplicateNicknameException.class, () -> userService.signUp(userSignUpDto)).getMessage())
+        assertThat(assertThrows(UserException.class, () -> userService.signUp(userSignUpDto)).getMessage())
                 .isEqualTo("동일한 닉네임을 사용하는 계정이 이미 존재합니다.");
     }
 
