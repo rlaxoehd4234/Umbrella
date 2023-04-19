@@ -1,12 +1,8 @@
 package com.umbrella.security.userDetails;
 
-import com.umbrella.constant.Role;
-import com.umbrella.domain.User.User;
-import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.util.Assert;
@@ -41,6 +37,9 @@ public class UserContext implements UserDetails, OAuth2User {
 
     @Getter
     private Map<String, Object> attributes;
+
+    private static final String NAME_ATTRIBUTE = "name";
+    private static final String ERROR_MESSAGE = "로그인에 실패하였습니다. 이메일 주소 혹은 비밀번호를 다시 확인해주세요.";
 
     public UserContext(String username, String password, Long id, String nickName, Set<GrantedAuthority> authorities,
                        boolean accountNonExpired, boolean accountNonLocked, boolean credentialsNonExpired, boolean enabled) {
@@ -80,7 +79,7 @@ public class UserContext implements UserDetails, OAuth2User {
 
     @Override
     public String getName() {
-        return String.valueOf(attributes.get("name"));
+        return String.valueOf(attributes.get(NAME_ATTRIBUTE));
     }
 
     @Override
@@ -104,11 +103,11 @@ public class UserContext implements UserDetails, OAuth2User {
     }
 
     private static SortedSet<GrantedAuthority> sortAuthorities(Collection<? extends GrantedAuthority> authorities) {
-        Assert.notNull(authorities, "Cannot pass a null GrantedAuthority collection");
+        Assert.notNull(authorities, ERROR_MESSAGE);
 
         SortedSet<GrantedAuthority> sortedAuthorities = new TreeSet<>(new AuthorityComparator());
         for (GrantedAuthority grantedAuthority : authorities) {
-            Assert.notNull(grantedAuthority, "GrantedAuthority list cannot contain any null elements");
+            Assert.notNull(grantedAuthority, ERROR_MESSAGE);
             sortedAuthorities.add(grantedAuthority);
         }
         return sortedAuthorities;

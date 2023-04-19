@@ -4,6 +4,7 @@ import com.umbrella.constant.AuthPlatform;
 import com.umbrella.constant.Gender;
 import com.umbrella.constant.Role;
 import com.umbrella.domain.User.User;
+import com.umbrella.domain.exception.UserException;
 import com.umbrella.dto.user.UserInfoDto;
 import com.umbrella.dto.user.UserRequestSignUpDto;
 import com.umbrella.dto.user.UserUpdateDto;
@@ -143,7 +144,7 @@ public class UserServiceTest {
         em.flush();
         em.clear();
 
-        assertThat(assertThrows(DuplicateEmailException.class, () -> userService.signUp(userSignUpDto)).getMessage())
+        assertThat(assertThrows(UserException.class, () -> userService.signUp(userSignUpDto)).getBaseExceptionType().getErrorMessage())
                 .isEqualTo("동일한 이메일을 사용하는 계정이 이미 존재합니다.");
     }
 
@@ -163,8 +164,10 @@ public class UserServiceTest {
                 .isEqualTo("동일한 닉네임을 사용하는 계정이 이미 존재합니다.");
     }
 
+    /* Exception Handling 을 했기 때문에 DTO 를 만드는 과정에서는 에러가 발생할 일이 없기 때문에 비활성화함*/
     @Test
     @DisplayName("[FAILED]_회원가입_실패_존재하지_않는_필드")
+    @Disabled
     public void signUpExceptionTest03() {
         // given, when, then
         assertThrows(IllegalArgumentException.class, () -> new UserRequestSignUpDto(null,
@@ -430,9 +433,9 @@ public class UserServiceTest {
         UserRequestSignUpDto userSignUpDto = setAuthenticationInContext();
 
         // when, then
-        assertThat(assertThrows(IllegalArgumentException.class,
+        assertThat(assertThrows(UserException.class,
                 () -> userService.withdraw(password + 123)
-        ).getMessage()).isEqualTo("비밀번호가 일치하지 않습니다.");
+        ).getBaseExceptionType().getErrorMessage()).isEqualTo("비밀번호가 일치하지 않습니다.");
     }
 
     @Test

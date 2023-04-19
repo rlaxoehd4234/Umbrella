@@ -3,8 +3,6 @@ package com.umbrella.domain.User;
 import com.umbrella.constant.AuthPlatform;
 import com.umbrella.constant.Gender;
 import com.umbrella.constant.Role;
-import com.umbrella.domain.Comment.Comment;
-import com.umbrella.domain.Post.Post;
 import com.umbrella.dto.user.UserUpdateDto;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -14,8 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter

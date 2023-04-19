@@ -4,6 +4,7 @@ import com.umbrella.constant.AuthPlatform;
 import com.umbrella.constant.Gender;
 import com.umbrella.constant.Role;
 import com.umbrella.domain.User.User;
+import com.umbrella.domain.exception.UserException;
 import com.umbrella.exception.DuplicateEmailException;
 import com.umbrella.domain.User.UserRepository;
 import com.umbrella.security.oAuth2.OAuth2UserInfo;
@@ -21,6 +22,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+import static com.umbrella.domain.exception.UserExceptionType.DUPLICATE_EMAIL_ERROR;
+
 @Service
 @RequiredArgsConstructor
 public class CustomOAuth2UserServiceImpl implements CustomOAuth2UserService {
@@ -32,6 +35,8 @@ public class CustomOAuth2UserServiceImpl implements CustomOAuth2UserService {
     private final RoleUtil roleUtil;
 
     private static final int OAUTH_USER_AGE = -1;
+
+    private static final String PASSWORD_PREFIX = "OAuth2LoginUserWith";
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -49,13 +54,13 @@ public class CustomOAuth2UserServiceImpl implements CustomOAuth2UserService {
         OAuth2UserInfo oAuth2UserInfo = oAuth2UserInfoFactory
                 .getOAuth2UserInfo(authPlatform, (Map<String, Object>) oAuth2User.getAttributes());
 
-        String password = "OAuth2LoginUserWith" + oAuth2UserInfo.getProvider() + UUID.randomUUID();
+        String password = PASSWORD_PREFIX + oAuth2UserInfo.getProvider() + UUID.randomUUID();
 
         Optional<User> findUser = userRepository.findByEmail(oAuth2UserInfo.getEmail());
 
         if (findUser.isPresent()) {
             if (!String.valueOf(findUser.get().getPlatform()).equals(oAuth2UserInfo.getProvider().toUpperCase())) {
-                throw new DuplicateEmailException("This email has already been registered!");
+                throw new UserException(DUPLICATE_EMAIL_ERROR);
             } else {
                 User user = findUser.get();
 

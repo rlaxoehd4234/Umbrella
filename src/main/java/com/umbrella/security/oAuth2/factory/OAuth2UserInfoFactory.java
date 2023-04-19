@@ -1,6 +1,7 @@
 package com.umbrella.security.oAuth2.factory;
 
 import com.umbrella.constant.AuthPlatform;
+import com.umbrella.domain.exception.UserException;
 import com.umbrella.security.oAuth2.Impl.GithubUserInfo;
 import com.umbrella.security.oAuth2.Impl.GoogleUserInfo;
 import com.umbrella.security.oAuth2.Impl.KakaoUserInfo;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+import static com.umbrella.domain.exception.UserExceptionType.UNSUPPORTED_PLATFORM;
+
 @Component
 public class OAuth2UserInfoFactory {
     public OAuth2UserInfo getOAuth2UserInfo(AuthPlatform authPlatform, Map<String, Object> attributes) {
@@ -18,7 +21,7 @@ public class OAuth2UserInfoFactory {
             case GOOGLE: return new GoogleUserInfo(attributes);
             case GITHUB: return new GithubUserInfo(attributes);
             case NAVER: return new NaverUserInfo(attributes);
-            default: throw new IllegalArgumentException("소셜 로그인을 지원하지 않는 플랫폼입니다.");
+            default: throw new UserException(UNSUPPORTED_PLATFORM);
         }
     }
 }
