@@ -3,6 +3,7 @@ package com.umbrella.dto.user;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.umbrella.constant.Gender;
+import com.umbrella.domain.exception.UserException;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,6 +11,8 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
 import java.util.Calendar;
+
+import static com.umbrella.domain.exception.UserExceptionType.IMPOSSIBLE_AGE_ERROR;
 
 @Getter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -63,6 +66,10 @@ public class UserRequestSignUpDto {
 
         if (birthMonth * 100 + birthDay > currentMonth * 100 + currentDay) {
             age--;
+        }
+
+        if (age < 5) {
+            throw new UserException(IMPOSSIBLE_AGE_ERROR);
         }
 
         return age;

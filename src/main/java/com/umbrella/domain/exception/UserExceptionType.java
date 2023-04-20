@@ -26,9 +26,10 @@ public enum UserExceptionType implements BaseExceptionType {
     DUPLICATE_NICKNAME_ERROR(608, HttpStatus.BAD_REQUEST, "동일한 닉네임을 사용하는 계정이 이미 존재합니다."),
     INCONSISTENCY_PASSWORD_ERROR(609, HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
     ENTITY_NOT_FOUND_ERROR(610, HttpStatus.BAD_REQUEST, "해당 정보를 가진 계정이 존재하지 않습니다."),
+    IMPOSSIBLE_AGE_ERROR(611, HttpStatus.BAD_REQUEST, "5세 미만의 영유아는 본 서비스를 이용할 수 없습니다."),
 
     /* Json Processing Filter */
-    UNSUPPORTED_HTTP_METHOD(611, HttpStatus.UNAUTHORIZED, "올바르지 않은 요청 형식입니다."),
+    UNSUPPORTED_HTTP_METHOD(612, HttpStatus.UNAUTHORIZED, "올바르지 않은 요청 형식입니다."),
 
     /* OAuth2 User Info Factory */
     UNSUPPORTED_PLATFORM(620, HttpStatus.BAD_REQUEST, "소셜 로그인을 지원하지 않는 플랫폼입니다."),

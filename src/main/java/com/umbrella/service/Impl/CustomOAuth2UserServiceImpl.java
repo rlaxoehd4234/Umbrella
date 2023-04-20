@@ -51,7 +51,7 @@ public class CustomOAuth2UserServiceImpl implements CustomOAuth2UserService {
         AuthPlatform authPlatform = AuthPlatform.valueOf(userRequest.getClientRegistration()
                                                                         .getRegistrationId().toUpperCase());
         OAuth2UserInfo oAuth2UserInfo = oAuth2UserInfoFactory
-                .getOAuth2UserInfo(authPlatform, (Map<String, Object>) oAuth2User.getAttributes());
+                .getOAuth2UserInfo(authPlatform, oAuth2User.getAttributes());
 
         String password = PASSWORD_PREFIX + oAuth2UserInfo.getProvider() + UUID.randomUUID();
 
