@@ -35,7 +35,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
     private final UserRepository userRepository;
     private final RoleUtil roleUtil;
 
-    private static final String[] NO_CHECK_URI_LIST = {"/login", "/signUp"};
+    private static final String[] NO_CHECK_URI_LIST = {"/login", "/signUp", "/"};
 
     private static final int PASS = 1;
     private static final int REISSUE = 0;
