@@ -40,13 +40,13 @@ public class LoginSuccessJWTProvideHandler extends SimpleUrlAuthenticationSucces
         jwtService.setRefreshTokenInCookie(response, refreshToken);
         jwtService.sendAccessToken(response, accessToken);
 
-        User foundUser = userRepository.findByEmail(email)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow( () -> new EntityNotFoundException("찾을 수 없는 계정입니다.") );
 
-        foundUser.updateRefreshToken(refreshToken);
+        user.updateRefreshToken(refreshToken);
 
         Map<String, Object> responseMap = new HashMap<>();
-        responseMap.put("nick_name", foundUser.getNickName());
+        responseMap.put("nick_name", user.getNickName());
         String responseBody = objectMapper.writeValueAsString(responseMap) + "\n성공적으로 로그인이 완료되었습니다!";
 
         response.setStatus(HttpServletResponse.SC_OK);

@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum GlobalExceptionType implements BaseExceptionType{
     ;
-
     private int errorCode;
     private HttpStatus httpStatus;
     private String errorMessage;

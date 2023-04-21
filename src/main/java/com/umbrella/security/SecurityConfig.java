@@ -60,7 +60,7 @@ public class SecurityConfig {
         .and()
                 .authorizeRequests()
                 .antMatchers("/login", "/signUp", "/").permitAll()
-                .antMatchers("/oauth2/**", "/auth/**").permitAll()
+                .antMatchers("/auth/**", "/oauth2/**").permitAll()
                 .anyRequest().authenticated()
         .and()
                 .addFilterAfter(jsonEmailPasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
@@ -79,10 +79,10 @@ public class SecurityConfig {
                                         .failureHandler(oAuth2LoginFailureHandler())
                     )
         .and()
-                .cors().configurationSource(corsConfigurationSource())
-        .and()
-                .exceptionHandling()
-                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.FORBIDDEN));
+                .cors().configurationSource(corsConfigurationSource());
+//        .and()
+//                .exceptionHandling()
+//                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.FORBIDDEN));
 
         return http.build();
     }
@@ -138,7 +138,8 @@ public class SecurityConfig {
 
     @Bean
     public OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler() {
-        OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler = new OAuth2LoginSuccessHandler();
+        OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler =
+                new OAuth2LoginSuccessHandler(userRepository, jwtService, cookieOAuth2AuthorizationRequestRepository);
         return oAuth2LoginSuccessHandler;
     }
 
