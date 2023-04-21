@@ -17,7 +17,7 @@ import javax.persistence.Id;
 public class ChatRoom {
 
     @Id @GeneratedValue
-    @Column(name = "chat_romm_id")
+    @Column(name = "chat_room_id")
     private Long chatRoomId;
 
     @Column(columnDefinition = "TEXT" , nullable = false)
@@ -38,5 +38,4 @@ public class ChatRoom {
     public void popUserCount(){
         userCount--;
     }
-
 }
