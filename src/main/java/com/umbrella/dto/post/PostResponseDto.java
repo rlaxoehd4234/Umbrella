@@ -14,6 +14,7 @@ public class PostResponseDto {
     private String writer;
 
     private String content;
+    private Long likeCount;
 
 
     public PostResponseDto(Post post){
@@ -21,6 +22,7 @@ public class PostResponseDto {
         this.title = post.getTitle();
         this.writer = post.getWriter();
         this.content = post.getContent();
+        this.likeCount = Long.valueOf(post.getLikeCount());
     }
 
 

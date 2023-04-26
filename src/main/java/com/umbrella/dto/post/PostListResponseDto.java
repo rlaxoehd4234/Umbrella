@@ -14,10 +14,13 @@ public class PostListResponseDto {
 
     private String title;
 
+    private Long likeCount;
+
     public PostListResponseDto(Post post){
         this.id = post.getId();
         this.writer = post.getWriter();
         this.title = post.getTitle();
+        this.likeCount = Long.valueOf(post.getLikeCount());
 
 
     }

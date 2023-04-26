@@ -2,6 +2,8 @@ package com.umbrella.service.Impl;
 
 
 import com.umbrella.domain.Comment.CommentRepository;
+import com.umbrella.domain.Heart.PostHeart;
+import com.umbrella.domain.Heart.PostHeartRepository;
 import com.umbrella.domain.Post.Post;
 import com.umbrella.domain.Post.PostRepository;
 import com.umbrella.domain.User.User;
@@ -30,6 +32,7 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
+    private final PostHeartRepository postHeartRepository;
     private final SecurityUtil securityUtil;
 
 
@@ -65,7 +68,7 @@ public class PostServiceImpl implements PostService {
         Post post = validatePost(id);
         validateUser(post.getUser());
         postRepository.delete(post);
-
+        postHeartRepository.delete(postHeartRepository.findByUserAndPost(post.getUser(),post));
         return id;
     }
 
