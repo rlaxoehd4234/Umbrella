@@ -24,6 +24,11 @@ public class LoginServiceImpl implements LoginService {
                         .orElseThrow(
                             () -> new UsernameNotFoundException("해당 이메일을 가진 계정이 존재하지 않습니다.")
                         );
-        return new UserContext(user.getEmail(), user.getPassword(), user.getId(), user.getNickName(), roleUtil.addAuthoritiesForContext(user));
+        return new UserContext(
+                user.getEmail(),
+                user.getPassword(),
+                user.getId(),
+                user.getNickName(),
+                roleUtil.addAuthoritiesForContext(user));
     }
 }

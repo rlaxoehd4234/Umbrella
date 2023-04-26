@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
 
     private User userSignUpDtoToEntity(UserRequestSignUpDto userRequestSignUpDto) {
 
-        User user = User.builder()
+        return User.builder()
                 .email(userRequestSignUpDto.getEmail())
                 .nickName(userRequestSignUpDto.getNickName())
                 .password(userRequestSignUpDto.getPassword())
@@ -38,8 +38,6 @@ public class UserServiceImpl implements UserService {
                 .age(userRequestSignUpDto.calculateAge())
                 .gender(userRequestSignUpDto.getGender())
                 .build();
-
-        return user;
     }
 
     private User getUserByEmail() {

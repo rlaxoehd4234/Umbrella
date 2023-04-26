@@ -18,7 +18,7 @@ public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request,
                                         HttpServletResponse response,
-                                        AuthenticationException exception) throws IOException, ServletException {
+                                        AuthenticationException exception) throws IOException {
         Map<String, Object> errorResponse = new HashMap<>();
         errorResponse.put("errorMessage", "로그인에 실패하였습니다. 이메일 주소 혹은 비밀번호를 다시 확인해주세요.");
 

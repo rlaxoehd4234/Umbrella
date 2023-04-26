@@ -14,27 +14,32 @@ import java.util.Calendar;
 
 import static com.umbrella.domain.exception.UserExceptionType.IMPOSSIBLE_AGE_ERROR;
 
-@Getter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserRequestSignUpDto {
 
+    @Getter
     @Email(message = "올바른 형식의 이메일 주소여야 합니다.")
     private String email;
 
+    @Getter
     private String nickName;
 
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,30}$",
-            message = "비밀번호는 8 ~ 30 자리이면서 1개 이상의 알파벳, 숫자, 특수문자를 포함해야 합니다.")
+    @Getter
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,20}$",
+            message = "비밀번호는 8 ~ 20 자리이면서 1개 이상의 알파벳, 숫자, 특수문자를 포함해야 합니다.")
     private String password;
 
+    @Getter
     @Size(min = 2, max = 100, message = "이름의 길이는 2에서 100 사이여야 합니다.")
     @Pattern(regexp = "^[A-Za-z가-힣]+$", message = "사용자 이름은 2자 이상이면서 한글 혹은 알파벳으로만 이루어져있어야 합니다.")
     private String name;
 
+    @Getter
     @Size(min = 8, max = 8, message = "생년월일은 8자리가 입력되어야 합니다.")
     private String  birthDate;
 
+    @Getter
     private Gender gender;
 
     @Builder
@@ -75,7 +80,7 @@ public class UserRequestSignUpDto {
         return age;
     }
 
-    private Gender getGender(String genderValue) {
+    private Gender getGender(String genderValue) { // Overloading getGender with String Argument
         Gender gender = Gender.UNKNOWN;
         return gender.from(genderValue);
     }

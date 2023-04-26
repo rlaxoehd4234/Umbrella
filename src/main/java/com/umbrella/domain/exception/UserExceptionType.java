@@ -38,7 +38,7 @@ public enum UserExceptionType implements BaseExceptionType {
     NOT_FOUND_ERROR(400, HttpStatus.OK, "존재하지 않는 사용자입니다.")
     ;
 
-    private int errorCode;
-    private HttpStatus httpStatus;
-    private String errorMessage;
+    private final int errorCode;
+    private final HttpStatus httpStatus;
+    private final String errorMessage;
 }
