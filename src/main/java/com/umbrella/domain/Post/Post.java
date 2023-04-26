@@ -36,7 +36,7 @@ public class Post {
     private User user;
 
     @ColumnDefault("0")
-    private Integer viewCount;
+    private Integer likeCount;
 
     public Post(Long id, String title) {
         this.id = id;
@@ -58,9 +58,9 @@ public class Post {
         this.content = content;
     }
     public void addHeart(){
-        viewCount++;
+        likeCount++;
     }
     public void popHeart() {
-        viewCount--;
+        likeCount--;
     }
 }
