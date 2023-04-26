@@ -6,14 +6,16 @@ import lombok.Getter;
 
 import java.util.Optional;
 
-@Getter
 public class UserUpdateDto {
 
+    @Getter
     @JsonProperty("nick_name")
     private Optional<String> nickName;
 
+    @Getter
     private Optional<String> name;
 
+    @Getter
     private Optional<Integer> age;
 
     @Builder

@@ -2,6 +2,7 @@ package com.umbrella.service.Impl;
 
 import com.umbrella.domain.User.User;
 import com.umbrella.domain.User.UserRepository;
+import com.umbrella.domain.exception.UserException;
 import com.umbrella.security.utils.CookieUtil;
 import com.umbrella.service.JwtService;
 
@@ -17,14 +18,13 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
-import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.security.Key;
 import java.util.*;
+
+import static com.umbrella.domain.exception.UserExceptionType.NOT_FOUND_ERROR;
 
 @Transactional
 @Service
@@ -94,7 +94,9 @@ public class JwtServiceImpl implements JwtService {
     public void updateRefreshToken(String email, String refreshToken) {
         userRepository.findByEmail(email).ifPresentOrElse(
                 user -> user.updateRefreshToken(refreshToken),
-                () -> new EntityNotFoundException("해당 이메일을 가진 계정이 존재하지 않습니다.")
+                () -> {
+                    throw new UserException(NOT_FOUND_ERROR);
+                }
         );
     }
 
@@ -102,12 +104,14 @@ public class JwtServiceImpl implements JwtService {
     public void destroyRefreshToken(String email) {
         userRepository.findByEmail(email).ifPresentOrElse(
                 User::destroyRefreshToken,
-                () -> new EntityNotFoundException("해당 이메일을 가진 계정이 존재하지 않습니다.")
+                () -> {
+                    throw new UserException(NOT_FOUND_ERROR);
+                }
         );
     }
 
     @Override
-    public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) throws IOException {
+    public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) {
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_OK);
 
@@ -135,21 +139,17 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public Optional<String> extractAccessToken(HttpServletRequest request) throws IOException, ServletException {
+    public Optional<String> extractAccessToken(HttpServletRequest request) {
         return Optional.ofNullable(request.getHeader(accessHeader))
                 .filter(accessToken -> accessToken.startsWith(BEARER))
                 .map(accessToken -> accessToken.replace(BEARER, ""));
     }
 
     @Override
-    public Optional<String> extractRefreshToken(HttpServletRequest request) throws IOException, ServletException {
+    public Optional<String> extractRefreshToken(HttpServletRequest request) {
         Optional<Cookie> cookie = cookieUtil.getCookie(request, COOKIE_REFRESH_TOKEN_KEY);
 
-        if (cookie.isPresent()) {
-            return Optional.ofNullable(cookie.get().getValue());
-        }
-
-        return Optional.empty();
+        return cookie.map(Cookie::getValue);
     }
 
     @Override

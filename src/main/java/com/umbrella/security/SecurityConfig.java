@@ -79,10 +79,10 @@ public class SecurityConfig {
                                         .failureHandler(oAuth2LoginFailureHandler())
                     )
         .and()
-                .cors().configurationSource(corsConfigurationSource());
-//        .and()
-//                .exceptionHandling()
-//                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.FORBIDDEN));
+                .cors().configurationSource(corsConfigurationSource())
+        .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.FORBIDDEN));
 
         return http.build();
     }
@@ -125,10 +125,7 @@ public class SecurityConfig {
 
     @Bean
     public JwtAuthenticationProcessingFilter jwtAuthenticationProcessingFilter() {
-        JwtAuthenticationProcessingFilter jwtAuthenticationProcessingFilter
-                                    = new JwtAuthenticationProcessingFilter(jwtService, userRepository, roleUtil);
-
-        return jwtAuthenticationProcessingFilter;
+        return new JwtAuthenticationProcessingFilter(jwtService, userRepository, roleUtil);
     }
 
     @Bean
@@ -138,15 +135,12 @@ public class SecurityConfig {
 
     @Bean
     public OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler() {
-        OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler =
-                new OAuth2LoginSuccessHandler(userRepository, jwtService, cookieOAuth2AuthorizationRequestRepository);
-        return oAuth2LoginSuccessHandler;
+        return new OAuth2LoginSuccessHandler(userRepository, jwtService, cookieOAuth2AuthorizationRequestRepository);
     }
 
     @Bean
     public OAuth2LoginFailureHandler oAuth2LoginFailureHandler() {
-        OAuth2LoginFailureHandler oAuth2LoginFailureHandler = new OAuth2LoginFailureHandler();
-        return oAuth2LoginFailureHandler;
+        return new OAuth2LoginFailureHandler();
     }
 
     @Bean

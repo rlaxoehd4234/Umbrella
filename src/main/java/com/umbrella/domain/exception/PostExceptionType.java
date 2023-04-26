@@ -18,5 +18,4 @@ public enum PostExceptionType implements BaseExceptionType {
     private HttpStatus httpStatus;
     private String errorMessage;
 
-
 }

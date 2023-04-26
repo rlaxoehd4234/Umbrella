@@ -12,7 +12,6 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -35,7 +34,7 @@ public class JsonEmailPasswordAuthenticationFilter extends AbstractAuthenticatio
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
-            throws AuthenticationException, IOException, ServletException
+            throws AuthenticationException, IOException
     {
         if (!HTTP_METHOD.equals(request.getMethod())) {
             throw new AuthenticationServiceException("Authentication method not supported : " + request.getMethod());

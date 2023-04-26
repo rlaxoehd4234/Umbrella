@@ -8,7 +8,6 @@ import com.umbrella.service.JwtService;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
@@ -43,10 +42,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
     private static final String REFRESH_TOKEN_ERROR_M = "유효하지 않은 리프레쉬 토큰입니다!";
     private static final String ACCESS_TOKEN_ERROR_M = "유효하지 않은 엑세스 토큰입니다!";
 
-    @Value("${jwt.access.header}")
-    private String accessHeader;
-
-    private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
+    private final GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -54,7 +50,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         String requestURI = request.getRequestURI();
 
-        if (Arrays.stream(NO_CHECK_URI_LIST).anyMatch(uri -> uri.equals(requestURI))) {
+        if (Arrays.asList(NO_CHECK_URI_LIST).contains(requestURI)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -64,14 +60,16 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
                 () -> new JwtException(ACCESS_TOKEN_ERROR_M)
         );
 
+        String extractEmail = String.valueOf(jwtService.extractEmail(extractAccessToken));
+        if (extractEmail.isEmpty()) {
+            throw new JwtException(REFRESH_TOKEN_ERROR_M);
+        }
+
         if (extractRefreshToken.isPresent()) {
             String email = String.valueOf(jwtService.extractSubject(extractRefreshToken.get()));
             if (jwtService.isTokenValid(extractRefreshToken.get()) == PASS) {
                 checkAccessToken(response, extractAccessToken, email);
-                checkAndSaveAuthentication(request, response, filterChain,
-                        jwtService.extractEmail(extractAccessToken).get());
-            } else {
-                throw new JwtException(REFRESH_TOKEN_ERROR_M);
+                checkAndSaveAuthentication(extractEmail);
             }
         } else {
             throw new JwtException(REFRESH_TOKEN_ERROR_M);
@@ -93,10 +91,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         }
     }
 
-    private void checkAndSaveAuthentication(HttpServletRequest request,
-                                            HttpServletResponse response,
-                                            FilterChain filterChain,
-                                            String email) throws ServletException, IOException {
+    private void checkAndSaveAuthentication(String email) {
         userRepository.findByEmail(email).ifPresent(this::saveAuthentication);
     }
 

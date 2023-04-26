@@ -281,7 +281,7 @@ public class JwtAuthenticationProcessingFilterTest {
     @DisplayName("[SUCCESS]_로그인_페이지는_토큰_없이_통과")
     public void loginUrlNonPassTest() throws Exception {
         //given
-        Map<String, String> map = getUsernamePasswordMap(email, password);
+        Map map = getUsernamePasswordMap(email, password);
 
         //when, then
         MvcResult result = mockMvc.perform(post(LOGIN_URL)
