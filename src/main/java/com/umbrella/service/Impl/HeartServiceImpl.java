@@ -68,7 +68,7 @@ public class HeartServiceImpl implements HeartService {
             throw new UserException(UserExceptionType.UN_AUTHORIZE_ERROR);
         }
         if(postHeart == null){
-            throw new PostException(PostExceptionType.ALREADY_PUSH_ERROR);
+            throw new PostException(PostExceptionType.NON_PUSH_ERROR);
         }
     }
 
