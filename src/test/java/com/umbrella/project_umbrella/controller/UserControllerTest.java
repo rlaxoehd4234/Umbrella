@@ -250,7 +250,7 @@ public class UserControllerTest {
 
         Map<String, Object> passwordUpdateMap = new HashMap<>();
         passwordUpdateMap.put("checkPassword", password);
-        passwordUpdateMap.put("newPassword", password + "!@#@!#@!#");
+        passwordUpdateMap.put("newPassword", password + "!");
 
         String updatePasswordData = objectMapper.writeValueAsString(passwordUpdateMap);
 
@@ -268,7 +268,7 @@ public class UserControllerTest {
                 () -> new EntityNotFoundException("해당 이메일을 사용하는 계정이 존재하지 않습니다.")
         );
         assertThat(passwordEncoder.matches(password, updateUser.getPassword())).isFalse();
-        assertThat(passwordEncoder.matches(password + "!@#@!#@!#", updateUser.getPassword())).isTrue();
+        assertThat(passwordEncoder.matches(password + "!", updateUser.getPassword())).isTrue();
     }
 
     @Test
