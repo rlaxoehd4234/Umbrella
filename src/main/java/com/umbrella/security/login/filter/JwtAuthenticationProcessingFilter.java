@@ -60,16 +60,15 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
                 () -> new JwtException(ACCESS_TOKEN_ERROR_M)
         );
 
-        String email = extractRefreshToken
-                .map(jwtService::extractEmail)
+        String email = jwtService.extractEmail(extractAccessToken)
                 .map(Object::toString)
-                .orElseThrow(() -> new JwtException(REFRESH_TOKEN_ERROR_M));
+                .orElseThrow(
+                        () -> new JwtException(ACCESS_TOKEN_ERROR_M)
+                );
 
         if (jwtService.isTokenValid(extractRefreshToken.get()) == PASS) {
             checkAccessToken(response, extractAccessToken, email);
-            jwtService.extractEmail(extractAccessToken)
-                    .map(Object::toString)
-                    .ifPresent(this::checkAndSaveAuthentication);
+            checkAndSaveAuthentication(email);
         } else {
             throw new JwtException(REFRESH_TOKEN_ERROR_M);
         }
