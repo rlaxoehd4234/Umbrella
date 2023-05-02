@@ -25,7 +25,7 @@
 
 - 공통
     - Spring Boot 2.7.7
-        - WebSocket
+        - Spring WebFlux
         - Spring Security
         - JPA
         - MySQL
