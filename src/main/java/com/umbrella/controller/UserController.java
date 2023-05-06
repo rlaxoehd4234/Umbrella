@@ -1,6 +1,7 @@
 package com.umbrella.controller;
 
 import com.umbrella.dto.user.*;
+import com.umbrella.dto.workspace.WorkspaceRequestCreateDto;
 import com.umbrella.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,16 @@ public class UserController {
         validateSignUpRequest(userSignUpDto);
         userService.signUp(userSignUpDto);
         return ResponseEntity.ok().body("회원가입이 성공적으로 완료되었습니다!");
+    }
+
+    private void validateSignUpRequest(UserRequestSignUpDto userSignUpDto) {
+        /* AOP Exception Handler will Operate */
+        Assert.hasText(userSignUpDto.getEmail(), "email must not be blank");
+        Assert.hasText(userSignUpDto.getNickName(), "nickName must not be blank");
+        Assert.hasText(userSignUpDto.getPassword(), "password must not be blank");
+        Assert.hasText(userSignUpDto.getName(), "mName must not be blank");
+        Assert.hasText(userSignUpDto.getBirthDate(), "birthDate must not be null");
+        Assert.hasText(userSignUpDto.getGender().getGenderValue(), "gender must not be blank");
     }
 
     @PutMapping(value = "/user/update/info")
@@ -64,13 +75,10 @@ public class UserController {
         return new ResponseEntity(userInfoDto, HttpStatus.OK);
     }
 
-    private void validateSignUpRequest(UserRequestSignUpDto userSignUpDto) {
-        /* AOP Exception Handler will Operate */
-        Assert.hasText(userSignUpDto.getEmail(), "email must not be blank");
-        Assert.hasText(userSignUpDto.getNickName(), "nickName must not be blank");
-        Assert.hasText(userSignUpDto.getPassword(), "password must not be blank");
-        Assert.hasText(userSignUpDto.getName(), "mName must not be blank");
-        Assert.hasText(userSignUpDto.getBirthDate(), "birthDate must not be null");
-        Assert.hasText(userSignUpDto.getGender().getGenderValue(), "gender must not be blank");
+    @PostMapping(value = "/workspace/create")
+    public ResponseEntity createWorkspace(@RequestBody WorkspaceRequestCreateDto workspaceRequestCreateDto) {
+        userService.createWorkspace(workspaceRequestCreateDto);
+
+        return ResponseEntity.ok().body("워크스페이스가 성공적으로 생성되었습니다.");
     }
 }

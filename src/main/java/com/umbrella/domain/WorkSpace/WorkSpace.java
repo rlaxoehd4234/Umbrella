@@ -1,5 +1,6 @@
 package com.umbrella.domain.WorkSpace;
 
+import com.umbrella.domain.User.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,6 +9,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,13 +26,19 @@ public class WorkSpace {
     @Size(min = 5, max = 50)
     private String title;
 
+    @NotBlank
+    private String description;
+
+    @OneToMany(mappedBy = "workspace")
+    private List<WorkspaceUser> workspaceUsers = new ArrayList<>();
+
     @Builder
-    public WorkSpace(String title){
+    public WorkSpace(String title, String description){
         this.title = title;
+        this.description = description;
     }
 
-    public void update(String title){
+    public void updateTitle(String title){
         this.title = title;
     }
-
 }

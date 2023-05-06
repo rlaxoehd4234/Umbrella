@@ -3,6 +3,7 @@ package com.umbrella.domain.User;
 import com.umbrella.constant.AuthPlatform;
 import com.umbrella.constant.Gender;
 import com.umbrella.constant.Role;
+import com.umbrella.domain.WorkSpace.WorkspaceUser;
 import com.umbrella.dto.user.UserUpdateDto;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -12,36 +13,50 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
     @Id
-    @Column
+    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     @Column(nullable = false, unique = true)
     private String email;
+
     @Column(nullable = false, unique = true)
     private String nickName;
+
     @Column(nullable = false)
     private String password;
+
     @Column(nullable = false)
     private String name;
+
     @Column
     private int age;
+
     @Column // UNKNOWN -> OAuth2 서버측에서 성별 값을 전달받지 못했을 경우
     private Gender gender;
+
     @Column
     @Enumerated(EnumType.STRING)
     private Role role;
+
     @Column
     @Enumerated(EnumType.STRING)
     private AuthPlatform platform;
+
     @Column(length = 100)
     @Lob
     private String refreshToken;
+
+    @OneToMany(mappedBy = "workspaceUser")
+    private List<WorkspaceUser> workspaceUsers = new ArrayList<>();
 
     @Builder
     public User(String email, String nickName, String password,
@@ -103,4 +118,14 @@ public class User {
     }
 
     public void addDefaultPlatform() { this.platform = AuthPlatform.UMBRELLA; }
+
+    public void enterWorkspaceUser(WorkspaceUser workspaceUser) {
+        workspaceUser.setWorkspaceUser(this);
+        this.workspaceUsers.add(workspaceUser);
+    }
+
+    public void exitWorkspaceUser(WorkspaceUser workspaceUser) {
+        workspaceUser.getWorkspace().getWorkspaceUsers().remove(workspaceUser);
+        this.getWorkspaceUsers().remove(workspaceUser);
+    }
 }
