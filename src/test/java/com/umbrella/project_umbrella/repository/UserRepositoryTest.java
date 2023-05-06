@@ -219,6 +219,7 @@ public class UserRepositoryTest {
 
         // given
         User user = createUser();
+        userRepository.save(user);
 
         // when
         userRepository.delete(user);

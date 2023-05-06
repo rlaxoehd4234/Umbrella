@@ -4,11 +4,16 @@ import com.umbrella.constant.AuthPlatform;
 import com.umbrella.constant.Gender;
 import com.umbrella.constant.Role;
 import com.umbrella.domain.User.User;
+import com.umbrella.domain.WorkSpace.WorkSpace;
+import com.umbrella.domain.WorkSpace.WorkSpaceRepository;
+import com.umbrella.domain.WorkSpace.WorkspaceUser;
+import com.umbrella.domain.WorkSpace.WorkspaceUserRepository;
 import com.umbrella.domain.exception.UserException;
 import com.umbrella.dto.user.UserInfoDto;
 import com.umbrella.dto.user.UserRequestSignUpDto;
 import com.umbrella.dto.user.UserUpdateDto;
 import com.umbrella.domain.User.UserRepository;
+import com.umbrella.dto.workspace.WorkspaceRequestCreateDto;
 import com.umbrella.security.userDetails.UserContext;
 import com.umbrella.security.utils.RoleUtil;
 import com.umbrella.security.utils.SecurityUtil;
@@ -49,6 +54,12 @@ public class UserServiceTest {
     UserRepository userRepository;
 
     @Autowired
+    WorkSpaceRepository workSpaceRepository;
+
+    @Autowired
+    WorkspaceUserRepository workspaceUserRepository;
+
+    @Autowired
     UserService userService;
 
     @Autowired
@@ -75,22 +86,12 @@ public class UserServiceTest {
     private UserRequestSignUpDto setAuthenticationInContext() {
         UserRequestSignUpDto userSignUpDto = createUserSignUpDto();
 
-        userService.signUp(userSignUpDto);
+        User theUser = userService.signUp(userSignUpDto);
         em.flush();
         em.clear();
 
-        User user = User.builder()
-                .email(userSignUpDto.getEmail())
-                .password(userSignUpDto.getPassword())
-                .nickName(userSignUpDto.getNickName())
-                .name(userSignUpDto.getName())
-                .age(userSignUpDto.calculateAge())
-                .gender(Gender.MALE)
-                .role(Role.USER)
-                .build();
-
-        UserDetails authenticatedUser = new UserContext(user.getEmail(), user.getPassword(), user.getId(), user.getNickName(),
-                roleUtil.addAuthoritiesForContext(user));
+        UserDetails authenticatedUser = new UserContext(theUser.getEmail(), theUser.getPassword(),
+                theUser.getId(), theUser.getNickName(), roleUtil.addAuthoritiesForContext(theUser));
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(authenticatedUser, null,
                 authoritiesMapper.mapAuthorities(authenticatedUser.getAuthorities()));
@@ -469,6 +470,61 @@ public class UserServiceTest {
         assertThat(userInfoDto.getName()).isEqualTo(userSignUpDto.getName());
         assertThat(userInfoDto.getAge()).isEqualTo(userSignUpDto.calculateAge());
         assertThat(userInfoDto.getNickName()).isEqualTo(userSignUpDto.getNickName());
+    }
+
+    private WorkspaceRequestCreateDto createWorkspaceRequestCreateDto() {
+        WorkspaceRequestCreateDto theWorkspaceUserCreateDto = WorkspaceRequestCreateDto.builder()
+                .title("TEST WORKSPACE")
+                .description("테스트용 워크스페이스 입니다.")
+                .build();
+
+        return theWorkspaceUserCreateDto;
+    }
+
+    @Test
+    @DisplayName("[SUCCESS]_워크스페이스_생성")
+    public void createWorkspace() {
+        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext();
+        WorkspaceRequestCreateDto workspaceRequestCreateDto = createWorkspaceRequestCreateDto();
+        WorkspaceUser theWorkspaceUser = userService.createWorkspace(workspaceRequestCreateDto);
+        User theUser = userRepository.findByEmail(userSignUpDto.getEmail()).orElseThrow(
+                () -> new EntityNotFoundException("해당 이메일을 사용하는 계정을 찾을 수 없습니다.")
+        );
+
+        assertThat(
+                theWorkspaceUser.getWorkspaceUser().getEmail()
+        ).isEqualTo(userSignUpDto.getEmail());
+        assertThat(
+                theWorkspaceUser.getWorkspace().getTitle()
+        ).isEqualTo(workspaceRequestCreateDto.getTitle());
+        assertThat(
+                theUser.getWorkspaceUsers().size()
+        ).isEqualTo(1);
+        assertThat(
+                theUser.getWorkspaceUsers().get(0).getWorkspace().getTitle()
+        ).isEqualTo(workspaceRequestCreateDto.getTitle());
+    }
+
+    @Test
+    public void exitWorkspaceTest() {
+        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext();
+        WorkspaceRequestCreateDto workspaceRequestCreateDto = createWorkspaceRequestCreateDto();
+        WorkspaceUser theWorkspaceUser = userService.createWorkspace(workspaceRequestCreateDto);
+
+        User theUser = userRepository.findByEmail(userSignUpDto.getEmail()).orElseThrow(
+                () -> new EntityNotFoundException("해당 이메일을 사용하는 계정을 찾을 수 없습니다.")
+        );
+
+        WorkSpace theWorkspace = workSpaceRepository.findByTitle(workspaceRequestCreateDto.getTitle()).orElseThrow(
+                () -> new EntityNotFoundException("해당 워크스페이스를 찾을 수 없습니다.")
+        );
+
+        userService.exitWorkspace(theWorkspace.getId());
+
+        assertThat(theUser.getWorkspaceUsers().size()).isEqualTo(0);
+        assertThat(theWorkspace.getWorkspaceUsers().size()).isEqualTo(0);
+        assertThat(workspaceUserRepository.findByWorkspaceUser(theUser).size()).isEqualTo(0);
+        assertThat(workspaceUserRepository.findByWorkspace(theWorkspace).size()).isEqualTo(0);
     }
 }
 
