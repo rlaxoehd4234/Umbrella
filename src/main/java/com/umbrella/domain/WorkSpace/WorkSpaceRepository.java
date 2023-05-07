@@ -10,4 +10,6 @@ public interface WorkSpaceRepository extends JpaRepository<WorkSpace,Long> {
     Optional<WorkSpace> findById(Long id);
 
     Optional<WorkSpace> findByTitle(String title);
+
+    Optional<WorkSpace> findByIdAndTitle(Long id, String title);
 }
