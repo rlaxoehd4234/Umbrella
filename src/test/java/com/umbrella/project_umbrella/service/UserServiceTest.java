@@ -1,7 +1,6 @@
 package com.umbrella.project_umbrella.service;
 
 import com.umbrella.constant.AuthPlatform;
-import com.umbrella.constant.Gender;
 import com.umbrella.constant.Role;
 import com.umbrella.domain.User.User;
 import com.umbrella.domain.WorkSpace.WorkSpace;
@@ -9,11 +8,13 @@ import com.umbrella.domain.WorkSpace.WorkSpaceRepository;
 import com.umbrella.domain.WorkSpace.WorkspaceUser;
 import com.umbrella.domain.WorkSpace.WorkspaceUserRepository;
 import com.umbrella.domain.exception.UserException;
+import com.umbrella.domain.exception.WorkspaceException;
 import com.umbrella.dto.user.UserInfoDto;
 import com.umbrella.dto.user.UserRequestSignUpDto;
 import com.umbrella.dto.user.UserUpdateDto;
 import com.umbrella.domain.User.UserRepository;
 import com.umbrella.dto.workspace.WorkspaceRequestCreateDto;
+import com.umbrella.dto.workspace.WorkspaceRequestEnterAndExitDto;
 import com.umbrella.security.userDetails.UserContext;
 import com.umbrella.security.utils.RoleUtil;
 import com.umbrella.security.utils.SecurityUtil;
@@ -40,6 +41,7 @@ import javax.persistence.EntityNotFoundException;
 
 import java.util.Optional;
 
+import static com.umbrella.domain.exception.UserExceptionType.NOT_FOUND_ERROR;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -73,18 +75,22 @@ public class UserServiceTest {
 
     private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
-    private String password = "codePirates0204";
+    private static final String nickname = "테스트계정";
 
-    private String birthDate = "20010304";
+    private static final String password = "codePirates0204";
 
-    private String GENDER = "MALE";
+    private static final String name = "홍길동";
 
-    private UserRequestSignUpDto createUserSignUpDto() {
-        return new UserRequestSignUpDto("test@test.com", "테스트계정", password, "홍길동", birthDate, GENDER);
+    private static final String birthDate = "20010304";
+
+    private static final String GENDER = "MALE";
+
+    private UserRequestSignUpDto createUserSignUpDto(int i) {
+        return new UserRequestSignUpDto("test" + i + "@test.com", nickname + i, password, name, birthDate, GENDER);
     }
 
-    private UserRequestSignUpDto setAuthenticationInContext() {
-        UserRequestSignUpDto userSignUpDto = createUserSignUpDto();
+    private UserRequestSignUpDto setAuthenticationInContext(int i) {
+        UserRequestSignUpDto userSignUpDto = createUserSignUpDto(i);
 
         User theUser = userService.signUp(userSignUpDto);
         em.flush();
@@ -112,7 +118,7 @@ public class UserServiceTest {
     @DisplayName("[SUCCESS]_회원가입_성공")
     public void signUpTest() {
         // given
-        UserRequestSignUpDto userSignUpDto = createUserSignUpDto();
+        UserRequestSignUpDto userSignUpDto = createUserSignUpDto(0);
 
         // when
         userService.signUp(userSignUpDto);
@@ -137,7 +143,7 @@ public class UserServiceTest {
     @DisplayName("[FAILED]_회원가입_실패_이메일_중복")
     public void signUpExceptionTest01() {
         // given
-        UserRequestSignUpDto userSignUpDto = createUserSignUpDto();
+        UserRequestSignUpDto userSignUpDto = createUserSignUpDto(0);
 
         userService.signUp(userSignUpDto);
         em.flush();
@@ -152,7 +158,7 @@ public class UserServiceTest {
     @Disabled
     public void signUpExceptionTest02() {
         // given
-        UserRequestSignUpDto userSignUpDto = createUserSignUpDto();
+        UserRequestSignUpDto userSignUpDto = createUserSignUpDto(0);
 
         userService.signUp(userSignUpDto);
         em.flush();
@@ -212,7 +218,7 @@ public class UserServiceTest {
     @DisplayName("[SUCCESS]_회원정보_수정_비밀번호_변경")
     public void updatePasswordTest() {
         // given
-        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext();
+        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext(0);
 
         // when
         String changePassword = "codePirates0205";
@@ -232,7 +238,7 @@ public class UserServiceTest {
     @DisplayName("[SUCCESS]_회원정보_수정_이름만_변경")
     public void updateMNameTest() {
         // given
-        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext();
+        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext(0);
 
         // when
         String changeMName = "임꺽정";
@@ -257,7 +263,7 @@ public class UserServiceTest {
     @DisplayName("[SUCCESS]_회원정보_수정_닉네임만_변경")
     public void updateUserNickNameTest() {
         // given
-        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext();
+        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext(0);
 
         // when
         String changeNickName = "변경테스트";
@@ -282,7 +288,7 @@ public class UserServiceTest {
     @DisplayName("[SUCCESS]_회원정보_수정_나이만_변경")
     public void updateUserAgeTest() {
         // given
-        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext();
+        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext(0);
 
         // when
         int changeAge = 100;
@@ -307,7 +313,7 @@ public class UserServiceTest {
     @DisplayName("[SUCCESS]_회원정보_수정_닉네임과_실명만_변경")
     public void updateUserNickNameAndMNameTest() {
         // given
-        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext();
+        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext(0);
 
         // when
         String changeNickName = "변경테스트";
@@ -333,7 +339,7 @@ public class UserServiceTest {
     @DisplayName("[SUCCESS]_회원정보_수정_닉네임과_나이만_변경")
     public void updateUserNickNameAndAgeTest() {
         // given
-        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext();
+        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext(0);
 
         // when
         String changeNickName = "변경테스트";
@@ -359,7 +365,7 @@ public class UserServiceTest {
     @DisplayName("[SUCCESS]_회원정보_수정_실명과_나이만_변경")
     public void updateUserAgeAndMNameTest() {
         // given
-        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext();
+        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext(0);
 
         // when
         int changeAge = 100;
@@ -385,7 +391,7 @@ public class UserServiceTest {
     @DisplayName("[SUCCESS]_회원정보_수정_전부_변경")
     public void updateAllTest() {
         // given
-        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext();
+        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext(0);
 
         // when
         String changeNickName = "변경테스트";
@@ -412,7 +418,7 @@ public class UserServiceTest {
     @DisplayName("[SUCCESS]_회원탈퇴")
     public void withdrawTest() {
         // given
-        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext();
+        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext(0);
 
         // when
         userService.withdraw(password);
@@ -429,7 +435,7 @@ public class UserServiceTest {
     @DisplayName("[FAILED]_회원탈퇴_비밀번호_불일치")
     public void withdrawExceptionTest() {
         // given
-        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext();
+        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext(0);
 
         // when, then
         assertThat(assertThrows(UserException.class,
@@ -441,7 +447,7 @@ public class UserServiceTest {
     @DisplayName("[SUCCESS]_회원정보_조회")
     public void getUserInfoTest() {
         // given
-        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext();
+        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext(0);
         User user = userRepository.findByEmail(userSignUpDto.getEmail()).orElseThrow(
                 () -> new EntityNotFoundException("해당 이메일을 사용하는 계정을 찾을 수 없습니다.")
         );
@@ -460,7 +466,7 @@ public class UserServiceTest {
     @DisplayName("[SUCCESS]_회원정보_내_정보_조회")
     public void getMyInfoTest() {
         // given
-        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext();
+        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext(0);
 
         // when
         UserInfoDto userInfoDto = userService.getMyInfo();
@@ -472,24 +478,45 @@ public class UserServiceTest {
         assertThat(userInfoDto.getNickName()).isEqualTo(userSignUpDto.getNickName());
     }
 
+    private static final String WORKSPACE_TITLE =  "TEST WORKSPACE";
+    private static final String WORKSPACE_DESCRIPTION =  "테스트용 워크스페이스 입니다.";
+    private static final String DUPLICATE_ENTER_WORKSPACE_M = "이미 입장한 워크스페이스 입니다.";
+
     private WorkspaceRequestCreateDto createWorkspaceRequestCreateDto() {
         WorkspaceRequestCreateDto theWorkspaceUserCreateDto = WorkspaceRequestCreateDto.builder()
-                .title("TEST WORKSPACE")
-                .description("테스트용 워크스페이스 입니다.")
+                .title(WORKSPACE_TITLE)
+                .description(WORKSPACE_DESCRIPTION)
                 .build();
 
         return theWorkspaceUserCreateDto;
     }
 
+    private WorkspaceRequestEnterAndExitDto createWorkspaceRequestEnterAndExitDto(Long workspaceId) {
+        WorkspaceRequestEnterAndExitDto theWorkspaceUserEnterDto = WorkspaceRequestEnterAndExitDto.builder()
+                .id(workspaceId)
+                .title(WORKSPACE_TITLE)
+                .build();
+
+        return theWorkspaceUserEnterDto;
+    }
+
     @Test
     @DisplayName("[SUCCESS]_워크스페이스_생성")
     public void createWorkspace() {
-        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext();
+        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext(0);
         WorkspaceRequestCreateDto workspaceRequestCreateDto = createWorkspaceRequestCreateDto();
-        WorkspaceUser theWorkspaceUser = userService.createWorkspace(workspaceRequestCreateDto);
+        Long workspaceId =  userService.createWorkspace(workspaceRequestCreateDto);
+
         User theUser = userRepository.findByEmail(userSignUpDto.getEmail()).orElseThrow(
                 () -> new EntityNotFoundException("해당 이메일을 사용하는 계정을 찾을 수 없습니다.")
         );
+        WorkSpace theWorkspace = workSpaceRepository.findById(workspaceId).orElseThrow(
+                () -> new EntityNotFoundException("해당 워크스페이스를 찾을 수 없습니다.")
+        );
+        WorkspaceUser theWorkspaceUser = workspaceUserRepository.findByWorkspaceUserAndWorkspace(theUser, theWorkspace)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("해당 워크스페이스를 찾을 수 없습니다.")
+                );
 
         assertThat(
                 theWorkspaceUser.getWorkspaceUser().getEmail()
@@ -506,10 +533,41 @@ public class UserServiceTest {
     }
 
     @Test
-    public void exitWorkspaceTest() {
-        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext();
+    @DisplayName("[SUCCESS]_워크스페이스_입장")
+    public void enterWorkspaceTest() {
+        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext(0);
         WorkspaceRequestCreateDto workspaceRequestCreateDto = createWorkspaceRequestCreateDto();
-        WorkspaceUser theWorkspaceUser = userService.createWorkspace(workspaceRequestCreateDto);
+        Long theWorkspaceId = userService.createWorkspace(workspaceRequestCreateDto);
+
+        UserRequestSignUpDto theUserSignUpDto = setAuthenticationInContext(1);
+        WorkspaceRequestEnterAndExitDto workspaceRequestEnterDto = createWorkspaceRequestEnterAndExitDto(theWorkspaceId);
+        userService.enterWorkspace(workspaceRequestEnterDto);
+
+        User theUser = userRepository.findByEmail(securityUtil.getLoginUserEmail()).orElseThrow(
+                () -> new UserException(NOT_FOUND_ERROR)
+        );
+        assertThat(theUser.getWorkspaceUsers().stream().anyMatch( workspaceUser -> {
+            return workspaceUser.getWorkspace().getId() == theWorkspaceId;
+        })).isEqualTo(true);
+    }
+
+    @Test
+    @DisplayName("[FAILED]_워크스페이스_중복_입장")
+    public void enterWorkspaceFailTest() {
+        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext(0);
+        WorkspaceRequestCreateDto workspaceRequestCreateDto = createWorkspaceRequestCreateDto();
+        Long theWorkspaceId = userService.createWorkspace(workspaceRequestCreateDto);
+        WorkspaceRequestEnterAndExitDto workspaceRequestEnterDto = createWorkspaceRequestEnterAndExitDto(theWorkspaceId);
+
+        assertThrows(WorkspaceException.class, () -> userService.enterWorkspace(workspaceRequestEnterDto));
+    }
+
+    @Test
+    @DisplayName("[SUCCESS]_워크스페이스_퇴장")
+    public void exitWorkspaceTest() {
+        UserRequestSignUpDto userSignUpDto = setAuthenticationInContext(0);
+        WorkspaceRequestCreateDto workspaceRequestCreateDto = createWorkspaceRequestCreateDto();
+        Long workspaceId = userService.createWorkspace(workspaceRequestCreateDto);
 
         User theUser = userRepository.findByEmail(userSignUpDto.getEmail()).orElseThrow(
                 () -> new EntityNotFoundException("해당 이메일을 사용하는 계정을 찾을 수 없습니다.")
@@ -518,8 +576,8 @@ public class UserServiceTest {
         WorkSpace theWorkspace = workSpaceRepository.findByTitle(workspaceRequestCreateDto.getTitle()).orElseThrow(
                 () -> new EntityNotFoundException("해당 워크스페이스를 찾을 수 없습니다.")
         );
-
-        userService.exitWorkspace(theWorkspace.getId());
+        WorkspaceRequestEnterAndExitDto workspaceRequestEnterAndExitDto = createWorkspaceRequestEnterAndExitDto(workspaceId);
+        userService.exitWorkspace(workspaceRequestEnterAndExitDto);
 
         assertThat(theUser.getWorkspaceUsers().size()).isEqualTo(0);
         assertThat(theWorkspace.getWorkspaceUsers().size()).isEqualTo(0);

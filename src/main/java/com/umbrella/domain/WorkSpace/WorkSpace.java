@@ -1,6 +1,5 @@
 package com.umbrella.domain.WorkSpace;
 
-import com.umbrella.domain.User.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

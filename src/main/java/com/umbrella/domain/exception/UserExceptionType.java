@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 public enum UserExceptionType implements BaseExceptionType {
 
     /* SignUp DTO & Login DTO & Update Password DTO & Withdraw DTO Exceptions */
-    DEFAULT_ERROR(699 ,HttpStatus.BAD_REQUEST, "잘못된 인자가 삽입되었습니다."),
+    DEFAULT_USER_ERROR(699 ,HttpStatus.BAD_REQUEST, "잘못된 인자가 삽입되었습니다."),
     BLANK_PASSWORD_ERROR(600, HttpStatus.BAD_REQUEST, "비밀번호는 필수 입력 값입니다."),
     BLANK_EMAIL_ERROR(601, HttpStatus.BAD_REQUEST, "이메일은 필수 입력 값입니다."),
     BLANK_NICKNAME_ERROR(602, HttpStatus.BAD_REQUEST, "닉네임은 필수 입력 값입니다."),

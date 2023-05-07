@@ -2,6 +2,7 @@ package com.umbrella.controller;
 
 import com.umbrella.dto.user.*;
 import com.umbrella.dto.workspace.WorkspaceRequestCreateDto;
+import com.umbrella.dto.workspace.WorkspaceRequestEnterAndExitDto;
 import com.umbrella.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -77,8 +78,27 @@ public class UserController {
 
     @PostMapping(value = "/workspace/create")
     public ResponseEntity createWorkspace(@RequestBody WorkspaceRequestCreateDto workspaceRequestCreateDto) {
+        validateCreateWorkspaceRequest(workspaceRequestCreateDto);
         userService.createWorkspace(workspaceRequestCreateDto);
 
         return ResponseEntity.ok().body("워크스페이스가 성공적으로 생성되었습니다.");
+    }
+
+    private void validateCreateWorkspaceRequest(WorkspaceRequestCreateDto workspaceRequestCreateDto) {
+        /* AOP Exception Handler will Operate */
+        Assert.hasText(workspaceRequestCreateDto.getTitle(), "workspace_title must not be blank");
+        Assert.hasText(workspaceRequestCreateDto.getDescription(), "workspace_description must not be blank");
+    }
+
+    @PostMapping(value = "/workspace/enter")
+    public ResponseEntity enterWorkspace(@RequestBody WorkspaceRequestEnterAndExitDto workspaceRequestEnterDto) {
+        userService.enterWorkspace(workspaceRequestEnterDto);
+        return ResponseEntity.ok().body(workspaceRequestEnterDto);
+    }
+
+    @DeleteMapping(value = "/workspace/exit")
+    public ResponseEntity exitWorkspace(@RequestBody WorkspaceRequestEnterAndExitDto workspaceRequestExitDto) {
+        userService.exitWorkspace(workspaceRequestExitDto);
+        return ResponseEntity.ok().body(workspaceRequestExitDto);
     }
 }

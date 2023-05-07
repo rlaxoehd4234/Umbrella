@@ -2,7 +2,8 @@ package com.umbrella.exception;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.umbrella.domain.exception.UserExceptionType;
+import com.umbrella.domain.exception.WorkspaceException;
+import com.umbrella.domain.exception.WorkspaceExceptionType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -17,16 +18,22 @@ import java.util.List;
 import java.util.Map;
 
 import static com.umbrella.domain.exception.UserExceptionType.*;
+import static com.umbrella.domain.exception.WorkspaceExceptionType.*;
 
 @RestControllerAdvice
 public class ExceptionAdvice {
 
-    private static final String EMAIL_ERROR_MESSAGE = "email must not be blank";
-    private static final String NICKNAME_ERROR_MESSAGE = "nickName must not be blank";
-    private static final String PASSWORD_ERROR_MESSAGE = "password must not be blank";
-    private static final String NAME_ERROR_MESSAGE = "mName must not be blank";
-    private static final String BIRTHDATE_ERROR_MESSAGE = "birthDate must not be null";
-    private static final String GENDER_ERROR_MESSAGE = "gender must not be blank";
+    private static final String EMAIL_BLANK_ERROR_MESSAGE = "email must not be blank";
+    private static final String NICKNAME_BLANK_ERROR_MESSAGE = "nickName must not be blank";
+    private static final String PASSWORD_BLANK_ERROR_MESSAGE = "password must not be blank";
+    private static final String NAME_BLANK_ERROR_MESSAGE = "mName must not be blank";
+    private static final String BIRTHDATE_BLANK_ERROR_MESSAGE = "birthDate must not be null";
+    private static final String GENDER_BLANK_ERROR_MESSAGE = "gender must not be blank";
+
+    private static final String WORKSPACE_TITLE_BLANK_ERROR_MESSAGE = "workspace_title must not be blank";
+    private static final String WORKSPACE_DESCRIPTION_BLANK_ERROR_MESSAGE = "workspace_description must not be blank";
+    private static final String ALREADY_ENTERED_WORKSPACE_ERROR_MESSAGE = "이미 입장한 워크스페이스 입니다.";
+
 
     @ExceptionHandler
     public ResponseEntity MainExceptionHandler(BaseException exception){
@@ -36,16 +43,23 @@ public class ExceptionAdvice {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity DtoIllegalArgumentHandler(IllegalArgumentException exception) {
-        Map<String, UserExceptionType> errorMap = new HashMap<>();
-        errorMap.put(EMAIL_ERROR_MESSAGE, BLANK_EMAIL_ERROR);
-        errorMap.put(NICKNAME_ERROR_MESSAGE, BLANK_NICKNAME_ERROR);
-        errorMap.put(PASSWORD_ERROR_MESSAGE, BLANK_PASSWORD_ERROR);
-        errorMap.put(NAME_ERROR_MESSAGE, BLANK_NAME_ERROR);
-        errorMap.put(BIRTHDATE_ERROR_MESSAGE, BLANK_BIRTHDATE_ERROR);
-        errorMap.put(GENDER_ERROR_MESSAGE, BLANK_GENDER_ERROR);
+    public ResponseEntity IllegalArgumentHandler(IllegalArgumentException exception) {
+        Map<String, BaseExceptionType> errorMap = new HashMap<>();
+        /* 유저 회원가입 발생 오류 */
+        errorMap.put(EMAIL_BLANK_ERROR_MESSAGE, BLANK_EMAIL_ERROR);
+        errorMap.put(NICKNAME_BLANK_ERROR_MESSAGE, BLANK_NICKNAME_ERROR);
+        errorMap.put(PASSWORD_BLANK_ERROR_MESSAGE, BLANK_PASSWORD_ERROR);
+        errorMap.put(NAME_BLANK_ERROR_MESSAGE, BLANK_NAME_ERROR);
+        errorMap.put(BIRTHDATE_BLANK_ERROR_MESSAGE, BLANK_BIRTHDATE_ERROR);
+        errorMap.put(GENDER_BLANK_ERROR_MESSAGE, BLANK_GENDER_ERROR);
 
-        UserExceptionType exceptionMap = errorMap.getOrDefault(exception.getMessage(), DEFAULT_ERROR);
+        /* 워크스페이스 생성 발생 오류 */
+        errorMap.put(WORKSPACE_TITLE_BLANK_ERROR_MESSAGE, BLANK_WORKSPACE_TITLE_ERROR);
+        errorMap.put(WORKSPACE_DESCRIPTION_BLANK_ERROR_MESSAGE, BLANK_WORKSPACE_DESCRIPTION_ERROR);
+
+        /* 워크스페이스 입장 발생 오류 */
+        errorMap.put(ALREADY_ENTERED_WORKSPACE_ERROR_MESSAGE, ALREADY_ENTERED_WORKSPACE_ERROR);
+        BaseExceptionType exceptionMap = errorMap.getOrDefault(exception.getMessage(), DEFAULT_USER_ERROR);
 
         return ResponseEntity.status(exceptionMap.getHttpStatus())
                 .body(new ExceptionDto(exceptionMap.getErrorCode(), exceptionMap.getErrorMessage()));
