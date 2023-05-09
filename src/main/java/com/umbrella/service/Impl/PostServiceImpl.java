@@ -1,8 +1,9 @@
 package com.umbrella.service.Impl;
 
 
+import com.umbrella.domain.Board.Board;
+import com.umbrella.domain.Board.BoardRepository;
 import com.umbrella.domain.Comment.CommentRepository;
-import com.umbrella.domain.Heart.PostHeart;
 import com.umbrella.domain.Heart.PostHeartRepository;
 import com.umbrella.domain.Post.Post;
 import com.umbrella.domain.Post.PostRepository;
@@ -22,7 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
-import java.util.Optional;
 
 
 @Service
@@ -31,6 +31,7 @@ import java.util.Optional;
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
     private final PostHeartRepository postHeartRepository;
     private final SecurityUtil securityUtil;
@@ -41,13 +42,16 @@ public class PostServiceImpl implements PostService {
     // 저장 메서드
     public Long save(PostSaveRequestDto requestDto){
         User findUser = userRepository.findById(securityUtil.getLoginUserId()).orElseThrow(() -> new UserException(UserExceptionType.NOT_FOUND_ERROR));
+        Board board = validateBoard(requestDto.getTitle());
         validateUser(findUser);
+
 
         Post post = Post.builder()
                 .content(requestDto.getContent())
                 .writer(findUser.getName())
                 .title(requestDto.getTitle())
                 .user(findUser)
+                .board(board)
                 .build();
 
         return postRepository.save(post).getId();
@@ -105,6 +109,11 @@ public class PostServiceImpl implements PostService {
     public Post validatePost(Long id){
         return postRepository.findById(id)
                 .orElseThrow(() -> new PostException(PostExceptionType.NOT_FOUND_POST));
+    }
+
+    public Board validateBoard(String title){
+        return boardRepository.findByTitle(title);
+
     }
 
 
