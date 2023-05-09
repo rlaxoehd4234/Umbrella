@@ -1,6 +1,7 @@
 package com.umbrella.dto.post;
 
 import com.umbrella.domain.Post.Post;
+import com.umbrella.domain.User.User;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -16,14 +17,16 @@ public class PostSaveRequestDto {
     private String content;
     @NotBlank
     private String writer;
+    private String boardName;
 
 
 
     @Builder
-    public PostSaveRequestDto(String title, String content, String writer){
+    public PostSaveRequestDto(String title, String content,String writer , String boardName){
         this.title = title;
         this.content = content;
         this.writer = writer;
+        this.boardName = boardName;
     }
 
     public Post toEntity(){
