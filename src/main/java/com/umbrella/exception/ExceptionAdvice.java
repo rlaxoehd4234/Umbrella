@@ -2,6 +2,8 @@ package com.umbrella.exception;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.umbrella.controller.PostController;
+import com.umbrella.domain.exception.PostException;
 import com.umbrella.domain.exception.WorkspaceException;
 import com.umbrella.domain.exception.WorkspaceExceptionType;
 import org.springframework.http.HttpStatus;

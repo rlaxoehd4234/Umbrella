@@ -45,7 +45,6 @@ public class PostServiceImpl implements PostService {
         Board board = validateBoard(requestDto.getTitle());
         validateUser(findUser);
 
-
         Post post = Post.builder()
                 .content(requestDto.getContent())
                 .writer(findUser.getName())
@@ -77,15 +76,14 @@ public class PostServiceImpl implements PostService {
     }
 
     // 게시글 클릭 메서드
-    public PostResponseDto findById(Long id){
+    public PostResponseDto findById(Long id) {
         Post post = validatePost(id);
         return new PostResponseDto(post);
-
     }
 
     // 게시글 전체 리턴 메서드
     @Transactional(readOnly = true)
-    public Page<PostListResponseDto> findAllPosts(Pageable pageable){
+    public Page<PostListResponseDto> findAllPosts(Pageable pageable) {
         Page<Post> page = postRepository.findAll(pageable);
         Page<PostListResponseDto> map = page.map(PostListResponseDto::new);
 
@@ -112,6 +110,7 @@ public class PostServiceImpl implements PostService {
     }
 
     public Board validateBoard(String title){
+
         return boardRepository.findByTitle(title);
 
     }
