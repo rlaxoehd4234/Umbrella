@@ -38,19 +38,25 @@ public class UserController {
     }
 
     @PutMapping(value = "/user/update/info")
-    public ResponseEntity<String> updateUserInfo(@Valid @RequestBody UserUpdateDto userUpdateDto) {
+    public ResponseEntity<String> updateUserInfo(@Valid @RequestBody UserRequestUpdateDto userUpdateDto) {
         userService.update(userUpdateDto);
         return ResponseEntity.ok().body("입력하신 정보로 성공적으로 수정되었습니다.");
     }
 
     @PatchMapping(value = "/user/update/password")
-    public ResponseEntity<String> updateUserPassword(@Valid @RequestBody UpdatePasswordDto updatePasswordDto) {
+    public ResponseEntity<String> updateUserPassword(@Valid @RequestBody UserRequestUpdatePasswordDto updatePasswordDto) {
         /* AOP Exception Handler will Operate */
         Assert.hasText(updatePasswordDto.getCheckPassword(), "checkPassword must not be blank");
         Assert.hasText(updatePasswordDto.getNewPassword(), "newPassword must not be blank");
 
         userService.updatePassword(updatePasswordDto.getCheckPassword(), updatePasswordDto.getNewPassword());
         return ResponseEntity.ok().body("입력하신 비밀번호로 성공적으로 수정되었습니다.");
+    }
+
+    @PatchMapping(value = "/forget/password")
+    public ResponseEntity reCreatePassword(@RequestBody UserRequestFindPasswordDto userRequestFindPasswordDto) {
+        userService.reCreatePassword(userRequestFindPasswordDto);
+        return ResponseEntity.ok().body("");
     }
 
     @DeleteMapping(value = "/user/withdraw")

@@ -41,7 +41,8 @@ public class JwtServiceImpl implements JwtService {
     private final CookieUtil cookieUtil;
 
 
-    public JwtServiceImpl(UserRepository userRepository, @Value("${jwt.secret}") String secret,
+    public JwtServiceImpl(UserRepository userRepository,
+                          @Value("${jwt.secret}") String secret,
                           @Value("${app.auth.cookie.refresh-cookie-key}") String cookieKey,
                           CookieUtil cookieUtil) {
         this.userRepository = userRepository;
@@ -156,10 +157,11 @@ public class JwtServiceImpl implements JwtService {
     public Optional<String> extractEmail(String token) {
         try {
             Claims claims = extractClaim(token);
-
             return Optional.ofNullable(claims.get(EMAIL_CLAIM, String.class));
-        } catch (Exception e) {
-            log.error("유효하지 않은 토큰입니다.", e);
+        } catch (ExpiredJwtException e) {
+            Claims claims = e.getClaims();
+            return Optional.ofNullable(claims.get(EMAIL_CLAIM, String.class));
+        } catch (JwtException | IllegalArgumentException e) {
             throw new JwtException("유효하지 않은 토큰입니다.");
         }
     }
@@ -168,10 +170,11 @@ public class JwtServiceImpl implements JwtService {
     public Optional<String> extractSubject(String token) {
         try {
             Claims claims = extractClaim(token);
-
             return Optional.ofNullable(claims.getSubject());
-        } catch (Exception e) {
-            log.error("유효하지 않은 토큰입니다.", e);
+        } catch (ExpiredJwtException e) {
+            Claims claims = e.getClaims();
+            return Optional.ofNullable(claims.getSubject());
+        }catch (JwtException | IllegalArgumentException e) {
             throw new JwtException("유효하지 않은 토큰입니다.");
         }
     }

@@ -6,7 +6,7 @@ import lombok.Getter;
 
 import java.util.Optional;
 
-public class UserUpdateDto {
+public class UserRequestUpdateDto {
 
     @Getter
     @JsonProperty("nick_name")
@@ -19,9 +19,9 @@ public class UserUpdateDto {
     private Optional<Integer> age;
 
     @Builder
-    public UserUpdateDto(Optional<String> nickName,
-                         Optional<String> name,
-                         Optional<Integer> age) {
+    public UserRequestUpdateDto(Optional<String> nickName,
+                                Optional<String> name,
+                                Optional<Integer> age) {
         this.nickName = nickName;
         this.name = name;
         this.age = age;

@@ -11,6 +11,11 @@ public class SecurityUtil {
         return userContext.getUsername();
     }
 
+    public String getLoginUserNickname() {
+        UserContext userContext = getPrincipalInAuthentication();
+        return userContext.getNickName();
+    }
+
     public Long getLoginUserId() {
         UserContext userContext = getPrincipalInAuthentication();
         return userContext.getId();

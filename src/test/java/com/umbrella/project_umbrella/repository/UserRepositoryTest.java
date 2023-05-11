@@ -3,7 +3,7 @@ package com.umbrella.project_umbrella.repository;
 import com.umbrella.constant.Gender;
 import com.umbrella.constant.Role;
 import com.umbrella.domain.User.User;
-import com.umbrella.dto.user.UserUpdateDto;
+import com.umbrella.dto.user.UserRequestUpdateDto;
 import com.umbrella.domain.User.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -192,7 +192,7 @@ public class UserRepositoryTest {
 
         Optional<Integer> opUpdateAge = Optional.of(23);
 
-        UserUpdateDto userUpdateDto = UserUpdateDto.builder()
+        UserRequestUpdateDto userUpdateDto = UserRequestUpdateDto.builder()
                 .nickName(opUpdateName)
                 .name(opUpdateNickName)
                 .age(opUpdateAge)

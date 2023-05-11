@@ -8,7 +8,7 @@ import com.umbrella.domain.WorkSpace.WorkSpace;
 import com.umbrella.domain.WorkSpace.WorkSpaceRepository;
 import com.umbrella.domain.WorkSpace.WorkspaceUser;
 import com.umbrella.domain.WorkSpace.WorkspaceUserRepository;
-import com.umbrella.dto.user.UserUpdateDto;
+import com.umbrella.dto.user.UserRequestUpdateDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -123,7 +123,7 @@ public class WorkspaceUserRepositoryTest {
 
         Optional<String> updateNickName = Optional.of("updateNickName");
 
-        UserUpdateDto userUpdateDto = UserUpdateDto.builder()
+        UserRequestUpdateDto userUpdateDto = UserRequestUpdateDto.builder()
                 .name(Optional.empty())
                 .nickName(updateNickName)
                 .age(Optional.empty())
