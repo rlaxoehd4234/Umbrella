@@ -9,6 +9,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -16,7 +18,9 @@ import javax.persistence.*;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "comment_id")
     private Long id;
+
     @Column(columnDefinition = "TEXT" , nullable = false)
     private String content; // 변수명 변경
 
@@ -36,6 +40,11 @@ public class Comment {
     @JoinColumn(name = "user_id")
     private User user;
 
+
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("id asc")
+    private List<ChildComment> childCommentList = new ArrayList<>();
+
     @Builder
     public Comment(Long id, String content, String createDate, String modifiedDate, Post post, User user) {
         this.id = id;
@@ -50,6 +59,9 @@ public class Comment {
     public void update(String content){
         this.content = content;
     }
+
+
+
 
 
 }

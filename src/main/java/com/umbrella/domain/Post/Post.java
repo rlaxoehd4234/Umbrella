@@ -1,10 +1,13 @@
 package com.umbrella.domain.Post;
 
+import com.umbrella.domain.Board.Board;
 import com.umbrella.domain.User.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -35,6 +38,11 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Board board;
+
     @ColumnDefault("0")
     private Integer likeCount;
 
@@ -45,11 +53,12 @@ public class Post {
 
 
     @Builder
-    public Post(String writer, String title, String content, User user){
+    public Post(String writer, String title, String content, User user, Board board){
         this.writer = writer;
         this.content = content;
         this.title = title;
         this.user = user;
+        this.board = board;
     }
 
 
