@@ -20,7 +20,7 @@ import static com.umbrella.domain.exception.UserExceptionType.*;
 import static com.umbrella.domain.exception.WorkspaceExceptionType.*;
 
 @RestControllerAdvice
-public class UserExceptionAdvice {
+public class ExceptionAdvice {
 
     private static final String EMAIL_BLANK_ERROR_MESSAGE = "email must not be blank";
     private static final String NICKNAME_BLANK_ERROR_MESSAGE = "nickName must not be blank";
