@@ -6,11 +6,9 @@ import com.umbrella.security.login.cookie.CookieOAuth2AuthorizationRequestReposi
 import com.umbrella.security.login.filter.JsonEmailPasswordAuthenticationFilter;
 import com.umbrella.security.login.filter.JwtAuthenticationProcessingFilter;
 import com.umbrella.security.login.filter.JwtExceptionFilter;
-import com.umbrella.security.login.handler.LoginFailureHandler;
-import com.umbrella.security.login.handler.LoginSuccessJWTProvideHandler;
-import com.umbrella.security.login.handler.OAuth2LoginFailureHandler;
-import com.umbrella.security.login.handler.OAuth2LoginSuccessHandler;
+import com.umbrella.security.login.handler.*;
 import com.umbrella.security.utils.RoleUtil;
+import com.umbrella.security.utils.SecurityUtil;
 import com.umbrella.service.CustomOAuth2UserService;
 import com.umbrella.service.JwtService;
 import com.umbrella.service.LoginService;
@@ -59,7 +57,7 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
                 .authorizeRequests()
-                .antMatchers("/login", "/signUp", "/").permitAll()
+                .antMatchers("/login", "/signUp", "/", "/send-email").permitAll()
                 .antMatchers("/auth/**", "/oauth2/**").permitAll()
                 .anyRequest().authenticated()
         .and()
@@ -78,6 +76,12 @@ public class SecurityConfig {
                                         .successHandler((oAuth2LoginSuccessHandler()))
                                         .failureHandler(oAuth2LoginFailureHandler())
                     )
+        .and()
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login")
+                .deleteCookies("refresh")
+                .logoutSuccessHandler(logoutSuccessHandler())
         .and()
                 .cors().configurationSource(corsConfigurationSource())
         .and()
@@ -109,6 +113,11 @@ public class SecurityConfig {
     @Bean
     public LoginFailureHandler loginFailureHandler(){
         return new LoginFailureHandler();
+    }
+
+    @Bean
+    public LogoutSuccessHandler logoutSuccessHandler() {
+        return new LogoutSuccessHandler(objectMapper);
     }
 
     @Bean

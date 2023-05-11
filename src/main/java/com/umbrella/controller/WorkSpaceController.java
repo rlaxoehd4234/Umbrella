@@ -17,34 +17,28 @@ public class WorkSpaceController {
 
     private final WorkSpaceServiceImpl workSpaceService;
 
-    @PostMapping(name = "/workspace")
+    @PostMapping(value = "/workspace")
     public ResponseEntity<?> save(@Valid @RequestBody WorkspaceRequestDto requestDto){
         return ResponseEntity.ok().body(workSpaceService.save(requestDto));
     }
 
-    @GetMapping(name = "/workspace/{workspace_id}")
+    @GetMapping(value = "/workspace/{workspace_id}")
     public ResponseEntity<?> findById(@PathVariable Long id){
         return ResponseEntity.ok().body(workSpaceService.findById(id));
     }
 
-    @PutMapping(name = "/workspace/{workspace_id}")
+    @PutMapping(value = "/workspace/{workspace_id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody WorkspaceUpdateRequestDto requestDto){
         return ResponseEntity.ok().body(workSpaceService.update(id,requestDto));
     }
-    @DeleteMapping(name = "/workspace/{workspace_id}")
+
+    @DeleteMapping(value = "/workspace/{workspace_id}")
     public ResponseEntity<?> delete(@PathVariable Long id){
         return ResponseEntity.ok().body(workSpaceService.delete(id));
     }
 
-    @GetMapping(name = "/workspace")
+    @GetMapping(value = "/workspace")
     public ResponseEntity<?> findAll(){
         return ResponseEntity.ok().body(workSpaceService.findAllList());
     }
-
-
-
-
-
-
-
 }

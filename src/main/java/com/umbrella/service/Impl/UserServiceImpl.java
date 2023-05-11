@@ -8,8 +8,9 @@ import com.umbrella.domain.WorkSpace.WorkspaceUserRepository;
 import com.umbrella.domain.exception.UserException;
 import com.umbrella.domain.exception.WorkspaceException;
 import com.umbrella.dto.user.UserInfoDto;
+import com.umbrella.dto.user.UserRequestFindPasswordDto;
 import com.umbrella.dto.user.UserRequestSignUpDto;
-import com.umbrella.dto.user.UserUpdateDto;
+import com.umbrella.dto.user.UserRequestUpdateDto;
 import com.umbrella.domain.User.UserRepository;
 import com.umbrella.dto.workspace.WorkspaceRequestCreateDto;
 import com.umbrella.dto.workspace.WorkspaceRequestEnterAndExitDto;
@@ -83,7 +84,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(UserUpdateDto userUpdateDto) {
+    public void update(UserRequestUpdateDto userUpdateDto) {
         User wantUpdateUser = getLoginUserByEmail();
         wantUpdateUser.updateUser(userUpdateDto);
     }
@@ -97,6 +98,14 @@ public class UserServiceImpl implements UserService {
         }
 
         updatePasswordUser.updatePassword(passwordEncoder, newPassword);
+    }
+
+    public void reCreatePassword(UserRequestFindPasswordDto userRequestFindPasswordDto) {
+        User theUser = userRepository.findByEmail(userRequestFindPasswordDto.getEmail()).orElseThrow(
+                () -> new UserException(NOT_FOUND_ERROR)
+        );
+
+        theUser.updatePassword(passwordEncoder, userRequestFindPasswordDto.getPassword());
     }
 
     @Override

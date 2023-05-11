@@ -11,7 +11,7 @@ import com.umbrella.domain.exception.UserException;
 import com.umbrella.domain.exception.WorkspaceException;
 import com.umbrella.dto.user.UserInfoDto;
 import com.umbrella.dto.user.UserRequestSignUpDto;
-import com.umbrella.dto.user.UserUpdateDto;
+import com.umbrella.dto.user.UserRequestUpdateDto;
 import com.umbrella.domain.User.UserRepository;
 import com.umbrella.dto.workspace.WorkspaceRequestCreateDto;
 import com.umbrella.dto.workspace.WorkspaceRequestEnterAndExitDto;
@@ -242,7 +242,7 @@ public class UserServiceTest {
 
         // when
         String changeMName = "임꺽정";
-        UserUpdateDto userUpdateDto = new UserUpdateDto(Optional.empty(),
+        UserRequestUpdateDto userUpdateDto = new UserRequestUpdateDto(Optional.empty(),
                                                                 Optional.of(changeMName),
                                                         Optional.empty());
         userService.update(userUpdateDto);
@@ -267,7 +267,7 @@ public class UserServiceTest {
 
         // when
         String changeNickName = "변경테스트";
-        UserUpdateDto userUpdateDto = new UserUpdateDto(Optional.of(changeNickName),
+        UserRequestUpdateDto userUpdateDto = new UserRequestUpdateDto(Optional.of(changeNickName),
                 Optional.empty(),
                 Optional.empty());
         userService.update(userUpdateDto);
@@ -292,7 +292,7 @@ public class UserServiceTest {
 
         // when
         int changeAge = 100;
-        UserUpdateDto userUpdateDto = new UserUpdateDto(Optional.empty(),
+        UserRequestUpdateDto userUpdateDto = new UserRequestUpdateDto(Optional.empty(),
                 Optional.empty(),
                 Optional.of(changeAge));
         userService.update(userUpdateDto);
@@ -318,7 +318,7 @@ public class UserServiceTest {
         // when
         String changeNickName = "변경테스트";
         String changeMName = "임꺽정";
-        UserUpdateDto userUpdateDto = new UserUpdateDto(Optional.of(changeNickName),
+        UserRequestUpdateDto userUpdateDto = new UserRequestUpdateDto(Optional.of(changeNickName),
                 Optional.of(changeMName),
                 Optional.empty());
         userService.update(userUpdateDto);
@@ -344,7 +344,7 @@ public class UserServiceTest {
         // when
         String changeNickName = "변경테스트";
         int changeAge = 100;
-        UserUpdateDto userUpdateDto = new UserUpdateDto(Optional.of(changeNickName),
+        UserRequestUpdateDto userUpdateDto = new UserRequestUpdateDto(Optional.of(changeNickName),
                 Optional.empty(),
                 Optional.of(changeAge));
         userService.update(userUpdateDto);
@@ -370,7 +370,7 @@ public class UserServiceTest {
         // when
         int changeAge = 100;
         String changeMName = "임꺽정";
-        UserUpdateDto userUpdateDto = new UserUpdateDto(Optional.empty(),
+        UserRequestUpdateDto userUpdateDto = new UserRequestUpdateDto(Optional.empty(),
                 Optional.of(changeMName),
                 Optional.of(changeAge));
         userService.update(userUpdateDto);
@@ -397,7 +397,7 @@ public class UserServiceTest {
         String changeNickName = "변경테스트";
         int changeAge = 100;
         String changeMName = "임꺽정";
-        UserUpdateDto userUpdateDto = new UserUpdateDto(Optional.of(changeNickName),
+        UserRequestUpdateDto userUpdateDto = new UserRequestUpdateDto(Optional.of(changeNickName),
                 Optional.of(changeMName),
                 Optional.of(changeAge));
         userService.update(userUpdateDto);

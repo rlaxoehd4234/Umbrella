@@ -4,6 +4,7 @@ import com.umbrella.domain.User.User;
 import com.umbrella.domain.User.UserRepository;
 import com.umbrella.security.userDetails.UserContext;
 import com.umbrella.security.utils.RoleUtil;
+import com.umbrella.security.utils.SecurityUtil;
 import com.umbrella.service.JwtService;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
     private final UserRepository userRepository;
     private final RoleUtil roleUtil;
 
-    private static final String[] NO_CHECK_URI_LIST = {"/login", "/signUp", "/"};
+    private static final String[] NO_CHECK_URI_LIST = {"/login", "/signUp", "/send-email"};
 
     private static final int PASS = 1;
     private static final int REISSUE = 0;
@@ -55,18 +56,16 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
             return;
         }
 
-        Optional<String> extractRefreshToken = jwtService.extractRefreshToken(request);
+        String extractRefreshToken = jwtService.extractRefreshToken(request).orElseThrow(
+                () -> new JwtException(REFRESH_TOKEN_ERROR_M)
+        );
         String extractAccessToken = jwtService.extractAccessToken(request).orElseThrow(
                 () -> new JwtException(ACCESS_TOKEN_ERROR_M)
         );
 
-        String email = jwtService.extractEmail(extractAccessToken)
-                .map(Object::toString)
-                .orElseThrow(
-                        () -> new JwtException(ACCESS_TOKEN_ERROR_M)
-                );
+        String email = jwtService.extractEmail(extractAccessToken).get();
 
-        if (jwtService.isTokenValid(extractRefreshToken.get()) == PASS) {
+        if (jwtService.isTokenValid(extractRefreshToken) == PASS) {
             checkAccessToken(response, extractAccessToken, email);
             checkAndSaveAuthentication(email);
         } else {

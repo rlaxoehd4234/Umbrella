@@ -4,7 +4,7 @@ import com.umbrella.constant.AuthPlatform;
 import com.umbrella.constant.Gender;
 import com.umbrella.constant.Role;
 import com.umbrella.domain.WorkSpace.WorkspaceUser;
-import com.umbrella.dto.user.UserUpdateDto;
+import com.umbrella.dto.user.UserRequestUpdateDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -79,7 +79,7 @@ public class User {
         this.platform = platform;
     }
 
-    public void updateUser(UserUpdateDto userUpdateDto) {
+    public void updateUser(UserRequestUpdateDto userUpdateDto) {
         userUpdateDto.getNickName().ifPresent(
                 nickName -> this.nickName = nickName
         );

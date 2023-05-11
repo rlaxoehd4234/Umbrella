@@ -2,10 +2,7 @@ package com.umbrella.exception;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.umbrella.controller.PostController;
-import com.umbrella.domain.exception.PostException;
-import com.umbrella.domain.exception.WorkspaceException;
-import com.umbrella.domain.exception.WorkspaceExceptionType;
+import com.umbrella.domain.exception.UserException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -23,7 +20,7 @@ import static com.umbrella.domain.exception.UserExceptionType.*;
 import static com.umbrella.domain.exception.WorkspaceExceptionType.*;
 
 @RestControllerAdvice
-public class ExceptionAdvice {
+public class UserExceptionAdvice {
 
     private static final String EMAIL_BLANK_ERROR_MESSAGE = "email must not be blank";
     private static final String NICKNAME_BLANK_ERROR_MESSAGE = "nickName must not be blank";
@@ -36,11 +33,11 @@ public class ExceptionAdvice {
     private static final String WORKSPACE_DESCRIPTION_BLANK_ERROR_MESSAGE = "workspace_description must not be blank";
     private static final String ALREADY_ENTERED_WORKSPACE_ERROR_MESSAGE = "이미 입장한 워크스페이스 입니다.";
 
+    @ExceptionHandler(UserException.class)
+    public ResponseEntity MainExceptionHandler(UserException exception){
 
-    @ExceptionHandler
-    public ResponseEntity MainExceptionHandler(BaseException exception){
-
-        return new ResponseEntity(new ExceptionDto(exception.getBaseExceptionType().getErrorCode(), exception.getBaseExceptionType().getErrorMessage()),
+        return new ResponseEntity(new ExceptionDto(exception.getBaseExceptionType().getErrorCode(),
+                exception.getBaseExceptionType().getErrorMessage()),
                 exception.getBaseExceptionType().getHttpStatus());
     }
 

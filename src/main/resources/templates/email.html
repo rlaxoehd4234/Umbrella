@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div style="margin:100px;">
+    <h1> Hi </h1>
+    <h1> For Better Co-Working Experience </h1>
+    <br>
+    <p> 아래 코드를 복사하여 입력칸에 붙여넣어 주세요. </p>
+    <br>
+
+    <div align="center" style="border:1px solid black; font-family:verdana;">
+        <h3 style="color:blue"> 회원가입 인증 코드 입니다. </h3>
+        <div style="font-size:130%" th:text="${authKey}"> </div>
+    </div>
+    <br/>
+</div>
+</body>
+</html>
