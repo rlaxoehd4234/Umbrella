@@ -1,6 +1,5 @@
 package com.umbrella.domain.WorkSpace;
 
-import com.umbrella.dto.workspace.WorkspaceListResponseDto;
 import com.umbrella.dto.workspace.WorkspaceResponseDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -14,9 +13,4 @@ public interface WorkSpaceRepository extends JpaRepository<WorkSpace,Long> {
     Optional<WorkSpace> findByTitle(String title);
 
     Optional<WorkSpace> findByIdAndTitle(Long id, String title);
-
-    List<WorkspaceResponseDto> findAllDesc();
-
-
-
 }
