@@ -109,8 +109,10 @@ public class JwtAuthenticationProcessingFilterTest {
                 .andReturn();
 
         String accessToken = result.getResponse().getHeader(accessHeader);
-//        String refreshToken = result.getResponse().getHeader(refreshHeader); // Json Body 에 RefreshToken 을 전송했을 때
         String refreshToken = result.getResponse().getCookie(COOKIE_REFRESH_TOKEN_KEY).getValue();
+
+        System.out.println(accessToken);
+        System.out.println(refreshToken);
 
         Map<String, String> tokenMap = new HashMap<>();
         tokenMap.put(accessHeader,accessToken);

@@ -3,6 +3,7 @@ package com.umbrella.exception;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.umbrella.domain.exception.UserException;
+import com.umbrella.domain.exception.WhenToMeetException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -41,6 +42,14 @@ public class UserExceptionAdvice {
                 exception.getBaseExceptionType().getHttpStatus());
     }
 
+    @ExceptionHandler(WhenToMeetException.class)
+    public ResponseEntity When2MeetExceptionHandler(UserException exception){
+
+        return new ResponseEntity(new ExceptionDto(exception.getBaseExceptionType().getErrorCode(),
+                exception.getBaseExceptionType().getErrorMessage()),
+                exception.getBaseExceptionType().getHttpStatus());
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity IllegalArgumentHandler(IllegalArgumentException exception) {
         Map<String, BaseExceptionType> errorMap = new HashMap<>();
@@ -58,6 +67,7 @@ public class UserExceptionAdvice {
 
         /* 워크스페이스 입장 발생 오류 */
         errorMap.put(ALREADY_ENTERED_WORKSPACE_ERROR_MESSAGE, ALREADY_ENTERED_WORKSPACE_ERROR);
+
         BaseExceptionType exceptionMap = errorMap.getOrDefault(exception.getMessage(), DEFAULT_USER_ERROR);
 
         return ResponseEntity.status(exceptionMap.getHttpStatus())

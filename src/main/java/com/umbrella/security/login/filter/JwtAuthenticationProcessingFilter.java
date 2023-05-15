@@ -64,9 +64,10 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         );
 
         String email = jwtService.extractEmail(extractAccessToken).get();
+        String nickName = jwtService.extractNickName(extractAccessToken).get();
 
         if (jwtService.isTokenValid(extractRefreshToken) == PASS) {
-            checkAccessToken(response, extractAccessToken, email);
+            checkAccessToken(response, extractAccessToken, email, nickName);
             checkAndSaveAuthentication(email);
         } else {
             throw new JwtException(REFRESH_TOKEN_ERROR_M);
@@ -75,13 +76,13 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         doFilter(request, response, filterChain);
     }
 
-    private void checkAccessToken(HttpServletResponse response, String accessToken, String email) {
+    private void checkAccessToken(HttpServletResponse response, String accessToken, String email, String nickName) {
         switch (jwtService.isTokenValid(accessToken)) {
             case PASS:
                 jwtService.sendAccessToken(response, accessToken);
                 break;
             case REISSUE:
-                jwtService.sendAccessToken(response, jwtService.createAccessToken(email));
+                jwtService.sendAccessToken(response, jwtService.createAccessToken(email, nickName));
                 break;
             default:
                 throw new JwtException(ACCESS_TOKEN_ERROR_M);

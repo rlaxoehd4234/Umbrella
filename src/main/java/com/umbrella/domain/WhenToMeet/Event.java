@@ -2,6 +2,7 @@ package com.umbrella.domain.WhenToMeet;
 
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -23,7 +24,8 @@ public class Event {
     @Setter
     @GeneratedValue(strategy = GenerationType.AUTO)
     @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "uuid", columnDefinition = "VARCHAR(255)", updatable = false, nullable = false)
+    @Type(type = "org.hibernate.type.UUIDCharType")
+    @Column(name = "uuid", length = 36, updatable = false, nullable = false)
     private UUID uuid;
 
     @NotEmpty
@@ -45,6 +47,7 @@ public class Event {
     @Column(name = "event_members")
     private List<String> members;
 
+    @Setter
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     @Column(name = "schedules")
     private List<Schedule> schedules;

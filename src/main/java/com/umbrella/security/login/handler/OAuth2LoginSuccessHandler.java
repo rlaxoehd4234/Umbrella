@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.umbrella.domain.User.User;
 import com.umbrella.domain.User.UserRepository;
 import com.umbrella.security.login.cookie.CookieOAuth2AuthorizationRequestRepository;
+import com.umbrella.security.userDetails.UserContext;
 import com.umbrella.security.utils.CookieUtil;
 import com.umbrella.service.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -69,10 +70,11 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
          String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
          String email = extractEmailInAuthentication(authentication);
+         String nickName = extractNickNameInAuthentication(authentication);
 
          String accessToken = null;
          try {
-             accessToken = setTokenAndSendNickname(email, response);
+             accessToken = setTokenAndSendNickname(email, nickName, response);
          } catch (IOException e) {
              // TODO: need Exception Handling
              throw new RuntimeException(e);
@@ -83,14 +85,20 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
      }
 
     private String extractEmailInAuthentication(Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        UserContext userDetails = (UserContext) authentication.getPrincipal();
 
         return userDetails.getUsername();
     }
 
-    private String setTokenAndSendNickname(String email, HttpServletResponse response) throws IOException {
+    private String extractNickNameInAuthentication(Authentication authentication) {
+        UserContext userDetails = (UserContext) authentication.getPrincipal();
+
+        return userDetails.getNickName();
+    }
+
+    private String setTokenAndSendNickname(String email, String nickName, HttpServletResponse response) throws IOException {
         String refreshToken = jwtService.createRefreshToken(email);
-        String accessToken = jwtService.createAccessToken(email);
+        String accessToken = jwtService.createAccessToken(email, nickName);
 
         jwtService.setRefreshTokenInCookie(response, refreshToken);
         jwtService.sendAccessToken(response, accessToken);

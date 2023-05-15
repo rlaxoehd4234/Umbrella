@@ -52,6 +52,7 @@ public class JwtServiceTest {
     private static final String BEARER = "Bearer ";
 
     private String email = "test@test.com";
+    private String nickName = "테스트계정";
     private String password = "12345";
     @BeforeEach
     public void init() {
@@ -59,7 +60,7 @@ public class JwtServiceTest {
                         .email(email)
                         .password(password)
                         .name("홍길동")
-                        .nickName("테스트계정")
+                        .nickName(nickName)
                         .age(22)
                         .gender(Gender.MALE)
                         .role(Role.USER)
@@ -75,7 +76,7 @@ public class JwtServiceTest {
     @DisplayName("[SUCCESS]_엑세스_토큰_발급")
     public void createAccessTokenTest() {
         // given
-        String accessToken = jwtService.createAccessToken(email);
+        String accessToken = jwtService.createAccessToken(email, nickName);
 
         // when
         String findEmail = jwtService.extractEmail(accessToken).orElseThrow(
@@ -162,7 +163,7 @@ public class JwtServiceTest {
         // given
         MockHttpServletResponse mockHttpServletResponse = new MockHttpServletResponse();
 
-        String accessToken = jwtService.createAccessToken(email);
+        String accessToken = jwtService.createAccessToken(email, nickName);
         String refreshToken = jwtService.createRefreshToken(email);
 
         jwtService.setAccessTokenHeader(mockHttpServletResponse, accessToken);
@@ -184,7 +185,7 @@ public class JwtServiceTest {
         // given
         MockHttpServletResponse mockHttpServletResponse = new MockHttpServletResponse();
 
-        String accessToken = jwtService.createAccessToken(email);
+        String accessToken = jwtService.createAccessToken(email, nickName);
         String refreshToken = jwtService.createRefreshToken(email);
 
 //        jwtService.setRefreshTokenHeader(mockHttpServletResponse, refreshToken);  // RefreshToken In Json Body
@@ -208,7 +209,7 @@ public class JwtServiceTest {
         // given
         MockHttpServletResponse mockHttpServletResponse = new MockHttpServletResponse();
 
-        String accessToken = jwtService.createAccessToken(email);
+        String accessToken = jwtService.createAccessToken(email, nickName);
         String refreshToken = jwtService.createRefreshToken(email);
 
         // when
@@ -248,7 +249,7 @@ public class JwtServiceTest {
     @DisplayName("[SUCCESS]_엑세스_토큰_추출")
     public void extractAccessTokenTest() throws IOException, ServletException {
         // given
-        String accessToken = jwtService.createAccessToken(email);
+        String accessToken = jwtService.createAccessToken(email, nickName);
         String refreshToken = jwtService.createRefreshToken(email);
 
         HttpServletRequest httpServletRequest = setRequest(accessToken, refreshToken);
@@ -272,7 +273,7 @@ public class JwtServiceTest {
     @Disabled
     public void extractRefreshTokenTest() throws IOException, ServletException {
         // given
-        String accessToken = jwtService.createAccessToken(email);
+        String accessToken = jwtService.createAccessToken(email, nickName);
         String refreshToken = jwtService.createRefreshToken(email);
 
         HttpServletRequest httpServletRequest = setRequest(accessToken, refreshToken);
@@ -289,7 +290,7 @@ public class JwtServiceTest {
     @DisplayName("[SUCCESS]_엑세스_토큰_클레임_추출")
     public void extractAccessTokenClaimsTest() throws IOException, ServletException {
         // given
-        String accessToken = jwtService.createAccessToken(email);
+        String accessToken = jwtService.createAccessToken(email, nickName);
         String refreshToken = jwtService.createRefreshToken(email);
 
         HttpServletRequest httpServletRequest = setRequest(accessToken, refreshToken);

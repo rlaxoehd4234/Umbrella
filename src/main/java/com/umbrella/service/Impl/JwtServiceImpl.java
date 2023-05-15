@@ -32,6 +32,18 @@ import static com.umbrella.domain.exception.UserExceptionType.NOT_FOUND_ERROR;
 @Slf4j
 public class JwtServiceImpl implements JwtService {
 
+    @Value("${jwt.access.expiration}")
+    private long accessTokenExpiration;
+
+    @Value("${jwt.refresh.expiration}")
+    private long refreshTokenExpiration;
+
+    @Value("${jwt.access.header}")
+    private String accessHeader;
+
+    @Value("${jwt.refresh.header}")
+    private String refreshHeader;
+
     private final UserRepository userRepository;
 
     private final Key secretKey;
@@ -39,6 +51,12 @@ public class JwtServiceImpl implements JwtService {
     private final String COOKIE_REFRESH_TOKEN_KEY;
 
     private final CookieUtil cookieUtil;
+
+    private static final String EMAIL_CLAIM = "email";
+    private static final String NICK_NAME_CLAIM = "nickName";
+    private static final String BEARER = "Bearer ";
+    private static final String ISSUER = "Umbrella";
+    private static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
 
 
     public JwtServiceImpl(UserRepository userRepository,
@@ -52,31 +70,15 @@ public class JwtServiceImpl implements JwtService {
         this.cookieUtil = cookieUtil;
     }
 
-    @Value("${jwt.access.expiration}")
-    private long accessTokenExpiration;
-
-    @Value("${jwt.refresh.expiration}")
-    private long refreshTokenExpiration;
-
-    @Value("${jwt.access.header}")
-    private String accessHeader;
-
-    @Value("${jwt.refresh.header}")
-    private String refreshHeader;
-
-    private static final String EMAIL_CLAIM = "email";
-    private static final String BEARER = "Bearer ";
-    private static final String ISSUER = "Umbrella";
-    private static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
-
     @Override
-    public String createAccessToken(String email) {
+    public String createAccessToken(String email, String nickName) {
         return Jwts.builder()
                 .signWith(secretKey, SIGNATURE_ALGORITHM)
                 .setSubject(email)
                 .setIssuer(ISSUER)
                 .setExpiration(new Date(System.currentTimeMillis() + accessTokenExpiration * 1000))
                 .claim(EMAIL_CLAIM, email)
+                .claim(NICK_NAME_CLAIM, nickName)
                 .compact();
     }
 
@@ -149,32 +151,32 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public Optional<String> extractRefreshToken(HttpServletRequest request) {
         Optional<Cookie> cookie = cookieUtil.getCookie(request, COOKIE_REFRESH_TOKEN_KEY);
-
         return cookie.map(Cookie::getValue);
     }
 
     @Override
     public Optional<String> extractEmail(String token) {
-        try {
-            Claims claims = extractClaim(token);
-            return Optional.ofNullable(claims.get(EMAIL_CLAIM, String.class));
-        } catch (ExpiredJwtException e) {
-            Claims claims = e.getClaims();
-            return Optional.ofNullable(claims.get(EMAIL_CLAIM, String.class));
-        } catch (JwtException | IllegalArgumentException e) {
-            throw new JwtException("유효하지 않은 토큰입니다.");
-        }
+        return extractClaim(token, EMAIL_CLAIM, String.class);
+    }
+
+    @Override
+    public Optional<String> extractNickName(String token) {
+        return extractClaim(token, NICK_NAME_CLAIM, String.class);
     }
 
     @Override
     public Optional<String> extractSubject(String token) {
+        return extractClaim(token, Claims.SUBJECT, String.class);
+    }
+
+    private <T> Optional<T> extractClaim(String token, String claimName, Class<T> type) {
         try {
             Claims claims = extractClaim(token);
-            return Optional.ofNullable(claims.getSubject());
+            return Optional.ofNullable(claims.get(claimName, type));
         } catch (ExpiredJwtException e) {
             Claims claims = e.getClaims();
-            return Optional.ofNullable(claims.getSubject());
-        }catch (JwtException | IllegalArgumentException e) {
+            return Optional.ofNullable(claims.get(claimName, type));
+        } catch (JwtException | IllegalArgumentException e) {
             throw new JwtException("유효하지 않은 토큰입니다.");
         }
     }
