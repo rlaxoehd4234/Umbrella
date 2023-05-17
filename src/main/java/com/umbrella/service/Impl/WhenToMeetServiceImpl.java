@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.time.Instant;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -28,6 +29,25 @@ public class WhenToMeetServiceImpl implements WhenToMeetService {
     private final EventRepository eventRepository;
     private final ScheduleRepository scheduleRepository;
     private final SecurityUtil securityUtil;
+
+    @Override
+    public Map<String, Map<LocalTime, Integer>> getScheduleInEvent(List<Schedule> schedules) {
+        Map<String, Map<LocalTime, Integer>> timeBlockInSchedule = new HashMap<>();
+
+        for (Schedule schedule : schedules) {
+            String date = schedule.getDate().toString().substring(0, 10);
+            List<LocalTime> timeBlocks = schedule.getTimeBlocks();
+
+            Map<LocalTime, Integer> timeBlockCountMap = timeBlockInSchedule.getOrDefault(date, new HashMap<>());
+            for (LocalTime timeBlock : timeBlocks) {
+                int count = timeBlockCountMap.getOrDefault(timeBlock, 0);
+                timeBlockCountMap.put(timeBlock, count + 1);
+            }
+            timeBlockInSchedule.put(date, timeBlockCountMap);
+        }
+
+        return timeBlockInSchedule;
+    }
 
     @Override
     public Event createEvent(RequestEventDto requestEventDto) {
@@ -56,21 +76,22 @@ public class WhenToMeetServiceImpl implements WhenToMeetService {
 
     @Override
     public String deleteEvent(UUID uuid) {
-        Optional<Event> optionalEvent = validateEvent(uuid);
-        eventRepository.delete(optionalEvent.get());
+        String loginUserName = securityUtil.getLoginUserNickname();
+        Event theEvent = validateEvent(uuid, loginUserName);
+        eventRepository.delete(theEvent);
 
-        return optionalEvent.get().getUuid().toString();
+        return theEvent.getUuid().toString();
     }
 
     @Override
     public Schedule addSchedule(UUID uuid, RequestScheduleDto requestScheduleDto) {
         String scheduleMember = securityUtil.getLoginUserNickname();
-        Optional<Event> optionalEvent = validateEvent(uuid);
+        Event theEvent = validateEvent(uuid, scheduleMember);
         Instant scheduleDate = requestScheduleDto.getDate().toInstant().truncatedTo(ChronoUnit.DAYS);
 
         Schedule savedSchedule = scheduleRepository.save(Schedule.builder()
                 .member(scheduleMember)
-                .event(optionalEvent.get())
+                .event(theEvent)
                 .date(Date.from(scheduleDate))
                 .timeBlocks(requestScheduleDto.getTimeBlocks())
                 .build());
@@ -78,14 +99,14 @@ public class WhenToMeetServiceImpl implements WhenToMeetService {
         return savedSchedule;
     }
 
-    private Optional<Event> validateEvent(UUID uuid) {
+    private Event validateEvent(UUID uuid, String userNickName) {
         Optional<Event> optionalEvent = eventRepository.findEventByUuid(uuid);
         if (optionalEvent.isEmpty()) {
             throw new WhenToMeetException(NOT_FOUND_EVENT_ERROR);
         }
-        if (!optionalEvent.get().getMembers().contains(securityUtil.getLoginUserNickname())) {
+        if (!optionalEvent.get().getMembers().contains(userNickName)) {
             throw new WhenToMeetException(NOT_FOUND_EVENT_ERROR);
         }
-        return optionalEvent;
+        return optionalEvent.get();
     }
 }

@@ -22,12 +22,15 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Slf4j
 @Component
+@Transactional
 @RequiredArgsConstructor
 public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
@@ -35,7 +38,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
     private final UserRepository userRepository;
     private final RoleUtil roleUtil;
 
-    private static final String[] NO_CHECK_URI_LIST = {"/login", "/signUp", "/send-email"};
+    private static final String[] NO_CHECK_URI_LIST = {"/", "/login", "/signUp", "/send-email"};
 
     private static final int PASS = 1;
     private static final int REISSUE = 0;
@@ -63,17 +66,21 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
                 () -> new JwtException(ACCESS_TOKEN_ERROR_M)
         );
 
-        String email = jwtService.extractEmail(extractAccessToken).get();
-        String nickName = jwtService.extractNickName(extractAccessToken).get();
+        try {
+            String email = jwtService.extractEmail(extractAccessToken).get();
+            String nickName = jwtService.extractNickName(extractAccessToken).get();
 
-        if (jwtService.isTokenValid(extractRefreshToken) == PASS) {
-            checkAccessToken(response, extractAccessToken, email, nickName);
-            checkAndSaveAuthentication(email);
-        } else {
-            throw new JwtException(REFRESH_TOKEN_ERROR_M);
+            if (jwtService.isTokenValid(extractRefreshToken) == PASS) {
+                checkAccessToken(response, extractAccessToken, email, nickName);
+                checkAndSaveAuthentication(email, nickName);
+            } else {
+                throw new JwtException(REFRESH_TOKEN_ERROR_M);
+            }
+
+            doFilter(request, response, filterChain);
+        } catch (NoSuchElementException e) {
+            throw new JwtException(ACCESS_TOKEN_ERROR_M);
         }
-
-        doFilter(request, response, filterChain);
     }
 
     private void checkAccessToken(HttpServletResponse response, String accessToken, String email, String nickName) {
@@ -89,11 +96,16 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         }
     }
 
-    private void checkAndSaveAuthentication(String email) {
-        userRepository.findByEmail(email).ifPresent(this::saveAuthentication);
+    private void checkAndSaveAuthentication(String email, String nickName) {
+        userRepository.findByEmail(email).ifPresent( user -> {
+            saveAuthentication(user, email, nickName);
+        });
     }
 
-    private void saveAuthentication(User user) {
+    private void saveAuthentication(User user, String email, String nickName) {
+        if (!email.equals(user.getEmail()) || !nickName.equals(user.getNickName())) {
+            throw new JwtException(ACCESS_TOKEN_ERROR_M);
+        }
         UserContext authenticatedUser = new UserContext(
                 user.getEmail(),
                 user.getPassword(),

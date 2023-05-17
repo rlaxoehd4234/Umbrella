@@ -43,7 +43,7 @@ public class UserExceptionAdvice {
     }
 
     @ExceptionHandler(WhenToMeetException.class)
-    public ResponseEntity When2MeetExceptionHandler(UserException exception){
+    public ResponseEntity When2MeetExceptionHandler(WhenToMeetException exception){
 
         return new ResponseEntity(new ExceptionDto(exception.getBaseExceptionType().getErrorCode(),
                 exception.getBaseExceptionType().getErrorMessage()),
