@@ -1,5 +1,6 @@
 package com.umbrella.domain.WhenToMeet;
 
+import com.umbrella.domain.WorkSpace.WorkspaceUser;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -7,8 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import java.sql.Timestamp;
+import javax.validation.constraints.NotNull;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
@@ -27,8 +27,9 @@ public class Schedule {
     @JoinColumn(name = "event_id")
     private Event event;
 
-    @Column(name = "member")
-    private String member;
+    @NotNull
+    @Column(name = "schedule_member")
+    private Long userId;
 
     @Column(name = "date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -40,9 +41,9 @@ public class Schedule {
     private List<LocalTime> timeBlocks;
 
     @Builder
-    public Schedule(Event event, String member, Date date, List<LocalTime> timeBlocks) {
+    public Schedule(Event event, Long userId, Date date, List<LocalTime> timeBlocks) {
         this.event = event;
-        this.member = member;
+        this.userId = userId;
         this.date = date;
         this.timeBlocks = timeBlocks;
     }

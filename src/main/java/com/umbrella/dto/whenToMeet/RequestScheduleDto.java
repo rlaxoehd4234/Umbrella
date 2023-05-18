@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RequestScheduleDto {
 
-    private List<LocalTime> timeBlocks;
-
     private Date date;
+
+    private List<LocalTime> timeBlocks;
 }

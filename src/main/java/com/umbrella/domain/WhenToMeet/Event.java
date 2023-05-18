@@ -1,5 +1,7 @@
 package com.umbrella.domain.WhenToMeet;
 
+import com.umbrella.domain.WorkSpace.WorkSpace;
+import com.umbrella.domain.WorkSpace.WorkspaceUser;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
@@ -28,6 +30,10 @@ public class Event {
     @Column(name = "uuid", length = 36, updatable = false, nullable = false)
     private UUID uuid;
 
+    @ManyToOne
+    @JoinColumn(name = "workspace_id")
+    private WorkSpace workSpace;
+
     @NotEmpty
     @Column(name = "title")
     private String title;
@@ -42,22 +48,17 @@ public class Event {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endDate;
 
-    @NotEmpty
-    @ElementCollection
-    @Column(name = "event_members")
-    private List<String> members;
-
     @Setter
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     @Column(name = "schedules")
     private List<Schedule> schedules;
 
     @Builder
-    public Event(String title, Date startDate, Date endDate, List<String> members) {
+    public Event(WorkSpace workSpace, String title, Date startDate, Date endDate) {
+        this.workSpace = workSpace;
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.members = members;
     }
 
     @PrePersist

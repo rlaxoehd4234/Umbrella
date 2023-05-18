@@ -3,6 +3,7 @@ package com.umbrella.controller;
 import com.umbrella.domain.WhenToMeet.Event;
 import com.umbrella.domain.WhenToMeet.EventRepository;
 import com.umbrella.domain.WhenToMeet.Schedule;
+import com.umbrella.domain.WhenToMeet.ScheduleRepository;
 import com.umbrella.domain.exception.WhenToMeetException;
 import com.umbrella.dto.whenToMeet.RequestEventDto;
 import com.umbrella.dto.whenToMeet.RequestScheduleDto;
@@ -24,6 +25,7 @@ import static com.umbrella.domain.exception.WhenToMeetExceptionType.NOT_FOUND_EV
 public class WhenToMeetController {
 
     private final EventRepository eventRepository;
+    private final ScheduleRepository scheduleRepository;
     private final WhenToMeetService whenToMeetService;
 
     @GetMapping(value = "/event/{uuid}")
@@ -56,5 +58,11 @@ public class WhenToMeetController {
     public ResponseEntity addSchedule(@PathVariable("uuid") UUID uuid, @RequestBody RequestScheduleDto requestScheduleDto) {
         Schedule savedSchedule = whenToMeetService.addSchedule(uuid, requestScheduleDto);
         return ResponseEntity.ok().body(savedSchedule.getDate());
+    }
+
+    @PostMapping(value = "/event/{uuid}/schedule/modify")
+    public ResponseEntity modifySchedule(@PathVariable("uuid") UUID uuid, @RequestBody RequestScheduleDto requestScheduleDto) {
+        Schedule savedSchedule = whenToMeetService.modifySchedule(uuid, requestScheduleDto);
+        return ResponseEntity.ok().body(savedSchedule.getTimeBlocks());
     }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.umbrella.domain.exception.UserException;
 import com.umbrella.domain.exception.WhenToMeetException;
+import com.umbrella.domain.exception.WorkspaceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -36,6 +37,14 @@ public class UserExceptionAdvice {
 
     @ExceptionHandler(UserException.class)
     public ResponseEntity MainExceptionHandler(UserException exception){
+
+        return new ResponseEntity(new ExceptionDto(exception.getBaseExceptionType().getErrorCode(),
+                exception.getBaseExceptionType().getErrorMessage()),
+                exception.getBaseExceptionType().getHttpStatus());
+    }
+
+    @ExceptionHandler(WorkspaceException.class)
+    public ResponseEntity WorkspaceExceptionHandler(WorkspaceException exception){
 
         return new ResponseEntity(new ExceptionDto(exception.getBaseExceptionType().getErrorCode(),
                 exception.getBaseExceptionType().getErrorMessage()),

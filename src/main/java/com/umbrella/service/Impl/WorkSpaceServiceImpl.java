@@ -4,8 +4,6 @@ import com.umbrella.domain.User.User;
 import com.umbrella.domain.User.UserRepository;
 import com.umbrella.domain.WorkSpace.WorkSpace;
 import com.umbrella.domain.WorkSpace.WorkSpaceRepository;
-import com.umbrella.domain.WorkSpace.WorkspaceUser;
-import com.umbrella.domain.WorkSpace.WorkspaceUserRepository;
 import com.umbrella.domain.exception.UserException;
 import com.umbrella.domain.exception.UserExceptionType;
 import com.umbrella.domain.exception.WorkspaceException;
@@ -27,7 +25,6 @@ import java.util.stream.Collectors;
 public class WorkSpaceServiceImpl implements WorkSpaceService {
     private final WorkSpaceRepository workSpaceRepository;
     private final SecurityUtil securityUtil;
-    private final WorkspaceUserRepository workspaceUserRepository;
     private final UserRepository userRepository;
 
     public Long save(WorkspaceRequestDto requestDto){
