@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8800
 
 spring:
   main:
@@ -19,3 +19,8 @@ spring:
       hibernate:
         show-sql: true
         format_sql: true
+    show-sql: true
+
+logging:
+  level:
+    org.hibernate.type: trace

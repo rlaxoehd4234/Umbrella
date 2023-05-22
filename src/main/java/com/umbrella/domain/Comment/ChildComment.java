@@ -1,5 +1,6 @@
 package com.umbrella.domain.Comment;
 
+import com.umbrella.dto.comment.ChildCommentDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -19,7 +20,7 @@ public class ChildComment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id")
-    Comment comment;
+    Comment parentComment;
 
     @Column(columnDefinition = "TEXT" , nullable = false)
     private String content; // 변수명 변경
@@ -39,8 +40,12 @@ public class ChildComment {
 
     // 연관관계 편의 메소드
     public void setChildComment(Comment comment, ChildComment childComment){
-        this.comment = comment;
+        this.parentComment = comment;
         comment.getChildCommentList().add(childComment);
+    }
+
+    public void update(ChildCommentDto childCommentDto){
+        this.content = content;
     }
 
 

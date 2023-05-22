@@ -1,5 +1,13 @@
 package com.umbrella.dto.comment;
 
-public class ChildCommentDto
-{
+import lombok.Data;
+
+
+@Data
+public class ChildCommentDto {
+
+    private Long commentId;
+    private String content;
+    private String nickname; // userName -> 작성자
+
 }

@@ -107,7 +107,6 @@ public class CommentServiceImpl {
             CommentResponseDto commentResponseDto =  CommentResponseDto.builder()
                     .commentId(commentEntity.getId())
                     .content(commentEntity.getContent())
-                    .createDate(commentEntity.getCreateDate())
                     .nickname(commentEntity.getUser().getNickName())
                     .build();
 
@@ -131,7 +130,7 @@ public class CommentServiceImpl {
     private Comment validateComment(Long commentId){
 
         return commentRepository.findById(commentId)
-                .orElseThrow(() -> new CommentException(CommentExceptionType.NOT_FOUND_POST));
+                .orElseThrow(() -> new CommentException(CommentExceptionType.NOT_FOUND_COMMENT));
     }
 
 
