@@ -1,11 +1,14 @@
 package com.umbrella.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Optional;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserRequestUpdateDto {
 
     @Getter

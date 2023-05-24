@@ -14,10 +14,13 @@ import com.umbrella.dto.user.UserRequestUpdateDto;
 import com.umbrella.domain.User.UserRepository;
 import com.umbrella.dto.workspace.WorkspaceRequestCreateDto;
 import com.umbrella.dto.workspace.WorkspaceRequestEnterAndExitDto;
+import com.umbrella.security.userDetails.UserContext;
 import com.umbrella.security.utils.SecurityUtil;
 import com.umbrella.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +32,7 @@ import java.util.Optional;
 
 import static com.umbrella.domain.exception.UserExceptionType.*;
 import static com.umbrella.domain.exception.WorkspaceExceptionType.ALREADY_ENTERED_WORKSPACE_ERROR;
+import static com.umbrella.domain.exception.WorkspaceExceptionType.NOT_FOUNT_WORKSPACE;
 
 @Service
 @RequiredArgsConstructor
@@ -66,6 +70,12 @@ public class UserServiceImpl implements UserService {
         );
     }
 
+    private void checkValidatePassword(String checkPassword, User withdrawUser) {
+        if (!withdrawUser.matchPassword(passwordEncoder, checkPassword)) {
+            throw new UserException(INCONSISTENCY_PASSWORD_ERROR);
+        }
+    }
+
     @Override
     public User signUp(UserRequestSignUpDto userSignUpDto) {
         User signUpUser = userSignUpDtoToEntity(userSignUpDto);
@@ -74,11 +84,17 @@ public class UserServiceImpl implements UserService {
         signUpUser.addDefaultPlatform();
         signUpUser.encodePassword(passwordEncoder);
 
-        if (userRepository.findByEmail(userSignUpDto.getEmail()).isPresent()) {
-            throw new UserException(DUPLICATE_EMAIL_ERROR);
-        } else if (userRepository.findByNickName(userSignUpDto.getNickName()).isPresent()) {
-            throw new UserException(DUPLICATE_NICKNAME_ERROR);
-        }
+        String email = userSignUpDto.getEmail();
+        String nickName = userSignUpDto.getNickName();
+
+        Optional<User> optionalUser = userRepository.findByEmailOrNickName(email, nickName);
+        optionalUser.ifPresent(user -> {
+            if (user.getEmail().equals(email)) {
+                throw new UserException(DUPLICATE_EMAIL_ERROR);
+            } else if (user.getNickName().equals(nickName)) {
+                throw new UserException(DUPLICATE_NICKNAME_ERROR);
+            }
+        });
 
         return  userRepository.save(signUpUser);
     }
@@ -93,31 +109,21 @@ public class UserServiceImpl implements UserService {
     public void updatePassword(String checkPassword, String newPassword) {
         User updatePasswordUser = getLoginUserByEmail();
 
-        if (!updatePasswordUser.matchPassword(passwordEncoder, checkPassword)) {
-            throw new UserException(INCONSISTENCY_PASSWORD_ERROR);
-        }
+        checkValidatePassword(checkPassword, updatePasswordUser);
 
         updatePasswordUser.updatePassword(passwordEncoder, newPassword);
     }
 
+    @Override
     public void reCreatePassword(UserRequestFindPasswordDto userRequestFindPasswordDto) {
-        User theUser = userRepository.findByEmail(userRequestFindPasswordDto.getEmail()).orElseThrow(
-                () -> new UserException(NOT_FOUND_ERROR)
-        );
-
+        User theUser = getLoginUserByEmail();
         theUser.updatePassword(passwordEncoder, userRequestFindPasswordDto.getPassword());
     }
 
     @Override
     public void withdraw(String checkPassword) {
-        User withdrawUser = userRepository.findByEmail(securityUtil.getLoginUserEmail()).orElseThrow(
-                () -> new UserException(ENTITY_NOT_FOUND_ERROR)
-        );
-
-        if (!withdrawUser.matchPassword(passwordEncoder, checkPassword)) {
-            throw new UserException(INCONSISTENCY_PASSWORD_ERROR);
-        }
-
+        User withdrawUser = getLoginUserByEmail();
+        checkValidatePassword(checkPassword, withdrawUser);
         userRepository.delete(withdrawUser);
     }
 
@@ -126,9 +132,8 @@ public class UserServiceImpl implements UserService {
         if (id == null) {
             throw new UserException(ENTITY_NOT_FOUND_ERROR);
         }
-
         User findUser = userRepository.findById(id).orElseThrow(
-                () ->  new UserException(ENTITY_NOT_FOUND_ERROR)
+            () ->  new UserException(ENTITY_NOT_FOUND_ERROR)
         );
 
         return new UserInfoDto(findUser);
@@ -137,7 +142,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserInfoDto getMyInfo() {
         User findUser = getLoginUserByEmail();
-
         return new UserInfoDto(findUser);
     }
 
@@ -153,9 +157,6 @@ public class UserServiceImpl implements UserService {
     public Long createWorkspace(WorkspaceRequestCreateDto workspaceCreateDto) {
         User theUser = getLoginUserByEmail();
         WorkSpace theWorkspace = workspaceDtoToEntity(workspaceCreateDto);
-
-        entityManager.persist(theUser);
-        entityManager.persist(theWorkspace);
 
         WorkspaceUser theWorkspaceUser = new WorkspaceUser();
         theUser.enterWorkspaceUser(theWorkspaceUser);
@@ -177,7 +178,7 @@ public class UserServiceImpl implements UserService {
         Optional<WorkSpace> theWorkspace = workSpaceRepository
                 .findByIdAndTitle(workspaceRequestEnterDto.getId(), workspaceRequestEnterDto.getTitle());
         if (theWorkspace.isEmpty()) {
-            throw new EntityNotFoundException("해당 워크스페이스는 존재하지 않습니다.");
+            throw new WorkspaceException(NOT_FOUNT_WORKSPACE);
         }
 
         entityManager.persist(theUser);

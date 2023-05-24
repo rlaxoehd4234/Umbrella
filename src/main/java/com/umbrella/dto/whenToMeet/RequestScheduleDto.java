@@ -1,20 +1,21 @@
-package com.umbrella.dto.email;
+package com.umbrella.dto.whenToMeet;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalTime;
+import java.util.Date;
+import java.util.List;
+
+@Getter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class EmailAuthResponseDto {
-    @Getter
-    private String authKey;
+public class RequestScheduleDto {
 
-    @Builder
-    public EmailAuthResponseDto(String authKey) {
-        this.authKey = authKey;
-    }
+    private Date date;
+
+    private List<LocalTime> timeBlocks;
 }

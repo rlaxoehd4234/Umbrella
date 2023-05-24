@@ -1,25 +1,26 @@
 package com.umbrella.security.login.handler;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.umbrella.domain.User.User;
 import com.umbrella.domain.User.UserRepository;
+import com.umbrella.security.userDetails.UserContext;
 import com.umbrella.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
-import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
+@Transactional
 @RequiredArgsConstructor
 public class LoginSuccessJWTProvideHandler extends SimpleUrlAuthenticationSuccessHandler {
 
@@ -31,38 +32,52 @@ public class LoginSuccessJWTProvideHandler extends SimpleUrlAuthenticationSucces
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException {
-        String email = extractEmail(authentication);
-        String accessToken = jwtService.createAccessToken(email);
+        String email = getEmailFromAuthentication(authentication);
+        String nickName = getNickNameFromAuthentication(authentication);
+
+        String accessToken = jwtService.createAccessToken(email, nickName);
         String refreshToken = jwtService.createRefreshToken(email);
 
         jwtService.setRefreshTokenInCookie(response, refreshToken);
         jwtService.sendAccessToken(response, accessToken);
 
-        User user = userRepository.findByEmail(email)
-                .orElseThrow( () -> new EntityNotFoundException("찾을 수 없는 계정입니다.") );
+        userRepository.findByEmail(email).ifPresent(user -> user.updateRefreshToken(refreshToken));
 
-        user.updateRefreshToken(refreshToken);
+        String responseBody = createLoginSuccessResponse(nickName);
 
-        Map<String, Object> responseMap = new HashMap<>();
-        responseMap.put("nick_name", user.getNickName());
-        String responseBody = objectMapper.writeValueAsString(responseMap) + "\n성공적으로 로그인이 완료되었습니다!";
+        sendResponse(response, responseBody);
 
+        logSuccess(email, accessToken, refreshToken);
+    }
+
+    private void logSuccess(String email, String accessToken, String refreshToken) {
+        log.info( "로그인에 성공합니다. email: {}", email);
+        log.info( "AccessToken 을 발급합니다. AccessToken: {}", accessToken);
+        log.info( "RefreshToken 을 발급합니다. RefreshToken: {}", refreshToken);
+    }
+
+    private void sendResponse(HttpServletResponse response, String responseBody) throws IOException {
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
         response.getWriter().write(responseBody);
         response.getWriter().flush();
         response.getWriter().close();
-
-        log.info( "로그인에 성공합니다. email: {}", email);
-        log.info( "AccessToken 을 발급합니다. AccessToken: {}", accessToken);
-        log.info( "RefreshToken 을 발급합니다. RefreshToken: {}", refreshToken);
     }
 
-    private String extractEmail(Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+    private String createLoginSuccessResponse(String nickName) throws JsonProcessingException {
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("nick_name", nickName);
+        String responseBody = objectMapper.writeValueAsString(responseMap) + "\n성공적으로 로그인이 완료되었습니다!";
+        return responseBody;
+    }
 
-        return userDetails.getUsername();
+    private String getEmailFromAuthentication(Authentication authentication) {
+        return ((UserContext) authentication.getPrincipal()).getUsername();
+    }
+
+    private String getNickNameFromAuthentication(Authentication authentication) {
+        return ((UserContext) authentication.getPrincipal()).getNickName();
     }
 }
 

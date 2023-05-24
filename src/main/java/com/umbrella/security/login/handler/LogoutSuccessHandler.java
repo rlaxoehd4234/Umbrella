@@ -1,9 +1,7 @@
 package com.umbrella.security.login.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.umbrella.security.utils.SecurityUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
