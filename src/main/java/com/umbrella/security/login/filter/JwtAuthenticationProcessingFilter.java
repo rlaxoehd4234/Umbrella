@@ -4,7 +4,6 @@ import com.umbrella.domain.User.User;
 import com.umbrella.domain.User.UserRepository;
 import com.umbrella.security.userDetails.UserContext;
 import com.umbrella.security.utils.RoleUtil;
-import com.umbrella.security.utils.SecurityUtil;
 import com.umbrella.service.JwtService;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +25,6 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Slf4j
 @Component

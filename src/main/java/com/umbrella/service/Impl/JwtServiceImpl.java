@@ -72,13 +72,16 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public String createAccessToken(String email, String nickName) {
+        Claims claims = Jwts.claims();
+        claims.put(EMAIL_CLAIM, email);
+        claims.put(NICK_NAME_CLAIM, nickName);
+
         return Jwts.builder()
                 .signWith(secretKey, SIGNATURE_ALGORITHM)
                 .setSubject(email)
                 .setIssuer(ISSUER)
                 .setExpiration(new Date(System.currentTimeMillis() + accessTokenExpiration * 1000))
-                .claim(EMAIL_CLAIM, email)
-                .claim(NICK_NAME_CLAIM, nickName)
+                .setClaims(claims)
                 .compact();
     }
 

@@ -1,6 +1,5 @@
 package com.umbrella.domain.WhenToMeet;
 
-import com.umbrella.domain.WorkSpace.WorkspaceUser;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

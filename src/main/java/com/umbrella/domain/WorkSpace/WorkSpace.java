@@ -1,5 +1,6 @@
 package com.umbrella.domain.WorkSpace;
 
+import com.umbrella.domain.WhenToMeet.Event;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,8 +29,11 @@ public class WorkSpace {
     @NotBlank
     private String description;
 
-    @OneToMany(mappedBy = "workspace")
+    @OneToMany(mappedBy = "workspace", cascade = CascadeType.PERSIST)
     private List<WorkspaceUser> workspaceUsers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "workSpace", cascade = CascadeType.ALL)
+    private List<Event> events = new ArrayList<>();
 
     @Builder
     public WorkSpace(String title, String description){

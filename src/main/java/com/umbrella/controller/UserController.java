@@ -68,7 +68,7 @@ public class UserController {
         return ResponseEntity.ok().body("성공적으로 회원탈퇴가 진행되었습니다.");
     }
 
-    @PostMapping(value = "/user/{userId}/info")
+    @GetMapping(value = "/user/{userId}/info")
     public ResponseEntity getInfo(@Valid @PathVariable("userId") Long id) {
         UserInfoDto userInfoDto = userService.getInfo(id);
 
@@ -78,9 +78,10 @@ public class UserController {
     @GetMapping(value = "/user/info")
     public ResponseEntity getMyInfo() {
         UserInfoDto userInfoDto = userService.getMyInfo();
-
         return new ResponseEntity(userInfoDto, HttpStatus.OK);
     }
+
+    // Workspace 생성, 입장 및 탈퇴 관련
 
     @PostMapping(value = "/workspace/create")
     public ResponseEntity createWorkspace(@RequestBody WorkspaceRequestCreateDto workspaceRequestCreateDto) {

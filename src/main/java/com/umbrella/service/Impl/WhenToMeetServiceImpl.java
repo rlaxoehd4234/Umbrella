@@ -6,7 +6,6 @@ import com.umbrella.domain.WhenToMeet.Schedule;
 import com.umbrella.domain.WhenToMeet.ScheduleRepository;
 import com.umbrella.domain.WorkSpace.WorkSpace;
 import com.umbrella.domain.WorkSpace.WorkSpaceRepository;
-import com.umbrella.domain.WorkSpace.WorkspaceUser;
 import com.umbrella.domain.exception.WhenToMeetException;
 import com.umbrella.domain.exception.WorkspaceException;
 import com.umbrella.dto.whenToMeet.RequestEventDto;
@@ -70,7 +69,6 @@ public class WhenToMeetServiceImpl implements WhenToMeetService {
             throw new WhenToMeetException(ILLEGAL_DATE_RANGE_ERROR);
         }
         try {
-
             Event newEvent = eventRepository.save(
                     Event.builder()
                             .workSpace(theWorkspace)
@@ -79,6 +77,7 @@ public class WhenToMeetServiceImpl implements WhenToMeetService {
                             .endDate(Date.from(endInstant))
                             .build()
             );
+
             return newEvent;
         } catch (Exception e) {
             e.printStackTrace();

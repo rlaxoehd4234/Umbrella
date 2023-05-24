@@ -1,7 +1,6 @@
 package com.umbrella.domain.WhenToMeet;
 
 import com.umbrella.domain.WorkSpace.WorkSpace;
-import com.umbrella.domain.WorkSpace.WorkspaceUser;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;

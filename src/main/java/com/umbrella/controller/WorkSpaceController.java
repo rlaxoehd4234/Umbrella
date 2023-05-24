@@ -23,7 +23,7 @@ public class WorkSpaceController {
     }
 
     @GetMapping(value = "/workspace/{workspace_id}")
-    public ResponseEntity<?> findById(@PathVariable Long id){
+    public ResponseEntity<?> findById(@PathVariable("workspace_id") Long id){
         return ResponseEntity.ok().body(workSpaceService.findById(id));
     }
 

@@ -3,17 +3,14 @@ package com.umbrella.controller;
 import com.umbrella.domain.WhenToMeet.Event;
 import com.umbrella.domain.WhenToMeet.EventRepository;
 import com.umbrella.domain.WhenToMeet.Schedule;
-import com.umbrella.domain.WhenToMeet.ScheduleRepository;
 import com.umbrella.domain.exception.WhenToMeetException;
 import com.umbrella.dto.whenToMeet.RequestEventDto;
 import com.umbrella.dto.whenToMeet.RequestScheduleDto;
-import com.umbrella.security.utils.SecurityUtil;
 import com.umbrella.service.WhenToMeetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -25,7 +22,6 @@ import static com.umbrella.domain.exception.WhenToMeetExceptionType.NOT_FOUND_EV
 public class WhenToMeetController {
 
     private final EventRepository eventRepository;
-    private final ScheduleRepository scheduleRepository;
     private final WhenToMeetService whenToMeetService;
 
     @GetMapping(value = "/event/{uuid}")

@@ -1,5 +1,6 @@
 package com.umbrella.security.userDetails;
 
+import com.umbrella.domain.WorkSpace.WorkspaceUser;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
@@ -58,6 +59,7 @@ public class UserContext implements UserDetails, OAuth2User {
         this(username, password, id, nickName, authorities, true, true, true, true);
     }
 
+    // OAuth2
     public UserContext(String username, String password, Long id, String nickName,
                        Set<GrantedAuthority> authorities, Map<String, Object> attributes,
                        boolean accountNonExpired, boolean accountNonLocked, boolean credentialsNonExpired, boolean enabled) {
