@@ -10,6 +10,4 @@ import lombok.Getter;
 public class PostException extends BaseException {
     private BaseExceptionType baseExceptionType;
 
-
-
 }
