@@ -4,7 +4,7 @@ import lombok.Data;
 
 
 @Data
-public class ChildCommentDto {
+public class ChildCommentRequestDto {
 
     private Long commentId;
     private String content;
