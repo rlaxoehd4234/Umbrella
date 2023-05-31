@@ -17,7 +17,7 @@ public class Post {
 
     @Id
     @GeneratedValue
-    @Column(nullable = false)
+    @Column(name = "post_id",nullable = false)
     private Long id;
 
     @NotNull

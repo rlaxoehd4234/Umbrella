@@ -1,7 +1,6 @@
 package com.umbrella.domain.Comment;
 
 import com.umbrella.domain.User.User;
-import com.umbrella.dto.comment.ChildCommentRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
