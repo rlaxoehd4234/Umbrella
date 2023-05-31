@@ -36,7 +36,7 @@ public class ChildCommentServiceImpl {
     public List<ChildCommentResponseDto> findChildComments(Long parentCommentId){
 
         List<ChildComment> childCommentList = childCommentRepository
-                .findAllByParentComment_Id(parentCommentId, Sort.by("id"));
+                .findAllByParentComment_Id(parentCommentId, Sort.by(Sort.Direction.ASC,"id"));
 
         List<ChildCommentResponseDto> responseDtoList = new ArrayList<>();
 
