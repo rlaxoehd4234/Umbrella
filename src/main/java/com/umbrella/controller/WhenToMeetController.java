@@ -51,14 +51,14 @@ public class WhenToMeetController {
     }
 
     @PostMapping(value = "/event/{uuid}/schedule")
-    public ResponseEntity addSchedule(@PathVariable("uuid") UUID uuid, @RequestBody RequestScheduleDto requestScheduleDto) {
-        Schedule savedSchedule = whenToMeetService.addSchedule(uuid, requestScheduleDto);
-        return ResponseEntity.ok().body(savedSchedule.getDate());
+    public ResponseEntity addSchedule(@PathVariable("uuid") UUID uuid, @RequestBody List<RequestScheduleDto> requestScheduleDto) {
+        whenToMeetService.addSchedule(uuid, requestScheduleDto);
+        return ResponseEntity.ok().body("성공적으로 추가되었습니다.");
     }
 
     @PostMapping(value = "/event/{uuid}/schedule/modify")
-    public ResponseEntity modifySchedule(@PathVariable("uuid") UUID uuid, @RequestBody RequestScheduleDto requestScheduleDto) {
-        Schedule savedSchedule = whenToMeetService.modifySchedule(uuid, requestScheduleDto);
-        return ResponseEntity.ok().body(savedSchedule.getTimeBlocks());
+    public ResponseEntity modifySchedule(@PathVariable("uuid") UUID uuid, @RequestBody List<RequestScheduleDto> requestScheduleDto) {
+        whenToMeetService.modifySchedule(uuid, requestScheduleDto);
+        return ResponseEntity.ok().body("성공적으로 수정되었습니다.");
     }
 }

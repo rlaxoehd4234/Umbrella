@@ -18,7 +18,7 @@ public interface WhenToMeetService {
 
     String deleteEvent(UUID uuid);
 
-    Schedule addSchedule(UUID uuid, RequestScheduleDto requestScheduleDto);
+    void addSchedule(UUID uuid, List<RequestScheduleDto> requestScheduleDto);
 
-    Schedule modifySchedule(UUID uuid, RequestScheduleDto requestScheduleDto);
+    void modifySchedule(UUID uuid, List<RequestScheduleDto> requestScheduleDto);
 }

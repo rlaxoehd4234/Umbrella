@@ -95,31 +95,31 @@ public class WhenToMeetServiceImpl implements WhenToMeetService {
     }
 
     @Override
-    public Schedule addSchedule(UUID uuid, RequestScheduleDto requestScheduleDto) {
+    public void addSchedule(UUID uuid, List<RequestScheduleDto> requestScheduleDto) {
         Long loginUserId = securityUtil.getLoginUserId();
         Event theEvent = validateEvent(uuid, loginUserId);
-
-        return generateSchedule(requestScheduleDto, loginUserId, theEvent);
+        generateSchedule(requestScheduleDto, loginUserId, theEvent);
     }
 
     @Override
-    public Schedule modifySchedule(UUID uuid, RequestScheduleDto requestScheduleDto) {
+    public void modifySchedule(UUID uuid, List<RequestScheduleDto> requestScheduleDto) {
         Long loginUserId = securityUtil.getLoginUserId();
         Event theEvent = validateEvent(uuid, loginUserId);
         scheduleRepository.deleteByEventAndUserId(theEvent, loginUserId);
-
-        return generateSchedule(requestScheduleDto, loginUserId, theEvent);
+        generateSchedule(requestScheduleDto, loginUserId, theEvent);
     }
 
-    private Schedule generateSchedule(RequestScheduleDto requestScheduleDto, Long loginUserId, Event theEvent) {
-        Instant scheduleDate = requestScheduleDto.getDate().toInstant().truncatedTo(ChronoUnit.DAYS);
+    private void generateSchedule(List<RequestScheduleDto> requestScheduleDto, Long loginUserId, Event theEvent) {
+        for (RequestScheduleDto scheduleDto : requestScheduleDto) {
+            Instant scheduleDate = scheduleDto.getDate().toInstant().truncatedTo(ChronoUnit.DAYS);
 
-        return scheduleRepository.save(Schedule.builder()
-                .event(theEvent)
-                .userId(loginUserId)
-                .date(Date.from(scheduleDate))
-                .timeBlocks(requestScheduleDto.getTimeBlocks())
-                .build());
+            scheduleRepository.save(Schedule.builder()
+                    .event(theEvent)
+                    .userId(loginUserId)
+                    .date(Date.from(scheduleDate))
+                    .timeBlocks(scheduleDto.getTimeBlocks())
+                    .build());
+        }
     }
 
     private Event validateEvent(UUID uuid, Long loginUserId) {
