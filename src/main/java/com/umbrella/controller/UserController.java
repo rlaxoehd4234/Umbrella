@@ -99,8 +99,7 @@ public class UserController {
 
     @PostMapping(value = "/workspace/enter")
     public ResponseEntity enterWorkspace(@RequestBody WorkspaceRequestEnterAndExitDto workspaceRequestEnterDto) {
-        userService.enterWorkspace(workspaceRequestEnterDto);
-        return ResponseEntity.ok().body(workspaceRequestEnterDto);
+        return ResponseEntity.ok().body(userService.enterWorkspace(workspaceRequestEnterDto));
     }
 
     @DeleteMapping(value = "/workspace/exit")

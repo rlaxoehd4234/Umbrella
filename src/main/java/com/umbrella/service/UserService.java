@@ -7,6 +7,7 @@ import com.umbrella.dto.user.UserRequestSignUpDto;
 import com.umbrella.dto.user.UserRequestUpdateDto;
 import com.umbrella.dto.workspace.WorkspaceRequestCreateDto;
 import com.umbrella.dto.workspace.WorkspaceRequestEnterAndExitDto;
+import com.umbrella.dto.workspace.WorkspaceResponseDto;
 
 public interface UserService {
 
@@ -26,7 +27,7 @@ public interface UserService {
 
     Long createWorkspace(WorkspaceRequestCreateDto workspaceCreateDto);
 
-    void enterWorkspace(WorkspaceRequestEnterAndExitDto workspaceRequestEnterDto);
+    WorkspaceResponseDto enterWorkspace(WorkspaceRequestEnterAndExitDto workspaceRequestEnterDto);
 
     void exitWorkspace(WorkspaceRequestEnterAndExitDto workspaceRequestEnterDto);
 }

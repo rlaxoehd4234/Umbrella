@@ -1,5 +1,6 @@
 package com.umbrella.domain.WorkSpace;
 
+import com.umbrella.domain.Board.Board;
 import com.umbrella.domain.WhenToMeet.Event;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -34,6 +35,9 @@ public class WorkSpace {
 
     @OneToMany(mappedBy = "workSpace", cascade = CascadeType.ALL)
     private List<Event> events = new ArrayList<>();
+
+    @OneToMany(mappedBy = "workSpace")
+    private List<Board> boards = new ArrayList<>();
 
     @Builder
     public WorkSpace(String title, String description){

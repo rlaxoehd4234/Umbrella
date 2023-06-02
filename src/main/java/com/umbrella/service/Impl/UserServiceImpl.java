@@ -1,6 +1,7 @@
 package com.umbrella.service.Impl;
 
 import com.umbrella.domain.User.User;
+import com.umbrella.domain.WhenToMeet.Event;
 import com.umbrella.domain.WorkSpace.WorkSpace;
 import com.umbrella.domain.WorkSpace.WorkSpaceRepository;
 import com.umbrella.domain.WorkSpace.WorkspaceUser;
@@ -14,13 +15,11 @@ import com.umbrella.dto.user.UserRequestUpdateDto;
 import com.umbrella.domain.User.UserRepository;
 import com.umbrella.dto.workspace.WorkspaceRequestCreateDto;
 import com.umbrella.dto.workspace.WorkspaceRequestEnterAndExitDto;
-import com.umbrella.security.userDetails.UserContext;
+import com.umbrella.dto.workspace.WorkspaceResponseDto;
 import com.umbrella.security.utils.SecurityUtil;
 import com.umbrella.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.umbrella.domain.exception.UserExceptionType.*;
@@ -167,7 +167,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void enterWorkspace(WorkspaceRequestEnterAndExitDto workspaceRequestEnterDto) {
+    public WorkspaceResponseDto enterWorkspace(WorkspaceRequestEnterAndExitDto workspaceRequestEnterDto) {
         User theUser = getLoginUserByEmail();
         if (theUser.getWorkspaceUsers().stream().anyMatch( workspaceUser -> {
             return workspaceUser.getWorkspace().getId() == workspaceRequestEnterDto.getId() &&
@@ -175,20 +175,23 @@ public class UserServiceImpl implements UserService {
         } )) {
             throw new WorkspaceException(ALREADY_ENTERED_WORKSPACE_ERROR);
         }
-        Optional<WorkSpace> theWorkspace = workSpaceRepository
+        Optional<WorkSpace> existWorkspace = workSpaceRepository
                 .findByIdAndTitle(workspaceRequestEnterDto.getId(), workspaceRequestEnterDto.getTitle());
-        if (theWorkspace.isEmpty()) {
+        if (existWorkspace.isEmpty()) {
             throw new WorkspaceException(NOT_FOUNT_WORKSPACE);
         }
 
+        WorkSpace theWorkspace = existWorkspace.get();
         entityManager.persist(theUser);
-        entityManager.persist(theWorkspace.get());
+        entityManager.persist(theWorkspace);
 
         WorkspaceUser theWorkspaceUser = new WorkspaceUser();
         theUser.enterWorkspaceUser(theWorkspaceUser);
-        theWorkspaceUser.takeWorkspace(theWorkspace.get());
+        theWorkspaceUser.takeWorkspace(theWorkspace);
 
         workspaceUserRepository.save(theWorkspaceUser);
+
+        return new WorkspaceResponseDto(theWorkspace);
     }
 
     @Override
