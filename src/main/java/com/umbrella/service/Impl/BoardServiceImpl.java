@@ -72,13 +72,13 @@ public class BoardServiceImpl implements BoardService {
 
     private Board validateWorkSpace(BoardSaveRequestDto requestDto){
         if(workSpaceRepository.findById(requestDto.getWorkSpace_id()).isEmpty()){
-            throw new WorkspaceException(WorkspaceExceptionType.NOT_FOUNT_WORKSPACE);
+            throw new WorkspaceException(WorkspaceExceptionType.NOT_FOUND_WORKSPACE);
         }
         return Board.builder().title(requestDto.getTitle()).build();
     }
     private Board validateBoard(Long id){
 
-        return boardRepository.findById(id).orElseThrow(() -> new WorkspaceException(WorkspaceExceptionType.NOT_FOUNT_WORKSPACE));
+        return boardRepository.findById(id).orElseThrow(() -> new WorkspaceException(WorkspaceExceptionType.NOT_FOUND_WORKSPACE));
     }
 
     private void validateUser(){

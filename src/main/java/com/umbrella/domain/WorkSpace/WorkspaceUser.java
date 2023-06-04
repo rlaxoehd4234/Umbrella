@@ -17,7 +17,7 @@ public class WorkspaceUser {
     private Long id;
 
     @Setter
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name = "workspace_id")
     private WorkSpace workspace;
 

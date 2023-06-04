@@ -74,6 +74,6 @@ public class WorkSpaceServiceImpl implements WorkSpaceService {
 
     public WorkSpace validateWorkspace(Long id){
 
-        return workSpaceRepository.findById(id).orElseThrow(() -> new WorkspaceException(WorkspaceExceptionType.NOT_FOUNT_WORKSPACE));
+        return workSpaceRepository.findById(id).orElseThrow(() -> new WorkspaceException(WorkspaceExceptionType.NOT_FOUND_WORKSPACE));
     }
 }
