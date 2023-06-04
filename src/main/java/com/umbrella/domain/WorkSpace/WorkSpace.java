@@ -30,13 +30,13 @@ public class WorkSpace {
     @NotBlank
     private String description;
 
-    @OneToMany(mappedBy = "workspace", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "workspace")
     private List<WorkspaceUser> workspaceUsers = new ArrayList<>();
 
-    @OneToMany(mappedBy = "workSpace", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "workSpace", cascade = CascadeType.REMOVE)
     private List<Event> events = new ArrayList<>();
 
-    @OneToMany(mappedBy = "workSpace")
+    @OneToMany(mappedBy = "workSpace", cascade = CascadeType.REMOVE)
     private List<Board> boards = new ArrayList<>();
 
     @Builder

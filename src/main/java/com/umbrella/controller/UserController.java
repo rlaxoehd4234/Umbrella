@@ -3,6 +3,7 @@ package com.umbrella.controller;
 import com.umbrella.dto.user.*;
 import com.umbrella.dto.workspace.WorkspaceRequestCreateDto;
 import com.umbrella.dto.workspace.WorkspaceRequestEnterAndExitDto;
+import com.umbrella.dto.workspace.WorkspaceResponseCreateDto;
 import com.umbrella.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -86,9 +87,9 @@ public class UserController {
     @PostMapping(value = "/workspace/create")
     public ResponseEntity createWorkspace(@RequestBody WorkspaceRequestCreateDto workspaceRequestCreateDto) {
         validateCreateWorkspaceRequest(workspaceRequestCreateDto);
-        userService.createWorkspace(workspaceRequestCreateDto);
-
-        return ResponseEntity.ok().body("워크스페이스가 성공적으로 생성되었습니다.");
+        return ResponseEntity.ok().body(WorkspaceResponseCreateDto.builder()
+                                                    .workspaceId(userService.createWorkspace(workspaceRequestCreateDto))
+                                                    .build());
     }
 
     private void validateCreateWorkspaceRequest(WorkspaceRequestCreateDto workspaceRequestCreateDto) {
