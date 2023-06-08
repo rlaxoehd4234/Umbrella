@@ -7,10 +7,7 @@ import com.umbrella.domain.WorkSpace.WorkspaceUser;
 import com.umbrella.domain.WorkSpace.WorkspaceUserRepository;
 import com.umbrella.domain.exception.UserException;
 import com.umbrella.domain.exception.WorkspaceException;
-import com.umbrella.dto.user.UserInfoDto;
-import com.umbrella.dto.user.UserRequestFindPasswordDto;
-import com.umbrella.dto.user.UserRequestSignUpDto;
-import com.umbrella.dto.user.UserRequestUpdateDto;
+import com.umbrella.dto.user.*;
 import com.umbrella.domain.User.UserRepository;
 import com.umbrella.dto.workspace.WorkspaceRequestCreateDto;
 import com.umbrella.dto.workspace.WorkspaceRequestEnterAndExitDto;
@@ -94,13 +91,19 @@ public class UserServiceImpl implements UserService {
             }
         });
 
-        return  userRepository.save(signUpUser);
+        return userRepository.save(signUpUser);
     }
 
     @Override
-    public void update(UserRequestUpdateDto userUpdateDto) {
+    public UserResponseUpdateDto update(UserRequestUpdateDto userUpdateDto) {
         User wantUpdateUser = getLoginUserByEmail();
         wantUpdateUser.updateUser(userUpdateDto);
+
+        return UserResponseUpdateDto.builder()
+                .nickName(wantUpdateUser.getNickName())
+                .name(wantUpdateUser.getName())
+                .age(wantUpdateUser.getAge())
+                .build();
     }
 
     @Override
