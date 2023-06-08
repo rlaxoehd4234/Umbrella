@@ -39,9 +39,8 @@ public class UserController {
     }
 
     @PutMapping(value = "/user/update/info")
-    public ResponseEntity<String> updateUserInfo(@Valid @RequestBody UserRequestUpdateDto userUpdateDto) {
-        userService.update(userUpdateDto);
-        return ResponseEntity.ok().body("입력하신 정보로 성공적으로 수정되었습니다.");
+    public ResponseEntity<UserResponseUpdateDto> updateUserInfo(@Valid @RequestBody UserRequestUpdateDto userUpdateDto) {
+        return ResponseEntity.ok().body(userService.update(userUpdateDto));
     }
 
     @PatchMapping(value = "/user/update/password")

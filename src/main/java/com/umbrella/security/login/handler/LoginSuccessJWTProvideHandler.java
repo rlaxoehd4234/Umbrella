@@ -32,6 +32,7 @@ public class LoginSuccessJWTProvideHandler extends SimpleUrlAuthenticationSucces
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException {
+        Long userId = getUserIdFromAuthentication(authentication);
         String email = getEmailFromAuthentication(authentication);
         String nickName = getNickNameFromAuthentication(authentication);
 
@@ -43,7 +44,7 @@ public class LoginSuccessJWTProvideHandler extends SimpleUrlAuthenticationSucces
 
         userRepository.findByEmail(email).ifPresent(user -> user.updateRefreshToken(refreshToken));
 
-        String responseBody = createLoginSuccessResponse(nickName);
+        String responseBody = createLoginSuccessResponse(userId, nickName);
 
         sendResponse(response, responseBody);
 
@@ -65,11 +66,16 @@ public class LoginSuccessJWTProvideHandler extends SimpleUrlAuthenticationSucces
         response.getWriter().close();
     }
 
-    private String createLoginSuccessResponse(String nickName) throws JsonProcessingException {
+    private String createLoginSuccessResponse(Long userId, String nickName) throws JsonProcessingException {
         Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("user_id", userId);
         responseMap.put("nick_name", nickName);
         String responseBody = objectMapper.writeValueAsString(responseMap) + "\n성공적으로 로그인이 완료되었습니다!";
         return responseBody;
+    }
+
+    private Long getUserIdFromAuthentication(Authentication authentication) {
+        return ((UserContext) authentication.getPrincipal()).getId();
     }
 
     private String getEmailFromAuthentication(Authentication authentication) {
