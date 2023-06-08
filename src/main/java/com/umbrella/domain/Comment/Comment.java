@@ -46,8 +46,6 @@ public class Comment {
     @JoinColumn(name = "user_id")
     private User user;
 
-
-
     @Builder
     public Comment(String content, Post post, User user) {
         this.content = content;
