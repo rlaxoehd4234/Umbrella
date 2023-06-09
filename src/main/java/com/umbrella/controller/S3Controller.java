@@ -24,7 +24,7 @@ public class S3Controller {
         return fileUploadService.uploadImage(file, "post");
     }
 
-    @PostMapping("delete")
+    @PostMapping("/delete")
     public void imgDelete(@Valid @RequestBody DeleteS3FileByFileNameDto dto){
         awsS3UploadService.deleteFile(dto.getAwsFileName());
     }
