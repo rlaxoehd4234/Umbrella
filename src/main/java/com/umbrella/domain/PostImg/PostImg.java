@@ -22,14 +22,18 @@ public class PostImg {
     @Column(nullable = false)
     private String imgUrl;
 
+    @Column(nullable = false)
+    private String imgName;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Post post;
 
     @Builder
-    public PostImg(String imgUrl, Post post) {
+    public PostImg(String imgUrl,String imgName, Post post) {
         this.imgUrl = imgUrl;
+        this.imgName = imgName;
         this.post = post;
     }
 }

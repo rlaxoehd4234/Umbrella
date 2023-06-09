@@ -22,7 +22,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 import static com.umbrella.domain.exception.WhenToMeetExceptionType.*;
-import static com.umbrella.domain.exception.WorkspaceExceptionType.NOT_FOUNT_WORKSPACE;
+import static com.umbrella.domain.exception.WorkspaceExceptionType.NOT_FOUND_WORKSPACE;
 
 @Service
 @Transactional
@@ -57,7 +57,7 @@ public class WhenToMeetServiceImpl implements WhenToMeetService {
     public Event createEvent(RequestEventDto requestEventDto) {
         Optional<WorkSpace> optionalWorkspace  = workSpaceRepository.findById(requestEventDto.getWorkspaceId());
         if (optionalWorkspace.isEmpty()) {
-            throw new WorkspaceException(NOT_FOUNT_WORKSPACE);
+            throw new WorkspaceException(NOT_FOUND_WORKSPACE);
         }
         WorkSpace theWorkspace = optionalWorkspace.get();
 

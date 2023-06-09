@@ -10,10 +10,12 @@ import lombok.NoArgsConstructor;
 public class EventResponseDto {
 
     private Long eventId;
+    private String eventUuid;
     private String title;
 
     public EventResponseDto(Event event) {
         this.eventId = event.getId();
+        this.eventUuid = String.valueOf(event.getUuid());
         this.title = event.getTitle();
     }
 }

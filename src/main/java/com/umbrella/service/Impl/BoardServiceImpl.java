@@ -82,7 +82,7 @@ public class BoardServiceImpl implements BoardService {
     }
     private Board validateBoard(Long id){
 
-        return boardRepository.findById(id).orElseThrow(() -> new WorkspaceException(WorkspaceExceptionType.NOT_FOUNT_WORKSPACE));
+        return boardRepository.findById(id).orElseThrow(() -> new WorkspaceException(WorkspaceExceptionType.NOT_FOUND_WORKSPACE));
     }
 
     private void validateUser(){

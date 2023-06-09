@@ -3,6 +3,7 @@ package com.umbrella.controller;
 import com.umbrella.dto.user.*;
 import com.umbrella.dto.workspace.WorkspaceRequestCreateDto;
 import com.umbrella.dto.workspace.WorkspaceRequestEnterAndExitDto;
+import com.umbrella.dto.workspace.WorkspaceResponseCreateDto;
 import com.umbrella.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,9 +39,8 @@ public class UserController {
     }
 
     @PutMapping(value = "/user/update/info")
-    public ResponseEntity<String> updateUserInfo(@Valid @RequestBody UserRequestUpdateDto userUpdateDto) {
-        userService.update(userUpdateDto);
-        return ResponseEntity.ok().body("입력하신 정보로 성공적으로 수정되었습니다.");
+    public ResponseEntity<UserResponseUpdateDto> updateUserInfo(@Valid @RequestBody UserRequestUpdateDto userUpdateDto) {
+        return ResponseEntity.ok().body(userService.update(userUpdateDto));
     }
 
     @PatchMapping(value = "/user/update/password")
@@ -86,9 +86,9 @@ public class UserController {
     @PostMapping(value = "/workspace/create")
     public ResponseEntity createWorkspace(@RequestBody WorkspaceRequestCreateDto workspaceRequestCreateDto) {
         validateCreateWorkspaceRequest(workspaceRequestCreateDto);
-        userService.createWorkspace(workspaceRequestCreateDto);
-
-        return ResponseEntity.ok().body("워크스페이스가 성공적으로 생성되었습니다.");
+        return ResponseEntity.ok().body(WorkspaceResponseCreateDto.builder()
+                                                    .workspaceId(userService.createWorkspace(workspaceRequestCreateDto))
+                                                    .build());
     }
 
     private void validateCreateWorkspaceRequest(WorkspaceRequestCreateDto workspaceRequestCreateDto) {
@@ -99,8 +99,7 @@ public class UserController {
 
     @PostMapping(value = "/workspace/enter")
     public ResponseEntity enterWorkspace(@RequestBody WorkspaceRequestEnterAndExitDto workspaceRequestEnterDto) {
-        userService.enterWorkspace(workspaceRequestEnterDto);
-        return ResponseEntity.ok().body(workspaceRequestEnterDto);
+        return ResponseEntity.ok().body(userService.enterWorkspace(workspaceRequestEnterDto));
     }
 
     @DeleteMapping(value = "/workspace/exit")
