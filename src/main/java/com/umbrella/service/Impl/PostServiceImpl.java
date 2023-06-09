@@ -9,10 +9,7 @@ import com.umbrella.domain.Post.Post;
 import com.umbrella.domain.Post.PostRepository;
 import com.umbrella.domain.User.User;
 import com.umbrella.domain.User.UserRepository;
-import com.umbrella.domain.exception.PostException;
-import com.umbrella.domain.exception.PostExceptionType;
-import com.umbrella.domain.exception.UserException;
-import com.umbrella.domain.exception.UserExceptionType;
+import com.umbrella.domain.exception.*;
 import com.umbrella.dto.post.*;
 import com.umbrella.security.utils.SecurityUtil;
 import com.umbrella.service.PostService;
@@ -39,9 +36,9 @@ public class PostServiceImpl implements PostService {
 
 
     // 저장 메서드
-    public Long save(PostSaveRequestDto requestDto){
+    public Long save(Long board_id, PostSaveRequestDto requestDto){
         User findUser = userRepository.findById(securityUtil.getLoginUserId()).orElseThrow(() -> new UserException(UserExceptionType.NOT_FOUND_ERROR));
-        Board board = validateBoard(requestDto.getTitle());
+        Board board = validateBoard(board_id);
         validateUser(findUser);
 
         Post post = Post.builder()
@@ -57,44 +54,48 @@ public class PostServiceImpl implements PostService {
 
 
     // 수정 메서드
-    public Long update(Long id, PostUpdateRequestDto requestDto){
-        Post post = validatePost(id);
+    public Long update(Long board_id, Long post_id, PostUpdateRequestDto requestDto){
+        validateBoard(board_id);
+        Post post = validatePost(post_id);
         validateUser(post.getUser());
         post.update(requestDto.getTitle(), requestDto.getContent());
 
-        return id;
+        return post_id;
     }
 
     // 삭제 메서드
-    public Long delete(Long id){
-        Post post = validatePost(id);
+    public Long delete(Long board_id, Long post_id){
+        Post post = validatePost(post_id);
+        validateBoard(board_id);
         validateUser(post.getUser());
         postRepository.delete(post);
         postHeartRepository.delete(postHeartRepository.findByUserAndPost(post.getUser(),post));
-        return id;
+        return post_id;
     }
 
     // 게시글 클릭 메서드
-    public PostResponseDto findById(Long id) {
-        Post post = validatePost(id);
+    public PostResponseDto findById(Long board_id, Long post_id) {
+        validateBoard(board_id);
+        Post post = validatePost(post_id);
+        validateUser(post.getUser());
         return new PostResponseDto(post);
     }
 
     // 게시글 전체 리턴 메서드
     @Transactional(readOnly = true)
     public Page<PostListResponseDto> findAllPosts(Pageable pageable) {
+        // TODO: User 타당성 검증
         Page<Post> page = postRepository.findAll(pageable);
-        Page<PostListResponseDto> map = page.map(PostListResponseDto::new);
 
-        return map;
+        return page.map(PostListResponseDto::new);
     }
 
-
+    @Transactional(readOnly = true)
     public Page<PostListResponseDto> findSearchPost(String title, Pageable pageable) {
+        // TODO: User 타당성 검증
         Page<Post> page = postRepository.findByTitleContaining(title, pageable);
-        Page<PostListResponseDto> map = page.map(PostListResponseDto::new);
 
-        return map;
+        return page.map(PostListResponseDto::new);
     }
 
     public void validateUser(User user)  {
@@ -108,10 +109,8 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new PostException(PostExceptionType.NOT_FOUND_POST));
     }
 
-    public Board validateBoard(String title){
-
-        return boardRepository.findByTitle(title);
-
+    public Board validateBoard(Long board_id){
+        return boardRepository.findById(board_id).orElseThrow(() -> new BoardException(BoardExceptionType.NOT_FOUND_BOARD));
     }
 
 
