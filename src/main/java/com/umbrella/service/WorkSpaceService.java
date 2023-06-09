@@ -9,11 +9,10 @@ import java.util.List;
 
 public interface WorkSpaceService {
 
-    Long save(WorkspaceRequestDto requestDto);
 
     Long update(Long id, WorkspaceUpdateRequestDto requestDto);
 
-    Long delete(Long id);
+//    Long delete(Long id);
 
     WorkspaceResponseDto findById(Long id);
 

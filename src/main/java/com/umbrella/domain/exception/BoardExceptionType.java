@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum BoardExceptionType implements BaseExceptionType {
 
+    NOT_FOUND_BOARD(444,HttpStatus.NOT_FOUND,"존지하지않는 게시물입니다.")
     ;
 
     private int errorCode;

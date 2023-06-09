@@ -13,16 +13,16 @@ import javax.validation.Valid;
 @RestController
 @Getter
 @RequiredArgsConstructor
-@RequestMapping("/post/heart")
+@RequestMapping
 public class PostHeartController {
 
     private final HeartServiceImpl heartService;
-    @PostMapping
+    @PostMapping("/post/heart")
     public ResponseEntity<?> insert(@RequestBody @Valid HeartRequestDto heartRequestDto){
         heartService.insert(heartRequestDto);
         return ResponseEntity.ok().body("완료되었습니다.");
     }
-    @DeleteMapping
+    @DeleteMapping("/post/heart")
     public ResponseEntity<?> delete(@RequestBody @Valid HeartRequestDto heartRequestDto){
         heartService.delete(heartRequestDto);
         return ResponseEntity.ok().body("완료되었습니다.");

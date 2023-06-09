@@ -6,6 +6,5 @@ import lombok.Getter;
 @Data
 @Getter
 public class HeartRequestDto {
-
-    private Long PostId;
+    private Long postId;
 }
