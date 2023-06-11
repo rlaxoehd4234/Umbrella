@@ -24,8 +24,9 @@ public class Board {
     private WorkSpace workSpace;
 
     @Builder
-    public Board(String title){
+    public Board(String title, WorkSpace workSpace){
         this.title = title;
+        this.workSpace = workSpace;
     }
     public void update(String title){
         this.title = title;

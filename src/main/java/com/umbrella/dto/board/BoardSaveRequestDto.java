@@ -7,12 +7,9 @@ import lombok.Getter;
 
 @Getter
 public class BoardSaveRequestDto {
-
-    private Long workSpace_id; //workSpace id;
     private String title;
     @Builder
-    public BoardSaveRequestDto(Long workSpace_id, String title){
-        this.workSpace_id = workSpace_id;
+    public BoardSaveRequestDto( String title){
         this.title = title;
     }
 }

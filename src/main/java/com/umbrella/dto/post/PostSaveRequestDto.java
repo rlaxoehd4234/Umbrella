@@ -15,25 +15,17 @@ public class PostSaveRequestDto {
     @NotBlank
     @Size(min = 30, max = 1000)
     private String content;
-    @NotBlank
-    private String writer;
-    private String boardName;
-
-
 
     @Builder
     public PostSaveRequestDto(String title, String content,String writer , String boardName){
         this.title = title;
         this.content = content;
-        this.writer = writer;
-        this.boardName = boardName;
     }
 
     public Post toEntity(){
         return Post.builder().
                 title(title).
                 content(content).
-                writer(writer).
                 build();
     }
 

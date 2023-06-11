@@ -10,6 +10,7 @@ import com.umbrella.domain.exception.UserException;
 import com.umbrella.domain.exception.UserExceptionType;
 import com.umbrella.domain.exception.WorkspaceException;
 import com.umbrella.domain.exception.WorkspaceExceptionType;
+import com.umbrella.dto.board.BoardListResponseDto;
 import com.umbrella.dto.board.BoardResponseDto;
 import com.umbrella.dto.board.BoardSaveRequestDto;
 import com.umbrella.dto.board.BoardUpdateRequestDto;
@@ -34,9 +35,9 @@ public class BoardServiceImpl implements BoardService {
     private final UserRepository userRepository;
 
     @Override
-    public Long save(BoardSaveRequestDto requestDto) {
+    public Long save(Long workspace_id, BoardSaveRequestDto requestDto) {
         validateUser();
-        Board board = validateWorkSpace(requestDto);
+        Board board = validateWorkSpace(requestDto, workspace_id);
         return boardRepository.save(board).getId();
     }
 
@@ -57,24 +58,27 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public BoardResponseDto findById(Long id) {
+    public BoardResponseDto findById(Long workspace_id, Long board_id) {
         validateUser();
-        Board board = validateBoard(id);
+        Board board = validateBoard(board_id);
         return new BoardResponseDto(board);
     }
 
     @Override
-    public List<BoardResponseDto> findAllDesc() {
+    public List<BoardListResponseDto> findAllDesc() {
         validateUser();
-        return boardRepository.findAll().stream().map(BoardResponseDto::new).collect(Collectors.toList());
+        return boardRepository.findAll().stream().map(BoardListResponseDto::new).collect(Collectors.toList());
     }
 
 
-    private Board validateWorkSpace(BoardSaveRequestDto requestDto){
-        if(workSpaceRepository.findById(requestDto.getWorkSpace_id()).isEmpty()){
-            throw new WorkspaceException(WorkspaceExceptionType.NOT_FOUND_WORKSPACE);
+    private Board validateWorkSpace(BoardSaveRequestDto requestDto, Long id){
+        if(workSpaceRepository.findById(id).isEmpty()){
+            throw new WorkspaceException(WorkspaceExceptionType.NOT_FOUNT_WORKSPACE);
         }
-        return Board.builder().title(requestDto.getTitle()).build();
+        return Board.builder()
+                .title(requestDto.getTitle())
+                .workSpace(workSpaceRepository.findById(id).orElseThrow(() -> new WorkspaceException(WorkspaceExceptionType.NOT_FOUNT_WORKSPACE)))
+                .build();
     }
     private Board validateBoard(Long id){
 
