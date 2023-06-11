@@ -80,7 +80,7 @@ public class WorkSpaceServiceImpl implements WorkSpaceService {
     public void validateWorkSpaceValidUser()  {
         User user = userRepository.findById(securityUtil.getLoginUserId()).orElseThrow(() -> new UserException(UserExceptionType.NOT_FOUND_ERROR));
 
-        if(!workspaceUserRepository.findByWorkspaceUser(user).isEmpty()){
+        if(workspaceUserRepository.findByWorkspaceUser(user).isEmpty()){
             throw new UserException(UserExceptionType.UN_AUTHORIZE_ERROR);
         }
     }
