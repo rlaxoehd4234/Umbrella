@@ -1,6 +1,7 @@
 package com.umbrella.dto.comment;
 
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 @Builder
 public class ChildCommentResponseDto {

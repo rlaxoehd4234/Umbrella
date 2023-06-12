@@ -4,6 +4,7 @@ import com.umbrella.domain.Post.Post;
 import com.umbrella.domain.User.User;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotBlank;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@NoArgsConstructor
 public class PostSaveRequestDto {
     @NotBlank
     private String title;
