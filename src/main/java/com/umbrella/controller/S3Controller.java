@@ -20,8 +20,8 @@ public class S3Controller {
     private final FileUploadService fileUploadService;
 
     @PostMapping("/upload")
-    public ImgDto imgUpload(@RequestParam MultipartFile file) throws IOException {
-        return fileUploadService.uploadImage(file, "post");
+    public ImgDto imgUpload(@RequestParam MultipartFile image) throws IOException {
+        return fileUploadService.uploadImage(image, "post");
     }
 
     @PostMapping("/delete")

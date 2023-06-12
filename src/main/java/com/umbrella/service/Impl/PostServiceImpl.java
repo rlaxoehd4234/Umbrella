@@ -48,6 +48,7 @@ public class PostServiceImpl implements PostService {
                 .title(requestDto.getTitle())
                 .user(findUser)
                 .board(board)
+                .likeCount(0)
                 .build();
 
         Post savedPost = postRepository.save(post);

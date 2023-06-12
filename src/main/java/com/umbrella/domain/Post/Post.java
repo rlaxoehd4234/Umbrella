@@ -43,7 +43,6 @@ public class Post {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Board board;
 
-    @ColumnDefault("0")
     private Integer likeCount;
 
     public Post(Long id, String title) {
@@ -53,12 +52,13 @@ public class Post {
 
 
     @Builder
-    public Post(String writer, String title, String content, User user, Board board){
+    public Post(String writer, String title, String content, User user, Board board, Integer likeCount){
         this.writer = writer;
         this.content = content;
         this.title = title;
         this.user = user;
         this.board = board;
+        this.likeCount = likeCount;
     }
 
 
