@@ -2,6 +2,7 @@ package com.umbrella.exception;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.umbrella.domain.exception.PostException;
 import com.umbrella.domain.exception.UserException;
 import com.umbrella.domain.exception.WhenToMeetException;
 import com.umbrella.domain.exception.WorkspaceException;
@@ -37,6 +38,14 @@ public class UserExceptionAdvice {
 
     @ExceptionHandler(UserException.class)
     public ResponseEntity MainExceptionHandler(UserException exception){
+
+        return new ResponseEntity(new ExceptionDto(exception.getBaseExceptionType().getErrorCode(),
+                exception.getBaseExceptionType().getErrorMessage()),
+                exception.getBaseExceptionType().getHttpStatus());
+    }
+
+    @ExceptionHandler(PostException.class)
+    public ResponseEntity MainExceptionHandler(PostException exception){
 
         return new ResponseEntity(new ExceptionDto(exception.getBaseExceptionType().getErrorCode(),
                 exception.getBaseExceptionType().getErrorMessage()),
