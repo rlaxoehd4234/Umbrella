@@ -12,14 +12,10 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class ChildCommentRequestDto {
 
-    @NotNull
-    private Long commentId;
-
-    @NotBlank
     @Size(min = 1, max = 500, message = "1자 이상, 500자 이하만 가능합니다.")
     private String content;
 
     @NotNull
-    private String nickname; // userName -> 작성자
+    private String nickName; // userName -> 작성자
 
 }

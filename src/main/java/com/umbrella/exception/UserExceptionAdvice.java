@@ -2,10 +2,7 @@ package com.umbrella.exception;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.umbrella.domain.exception.PostException;
-import com.umbrella.domain.exception.UserException;
-import com.umbrella.domain.exception.WhenToMeetException;
-import com.umbrella.domain.exception.WorkspaceException;
+import com.umbrella.domain.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -51,6 +48,16 @@ public class UserExceptionAdvice {
                 exception.getBaseExceptionType().getErrorMessage()),
                 exception.getBaseExceptionType().getHttpStatus());
     }
+
+
+    @ExceptionHandler(CommentException.class)
+    public ResponseEntity MainExceptionHandler(CommentException exception){
+
+        return new ResponseEntity(new ExceptionDto(exception.getBaseExceptionType().getErrorCode(),
+                exception.getBaseExceptionType().getErrorMessage()),
+                exception.getBaseExceptionType().getHttpStatus());
+    }
+
 
     @ExceptionHandler(WorkspaceException.class)
     public ResponseEntity WorkspaceExceptionHandler(WorkspaceException exception){
