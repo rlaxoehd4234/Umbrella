@@ -7,6 +7,7 @@ import com.umbrella.service.Impl.BoardServiceImpl;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class BoardController {
     private final BoardServiceImpl boardService;
 
     @PostMapping("/{workspace_id}/create")
-    public ResponseEntity<Long> save(@PathVariable Long workspace_id, BoardSaveRequestDto requestDto){
+    public ResponseEntity<Long> save(@PathVariable Long workspace_id,@Validated @RequestBody BoardSaveRequestDto requestDto){
         return ResponseEntity.ok().body(boardService.save(workspace_id,requestDto));
     }
 
