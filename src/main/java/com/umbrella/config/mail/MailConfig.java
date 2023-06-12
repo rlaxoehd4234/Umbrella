@@ -41,7 +41,7 @@ public class MailConfig {
         properties.setProperty("mail.smtp.connection-timeout", TIMEOUT);
         properties.setProperty("mail.smtp.timeout", TIMEOUT);
         properties.setProperty("mail.smtp.write-timeout", TIMEOUT);
-//        properties.setProperty("mail.smtp.ssl.enable","true");
+        properties.setProperty("mail.smtp.ssl.enable","true");
 
         return properties;
     }
