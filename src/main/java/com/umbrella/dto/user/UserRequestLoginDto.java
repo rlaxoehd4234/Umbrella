@@ -1,26 +1,26 @@
 package com.umbrella.dto.user;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.util.Assert;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserRequestLoginDto {
 
-    @NotBlank(message = "이메일은 필수 입력 값입니다.")
-    @Email
-    private final String email;
-    @NotBlank(message = "비밀번호는 필수 입력 값입니다.")
-    private final String password;
+    @Email(message = "올바른 형식의 이메일 주소여야 합니다")
+    private String email;
+
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,20}$",
+            message = "비밀번호는 8 ~ 20 자리이면서 1개 이상의 알파벳, 숫자, 특수문자를 포함해야 합니다.")
+    private String password;
 
     @Builder
     public UserRequestLoginDto(String email, String password) {
-        Assert.hasText(email, "email must not be blank");
-        Assert.hasText(password, "password must not be blank");
-
         this.email = email;
         this.password = password;
     }

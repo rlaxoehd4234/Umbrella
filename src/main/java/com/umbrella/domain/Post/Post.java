@@ -1,9 +1,14 @@
 package com.umbrella.domain.Post;
 
+import com.umbrella.domain.Board.Board;
 import com.umbrella.domain.User.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -15,7 +20,7 @@ public class Post {
 
     @Id
     @GeneratedValue
-    @Column(nullable = true)
+    @Column(name = "post_id",nullable = false)
     private Long id;
 
     @NotNull
@@ -33,6 +38,13 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Board board;
+
+    @ColumnDefault("0")
+    private Integer likeCount;
 
     public Post(Long id, String title) {
         this.id = id;
@@ -41,15 +53,23 @@ public class Post {
 
 
     @Builder
-    public Post(String writer, String title, String content){
+    public Post(String writer, String title, String content, User user, Board board){
         this.writer = writer;
         this.content = content;
         this.title = title;
+        this.user = user;
+        this.board = board;
     }
 
 
     public void update(String title, String content){
         this.title = title;
         this.content = content;
+    }
+    public void addHeart(){
+        likeCount++;
+    }
+    public void popHeart() {
+        likeCount--;
     }
 }

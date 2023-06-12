@@ -9,13 +9,13 @@ import org.springframework.data.domain.Pageable;
 
 public interface PostService {
 
-    Long save(PostSaveRequestDto requestDto);
+    Long save(Long board_id, PostSaveRequestDto requestDto) throws IllegalAccessException;
 
-    Long update(Long id, PostUpdateRequestDto requestDto);
+    Long update(Long board_id, Long post_id, PostUpdateRequestDto requestDto);
 
-    Long delete(Long id);
+    Long delete(Long board_id, Long post_id);
 
-    PostResponseDto findById(Long id);
+    PostResponseDto findById(Long board_id, Long post_id);
 
     Page<PostListResponseDto> findAllPosts(Pageable pageable);
 

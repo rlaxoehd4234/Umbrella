@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8800
 
 spring:
   main:
@@ -14,8 +14,13 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
     properties:
       hibernate:
         show-sql: true
         format_sql: true
+    show-sql: true
+
+logging:
+  level:
+    org.hibernate.type: trace

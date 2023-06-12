@@ -3,9 +3,8 @@ package com.umbrella.domain.User;
 import com.umbrella.constant.AuthPlatform;
 import com.umbrella.constant.Gender;
 import com.umbrella.constant.Role;
-import com.umbrella.domain.Comment.Comment;
-import com.umbrella.domain.Post.Post;
-import com.umbrella.dto.user.UserUpdateDto;
+import com.umbrella.domain.WorkSpace.WorkspaceUser;
+import com.umbrella.dto.user.UserRequestUpdateDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,30 +21,42 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
     @Id
-    @Column
+    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     @Column(nullable = false, unique = true)
     private String email;
+
     @Column(nullable = false, unique = true)
     private String nickName;
+
     @Column(nullable = false)
     private String password;
+
     @Column(nullable = false)
     private String name;
+
     @Column
     private int age;
-    @Column // 0 이면 남자, 1 이면 여자, 2 면 UNKNOWN -> OAuth2 서버측에서 성별 값을 전달받지 못했을 경우
+
+    @Column // UNKNOWN -> OAuth2 서버측에서 성별 값을 전달받지 못했을 경우
     private Gender gender;
+
     @Column
     @Enumerated(EnumType.STRING)
     private Role role;
+
     @Column
     @Enumerated(EnumType.STRING)
     private AuthPlatform platform;
+
     @Column(length = 100)
     @Lob
     private String refreshToken;
+
+    @OneToMany(mappedBy = "workspaceUser")
+    private List<WorkspaceUser> workspaceUsers = new ArrayList<>();
 
     @Builder
     public User(String email, String nickName, String password,
@@ -68,19 +79,7 @@ public class User {
         this.platform = platform;
     }
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Post> postList = new ArrayList<>();
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> commentList = new ArrayList<>();
-
-    public void addPost(Post post) {
-        postList.add(post);
-    }
-    public void addComment(Comment comment) {
-        commentList.add(comment);
-    }
-
-    public void updateUser(UserUpdateDto userUpdateDto) {
+    public void updateUser(UserRequestUpdateDto userUpdateDto) {
         userUpdateDto.getNickName().ifPresent(
                 nickName -> this.nickName = nickName
         );
@@ -119,4 +118,14 @@ public class User {
     }
 
     public void addDefaultPlatform() { this.platform = AuthPlatform.UMBRELLA; }
+
+    public void enterWorkspaceUser(WorkspaceUser workspaceUser) {
+        workspaceUser.setWorkspaceUser(this);
+        this.workspaceUsers.add(workspaceUser);
+    }
+
+    public void exitWorkspaceUser(WorkspaceUser workspaceUser) {
+        workspaceUser.getWorkspace().getWorkspaceUsers().remove(workspaceUser);
+        this.getWorkspaceUsers().remove(workspaceUser);
+    }
 }

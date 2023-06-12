@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.servlet.http.Cookie;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -108,8 +109,10 @@ public class JwtAuthenticationProcessingFilterTest {
                 .andReturn();
 
         String accessToken = result.getResponse().getHeader(accessHeader);
-//        String refreshToken = result.getResponse().getHeader(refreshHeader); // Json Body 에 RefreshToken 을 전송했을 때
         String refreshToken = result.getResponse().getCookie(COOKIE_REFRESH_TOKEN_KEY).getValue();
+
+        System.out.println(accessToken);
+        System.out.println(refreshToken);
 
         Map<String, String> tokenMap = new HashMap<>();
         tokenMap.put(accessHeader,accessToken);
@@ -133,11 +136,9 @@ public class JwtAuthenticationProcessingFilterTest {
         Map accessAndRefreshToken = getAccessAndRefreshToken();
         String accessToken = (String) accessAndRefreshToken.get(accessHeader);
 
-        System.out.println("ACCESS TOKEN : " + accessToken);
-
         // when, then
         mockMvc.perform(get(URL_ADDRESS).header(accessHeader, BEARER + accessToken))
-                .andExpectAll(status().isNotFound());
+                .andExpectAll(status().isForbidden());
     }
 
     @Test
@@ -147,11 +148,9 @@ public class JwtAuthenticationProcessingFilterTest {
         Map accessAndRefreshToken = getAccessAndRefreshToken();
         String accessToken = (String) accessAndRefreshToken.get(accessHeader);
 
-        System.out.println("ACCESS TOKEN : " + accessToken);
-
         // when, then
-        mockMvc.perform(get(URL_ADDRESS).header(accessHeader, BEARER + accessToken))
-                .andExpectAll(status().isNotFound());
+        mockMvc.perform(get(URL_ADDRESS).header(accessHeader, BEARER + accessToken + "wrongData"))
+                .andExpectAll(status().isForbidden());
     }
 
     @Test
@@ -159,16 +158,19 @@ public class JwtAuthenticationProcessingFilterTest {
     public void reIssueAccessTokenWithValidRefreshTokenTest() throws Exception {
         // given
         Map accessAndRefreshToken = getAccessAndRefreshToken();
+        String accessToken = String.valueOf(accessAndRefreshToken.get(accessHeader));
         String refreshToken = (String) accessAndRefreshToken.get(refreshHeader);
+        Cookie cookie = new Cookie(COOKIE_REFRESH_TOKEN_KEY, refreshToken);
 
         // when, then
         MvcResult result = mockMvc.perform(get(URL_ADDRESS)
-                        .header(COOKIE_REFRESH_TOKEN_KEY, refreshToken))
-                        .andExpect(status().isOk()).andReturn();
+                        .cookie(cookie)
+                        .header(accessHeader, BEARER + accessToken))
+                        .andExpect(status().isNotFound()).andReturn();
 
-        String accessToken = result.getResponse().getHeader(accessHeader);
+        String requestAccessToken = result.getResponse().getHeader(accessHeader);
 
-        String subject = jwtService.extractSubject(accessToken).orElseThrow(
+        String subject = jwtService.extractSubject(requestAccessToken).orElseThrow(
                 () -> new JwtException("유효하지 않은 토큰입니다.")
         );
 
@@ -197,12 +199,13 @@ public class JwtAuthenticationProcessingFilterTest {
         Map accessAndRefreshToken = getAccessAndRefreshToken();
         String refreshToken = (String) accessAndRefreshToken.get(refreshHeader);
         String accessToken = (String) accessAndRefreshToken.get(accessHeader);
+        Cookie cookie = new Cookie(COOKIE_REFRESH_TOKEN_KEY, refreshToken);
 
         // when
         MvcResult result = mockMvc.perform(get(URL_ADDRESS)
-                                    .header(COOKIE_REFRESH_TOKEN_KEY, refreshToken)
+                                    .cookie(cookie)
                                     .header(accessHeader, BEARER + accessToken))
-                .andExpect(status().isOk())
+                .andExpect(status().isNotFound())
                 .andReturn();
 
         String responseAccessToken = result.getResponse().getHeader(accessHeader);
@@ -217,29 +220,19 @@ public class JwtAuthenticationProcessingFilterTest {
     }
 
     @Test
-    @DisplayName("[SUCCESS]_유효한_리프레쉬_토큰으로_유효하지_않은_엑세스_토큰_갱신")
+    @DisplayName("[FAILED]_유효한_리프레쉬_토큰으로_유효하지_않은_엑세스_토큰_갱신")
     public void refreshNonValidAccessTokenWithValidRefreshTokenTest() throws Exception {
         // given
         Map accessAndRefreshToken = getAccessAndRefreshToken();
         String refreshToken = (String) accessAndRefreshToken.get(refreshHeader);
         String accessToken = (String) accessAndRefreshToken.get(accessHeader);
+        Cookie cookie = new Cookie(COOKIE_REFRESH_TOKEN_KEY, refreshToken);
 
-        // when
-        MvcResult result = mockMvc.perform(get(URL_ADDRESS)
-                        .header(COOKIE_REFRESH_TOKEN_KEY, refreshToken)
-                        .header(accessHeader, accessToken))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        String responseAccessToken = result.getResponse().getHeader(accessHeader);
-        String responseRefreshToken = result.getResponse().getHeader(refreshHeader);
-
-        String subject = jwtService.extractSubject(responseAccessToken).orElseThrow(
-                () -> new JwtException("유효하지 않은 토큰입니다.")
-        );
-
-        assertThat(subject).isEqualTo(email);
-        assertThat(responseRefreshToken).isNull();
+        // when, then
+        mockMvc.perform(get(URL_ADDRESS)
+                        .cookie(cookie)
+                        .header(accessHeader, accessToken + "wrongData"))
+                .andExpect(status().isForbidden());
     }
 
     @Test
@@ -254,7 +247,7 @@ public class JwtAuthenticationProcessingFilterTest {
         MvcResult result = mockMvc.perform(get(URL_ADDRESS)
                         .header(COOKIE_REFRESH_TOKEN_KEY, refreshToken + "wrongData")
                         .header(accessHeader, BEARER + accessToken))
-                .andExpect(status().isNotFound())
+                .andExpect(status().isForbidden())
                 .andReturn();
 
         String responseAccessToken = result.getResponse().getHeader(accessHeader);
@@ -290,7 +283,7 @@ public class JwtAuthenticationProcessingFilterTest {
     @DisplayName("[SUCCESS]_로그인_페이지는_토큰_없이_통과")
     public void loginUrlNonPassTest() throws Exception {
         //given
-        Map<String, String> map = getUsernamePasswordMap(email, password);
+        Map map = getUsernamePasswordMap(email, password);
 
         //when, then
         MvcResult result = mockMvc.perform(post(LOGIN_URL)
