@@ -43,7 +43,7 @@ public class PostController {
 
     @GetMapping("/{board_id}/posts")
     public ResponseEntity<Page<PostListResponseDto>> findPosts(@PathVariable Long board_id, @PageableDefault(size = 10) Pageable pageable){
-        return ResponseEntity.ok().body(postService.findAllPosts(pageable));
+        return ResponseEntity.ok().body(postService.findAllPosts(board_id, pageable));
     }
 
     @GetMapping("/search") // 검색 타이틀 검색
