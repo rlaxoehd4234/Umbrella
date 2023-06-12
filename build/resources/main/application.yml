@@ -8,18 +8,30 @@ spring:
     include: jwt, oauth2
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:33060/umbrella?useUnicode=true&serverTimezone=Asia/Seoul
-    username: root
-    password: 2982
+    url: jdbc:mysql://umbrella.cecjobmufkiw.ap-northeast-2.rds.amazonaws.com:3306/umbrella?useUnicode=true&serverTimezone=Asia/Seoul
+    :username: admin
+    password: rlaxoehd12
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     properties:
       hibernate:
         show-sql: true
         format_sql: true
     show-sql: true
+cloud:
+  aws:
+    credentials:
+      access-key: AKIA6FR5CNJTGZNV32VE
+      secret-key: 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
+    s3:
+      bucket: umbrellabackend
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+
 
 logging:
   level:

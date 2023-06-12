@@ -50,6 +50,7 @@ public class HeartServiceImpl implements HeartService {
         Post post = searchPost(requestDto.getPostId());
         validateDeleteUser(user,post);
         PostHeart postHeart = postHeartRepository.findByUserAndPost(user,post);
+        post.popHeart();
         postHeartRepository.delete(postHeart);
     }
 

@@ -17,7 +17,8 @@ public class CommentRequestDto {
 
     @NotNull
     private String nickName;
-    @NotBlank
-    private int pageNumber;
+
+    @NotNull
+    private Integer pageNumber;
 
 }
