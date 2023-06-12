@@ -2,8 +2,10 @@ package com.umbrella.dto.board;
 
 import com.umbrella.domain.Board.Board;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class BoardListResponseDto {
     private Long board_id;
     private String title;

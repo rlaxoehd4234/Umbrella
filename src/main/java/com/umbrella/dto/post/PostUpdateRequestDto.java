@@ -2,6 +2,7 @@ package com.umbrella.dto.post;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotBlank;
@@ -9,6 +10,7 @@ import javax.validation.constraints.Size;
 import java.util.List;
 
 @Getter
+@NoArgsConstructor
 public class PostUpdateRequestDto {
 
     @NotBlank
