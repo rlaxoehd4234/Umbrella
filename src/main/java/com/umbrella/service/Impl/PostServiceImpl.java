@@ -91,9 +91,9 @@ public class PostServiceImpl implements PostService {
 
     // 게시글 전체 리턴 메서드
     @Transactional(readOnly = true)
-    public Page<PostListResponseDto> findAllPosts(Pageable pageable) {
+    public Page<PostListResponseDto> findAllPosts(Long board_id, Pageable pageable) {
         // TODO: User 타당성 검증
-        Page<Post> page = postRepository.findAll(pageable);
+        Page<Post> page = postRepository.findAllByBoardId(board_id,pageable);
 
         return page.map(PostListResponseDto::new);
     }

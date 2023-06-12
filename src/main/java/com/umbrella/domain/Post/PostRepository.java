@@ -9,6 +9,6 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post,Long> {
 
-    Page<Post> findAll(Pageable pageable);
+    Page<Post> findAllByBoardId(Long board_id, Pageable pageable);
     Page<Post> findByTitleContaining(String title, Pageable pageable);
 }
