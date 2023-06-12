@@ -6,6 +6,7 @@ import com.umbrella.domain.Post.Post;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @Getter
@@ -19,13 +20,13 @@ public class PostListResponseDto {
 
     private String title;
 
-    private Long likeCount;
+    private Integer likeCount;
 
     public PostListResponseDto(Post post){
         this.postId = post.getId();
         this.writer = post.getUser().getName();
         this.title = post.getTitle();
-        this.likeCount = Long.valueOf(post.getLikeCount());
+        this.likeCount = post.getLikeCount();
 
 
     }
