@@ -27,7 +27,7 @@ public class ChildCommentController {
 
     // 대댓글 생성
     @PostMapping("/{comment_id}/childComments")
-    public ResponseEntity<?> createChildComment(@Valid ChildCommentRequestDto childCommentRequestDto,
+    public ResponseEntity<?> createChildComment(@Valid @RequestBody ChildCommentRequestDto childCommentRequestDto,
                                                 @PathVariable Long comment_id){
 
         List<ChildCommentResponseDto> responseDtoList = childCommentService
@@ -38,7 +38,7 @@ public class ChildCommentController {
 
     // 대댓글 수정
     @PutMapping("/{comment_id}/childComments/{childComment_id}")
-    public ResponseEntity<?> updateChildComment(@Valid ChildCommentRequestDto childCommentRequestDto,
+    public ResponseEntity<?> updateChildComment(@Valid @RequestBody ChildCommentRequestDto childCommentRequestDto,
                                                 @PathVariable Long comment_id, @PathVariable Long childComment_id){
 
         List<ChildCommentResponseDto> responseDtoList = childCommentService
