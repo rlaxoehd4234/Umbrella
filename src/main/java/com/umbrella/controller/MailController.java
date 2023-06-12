@@ -5,6 +5,7 @@ import com.umbrella.dto.email.EmailPostRequestDto;
 import com.umbrella.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,7 @@ public class MailController {
 
     private static final String SUBJECT = "[Umbrella] 인증을 위한 인증 코드 발급";
 
+    @CrossOrigin("*")
     @PostMapping("/send-email")
     public ResponseEntity sendEmail(@RequestBody EmailPostRequestDto emailPostRequestDto) {
         String authKey = emailService.sendAuthEmail(emailPostRequestDto, SUBJECT);
