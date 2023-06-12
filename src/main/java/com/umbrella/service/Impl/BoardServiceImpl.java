@@ -33,6 +33,7 @@ public class BoardServiceImpl implements BoardService {
     private final SecurityUtil securityUtil;
     private final WorkspaceUserRepository workspaceUserRepository;
     private final UserRepository userRepository;
+    private final PostImgServiceImpl postImgService;
 
     @Override
     public Long save(Long workspace_id, BoardSaveRequestDto requestDto) {
@@ -54,6 +55,7 @@ public class BoardServiceImpl implements BoardService {
         validateUser();
         Board board = validateBoard(id);
         boardRepository.delete(board);
+        postImgService.postImgDeletedByBoardId(id);
         return id;
     }
 
