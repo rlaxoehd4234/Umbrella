@@ -4,8 +4,10 @@ import com.umbrella.domain.WorkSpace.WorkSpace;
 import com.umbrella.service.WorkSpaceService;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class BoardSaveRequestDto {
     private String title;
     @Builder
