@@ -13,6 +13,7 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class Board {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "board_id")
     private Long id;
 
