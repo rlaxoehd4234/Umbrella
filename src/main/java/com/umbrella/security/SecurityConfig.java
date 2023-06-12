@@ -8,7 +8,6 @@ import com.umbrella.security.login.filter.JwtAuthenticationProcessingFilter;
 import com.umbrella.security.login.filter.JwtExceptionFilter;
 import com.umbrella.security.login.handler.*;
 import com.umbrella.security.utils.RoleUtil;
-import com.umbrella.security.utils.SecurityUtil;
 import com.umbrella.service.CustomOAuth2UserService;
 import com.umbrella.service.JwtService;
 import com.umbrella.service.LoginService;
@@ -16,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -26,7 +24,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -89,10 +86,10 @@ public class SecurityConfig {
                 .deleteCookies("refresh")
                 .logoutSuccessHandler(logoutSuccessHandler())
         .and()
-                .cors().configurationSource(corsConfigurationSource())
-        .and()
-                .exceptionHandling()
-                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.FORBIDDEN));
+                .cors().configurationSource(corsConfigurationSource());
+//        .and()
+//                .exceptionHandling()
+//                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.FORBIDDEN));
 
         return http.build();
     }
