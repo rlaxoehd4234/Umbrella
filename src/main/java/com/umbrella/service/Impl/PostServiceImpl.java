@@ -29,10 +29,11 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final BoardRepository boardRepository;
-    private final CommentRepository commentRepository;
     private final PostHeartRepository postHeartRepository;
     private final SecurityUtil securityUtil;
 
+    // postImgService add
+    private final PostImgServiceImpl postImgService;
 
 
     // 저장 메서드
@@ -49,7 +50,11 @@ public class PostServiceImpl implements PostService {
                 .board(board)
                 .build();
 
-        return postRepository.save(post).getId();
+        Post savedPost = postRepository.save(post);
+
+        postImgService.createPostImg(requestDto, post);
+
+        return savedPost.getId();
     }
 
 
@@ -59,6 +64,8 @@ public class PostServiceImpl implements PostService {
         Post post = validatePost(post_id);
         validateUser(post.getUser());
         post.update(requestDto.getTitle(), requestDto.getContent());
+
+        postImgService.updatePostImg(post, requestDto);
 
         return post_id;
     }
@@ -70,6 +77,7 @@ public class PostServiceImpl implements PostService {
         validateUser(post.getUser());
         postRepository.delete(post);
         postHeartRepository.delete(postHeartRepository.findByUserAndPost(post.getUser(),post));
+        postImgService.postImgDeletedByPostId(post_id);
         return post_id;
     }
 
