@@ -27,7 +27,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.umbrella.domain.exception.UserExceptionType.*;
 import static com.umbrella.domain.exception.WorkspaceExceptionType.ALREADY_ENTERED_WORKSPACE_ERROR;
@@ -108,6 +110,7 @@ public class UserServiceImpl implements UserService {
         String password = request.getPassword();
 
         UserContext theUser = (UserContext) loginService.loadUserByUsername(email);
+
         if (!passwordEncoder.matches(password, theUser.getPassword())) {
             throw new UserException(UNMATCHED_LOGIN_INFO_ERROR);
         }
