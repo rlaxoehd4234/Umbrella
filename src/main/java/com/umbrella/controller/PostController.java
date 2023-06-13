@@ -28,7 +28,7 @@ public class PostController {
     }
 
     @PutMapping("/{board_id}/{post_id}")
-    public ResponseEntity<Long> update(@PathVariable Long board_id,@PathVariable Long post_id, @Validated PostUpdateRequestDto requestDto){
+    public ResponseEntity<Long> update(@PathVariable Long board_id,@PathVariable Long post_id, @Validated @RequestBody PostUpdateRequestDto requestDto){
         return ResponseEntity.ok().body(postService.update(board_id, post_id, requestDto));
     }
     @GetMapping("/{board_id}/{post_id}")
