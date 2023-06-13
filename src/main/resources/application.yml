@@ -8,9 +8,9 @@ spring:
     include: jwt, oauth2
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://umbrella.cecjobmufkiw.ap-northeast-2.rds.amazonaws.com:3306/umbrella?useUnicode=true&serverTimezone=Asia/Seoul
-    :username: admin
-    password: rlaxoehd12
+    url: jdbc:mysql://localhost:3306/umbrella
+    :username: root
+    password: 1234
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
@@ -23,10 +23,10 @@ spring:
 cloud:
   aws:
     credentials:
-      access-key: AKIA6FR5CNJTGZNV32VE
-      secret-key: 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
+      access-key: AKIAQCLSPDRMTTKJNCJJ
+      secret-key: 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
     s3:
-      bucket: umbrellabackend
+      bucket: saulsol-bucket
     region:
       static: ap-northeast-2
     stack:

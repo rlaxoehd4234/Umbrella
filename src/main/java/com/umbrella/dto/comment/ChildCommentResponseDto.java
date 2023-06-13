@@ -10,5 +10,6 @@ public class ChildCommentResponseDto {
 
     private String content;
     private String nickName;
+    private Long childCommentId;
 
 }
