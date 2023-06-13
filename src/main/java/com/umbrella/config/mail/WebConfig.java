@@ -13,9 +13,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins(
-                        "http://ec2-3-39-93-217.ap-northeast-2.compute.amazonaws.com:8800",
-                        "http://localhost:3000",
-                        "https://our-umbrella.vercel.app/"
+                        "*"
                 )
                 .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                 .allowedHeaders(
