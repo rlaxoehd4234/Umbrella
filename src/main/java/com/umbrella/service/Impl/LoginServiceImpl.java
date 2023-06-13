@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import static com.umbrella.domain.exception.UserExceptionType.UNMATCHED_LOGIN_INFO_ERROR;
 
 @Service
