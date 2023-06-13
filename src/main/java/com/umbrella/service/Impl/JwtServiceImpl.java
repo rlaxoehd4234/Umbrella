@@ -128,8 +128,8 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public void setRefreshTokenInCookie(HttpServletResponse response, String refreshToken) {
         ResponseCookie cookie = ResponseCookie.from(COOKIE_REFRESH_TOKEN_KEY, refreshToken)
-                .httpOnly(true)
-                .secure(true)
+                .httpOnly(false)
+                .secure(false)
                 .sameSite("None")
                 .maxAge(refreshTokenExpiration)
                 .path("/")
