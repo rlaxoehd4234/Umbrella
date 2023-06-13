@@ -142,7 +142,11 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedOriginPatterns(Arrays.asList(
+                "http://ec2-3-39-93-217.ap-northeast-2.compute.amazonaws.com:8800",
+                "http://localhost:3000",
+                "https://our-umbrella.vercel.app/"
+        ));
         configuration.setAllowedHeaders(Arrays.asList(
                 "Accept",
                 "Accept-Encoding",
