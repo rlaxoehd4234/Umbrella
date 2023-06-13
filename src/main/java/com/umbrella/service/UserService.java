@@ -6,9 +6,13 @@ import com.umbrella.dto.workspace.WorkspaceRequestCreateDto;
 import com.umbrella.dto.workspace.WorkspaceRequestEnterAndExitDto;
 import com.umbrella.dto.workspace.WorkspaceResponseDto;
 
+import javax.servlet.http.HttpServletResponse;
+
 public interface UserService {
 
     User signUp(UserRequestSignUpDto userSignUpDto);
+
+    UserResponseLoginDto login(UserRequestLoginDto userLoginDto, HttpServletResponse response);
 
     UserResponseUpdateDto update(UserRequestUpdateDto userUpdateDto);
 

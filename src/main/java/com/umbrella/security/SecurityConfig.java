@@ -3,7 +3,6 @@ package com.umbrella.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.umbrella.domain.User.UserRepository;
 import com.umbrella.security.login.cookie.CookieOAuth2AuthorizationRequestRepository;
-import com.umbrella.security.login.filter.JsonEmailPasswordAuthenticationFilter;
 import com.umbrella.security.login.filter.JwtAuthenticationProcessingFilter;
 import com.umbrella.security.login.filter.JwtExceptionFilter;
 import com.umbrella.security.login.handler.*;
@@ -66,8 +65,8 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .anyRequest().authenticated()
         .and()
-                .addFilterAfter(jsonEmailPasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(jwtAuthenticationProcessingFilter(), JsonEmailPasswordAuthenticationFilter.class)
+//                .addFilterAfter(jsonEmailPasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationProcessingFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtExceptionFilter(), JwtAuthenticationProcessingFilter.class)
                 .oauth2Login()
                     .authorizationEndpoint()
@@ -111,30 +110,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public LoginSuccessJWTProvideHandler loginSuccessJWTProvideHandler(){
-        return new LoginSuccessJWTProvideHandler(jwtService, userRepository, objectMapper);
-    }
-
-    @Bean
-    public LoginFailureHandler loginFailureHandler(){
-        return new LoginFailureHandler();
-    }
-
-    @Bean
     public LogoutSuccessHandler logoutSuccessHandler() {
         return new LogoutSuccessHandler(objectMapper);
-    }
-
-    @Bean
-    public JsonEmailPasswordAuthenticationFilter jsonEmailPasswordAuthenticationFilter() {
-        JsonEmailPasswordAuthenticationFilter jsonEmailPasswordAuthenticationFilter =
-                new JsonEmailPasswordAuthenticationFilter(objectMapper);
-
-        jsonEmailPasswordAuthenticationFilter.setAuthenticationManager(authenticationManager());
-        jsonEmailPasswordAuthenticationFilter.setAuthenticationSuccessHandler(loginSuccessJWTProvideHandler());
-        jsonEmailPasswordAuthenticationFilter.setAuthenticationFailureHandler(loginFailureHandler());
-
-        return jsonEmailPasswordAuthenticationFilter;
     }
 
     @Bean

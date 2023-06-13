@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RestController
@@ -36,6 +37,11 @@ public class UserController {
         Assert.hasText(userSignUpDto.getName(), "mName must not be blank");
         Assert.hasText(userSignUpDto.getBirthDate(), "birthDate must not be null");
         Assert.hasText(userSignUpDto.getGender().getGenderValue(), "gender must not be blank");
+    }
+
+    @PostMapping(value = "/login")
+    public ResponseEntity<UserResponseLoginDto> login(@Valid @RequestBody UserRequestLoginDto request, HttpServletResponse response) {
+        return ResponseEntity.ok().body(userService.login(request, response));
     }
 
     @PutMapping(value = "/user/update/info")
