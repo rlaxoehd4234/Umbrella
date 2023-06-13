@@ -186,12 +186,12 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public void setAccessTokenHeader(HttpServletResponse response, String accessToken) {
-        response.setHeader(accessHeader, accessToken);
+        response.addHeader(accessHeader, accessToken);
     }
 
     @Override
     public void setRefreshTokenHeader(HttpServletResponse response, String refreshToken) {
-        response.setHeader(refreshHeader, refreshToken);
+        response.addHeader(refreshHeader, refreshToken);
     }
 
     @Override
