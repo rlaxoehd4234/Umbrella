@@ -23,10 +23,10 @@ spring:
 cloud:
   aws:
     credentials:
-      access-key: AKIAQCLSPDRMTTKJNCJJ
-      secret-key: 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
+      access-key: AKIA6FR5CNJTGDZM6YTC
+      secret-key: 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
     s3:
-      bucket: saulsol-bucket
+      bucket: finalumbrella
     region:
       static: ap-northeast-2
     stack:

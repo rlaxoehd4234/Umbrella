@@ -26,10 +26,10 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Transactional
 public class PostServiceImpl implements PostService {
+
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final BoardRepository boardRepository;
-    private final PostHeartRepository postHeartRepository;
     private final SecurityUtil securityUtil;
 
     // postImgService add
@@ -76,9 +76,9 @@ public class PostServiceImpl implements PostService {
         Post post = validatePost(post_id);
         validateBoard(board_id);
         validateUser(post.getUser());
+        postImgService.postImgDeletedByPostId(post_id); // 위치변경
         postRepository.delete(post);
-        postHeartRepository.delete(postHeartRepository.findByUserAndPost(post.getUser(),post));
-        postImgService.postImgDeletedByPostId(post_id);
+
         return post_id;
     }
 
