@@ -140,11 +140,8 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-//        configuration.addAllowedOriginPattern("*");
-//        configuration.addAllowedHeader("*");
-//        configuration.addAllowedMethod("*");
-//        configuration.addExposedHeader("*");
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","https://our-umbrella.vercel.app/"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","https://our-umbrella.vercel.app/",
+                "http://ec2-3-39-93-217.ap-northeast-2.compute.amazonaws.com:8800"));
         configuration.setAllowedHeaders(Arrays.asList(
                 "Accept",
                 "Accept-Encoding",
@@ -160,18 +157,7 @@ public class SecurityConfig {
                 "Authorization"
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList(
-                "Accept",
-                "Accept-Encoding",
-                "Accept-Language",
-                "Access-Control-Request-Headers",
-                "Access-Control-Request-Method",
-                "Connection",
-                "Host",
-                "Origin",
-                "Referer",
-                "Sec-Fetch-Mode",
-                "User-Agent",
+        configuration.setExposedHeaders(Arrays.asList(
                 "Authorization"
         ));
         configuration.setAllowCredentials(true);
