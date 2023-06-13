@@ -28,7 +28,9 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
 
@@ -65,9 +67,11 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
                 .authorizeRequests()
+                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .anyRequest().authenticated()
         .and()
-//                .addFilterAfter(jsonEmailPasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .cors().configurationSource(corsConfigurationSource())
+        .and()
                 .addFilterBefore(jwtAuthenticationProcessingFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtExceptionFilter(), JwtAuthenticationProcessingFilter.class)
                 .oauth2Login()
@@ -88,8 +92,6 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/login")
                 .deleteCookies("refresh")
                 .logoutSuccessHandler(logoutSuccessHandler())
-        .and()
-                .cors().configurationSource(corsConfigurationSource())
         .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.FORBIDDEN));
