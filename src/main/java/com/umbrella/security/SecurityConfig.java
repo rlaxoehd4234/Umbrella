@@ -30,6 +30,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
+
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
@@ -138,10 +140,40 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.addAllowedOriginPattern("*");
-        configuration.addAllowedHeader("*");
-        configuration.addAllowedMethod("*");
-        configuration.addExposedHeader("*");
+//        configuration.addAllowedOriginPattern("*");
+//        configuration.addAllowedHeader("*");
+//        configuration.addAllowedMethod("*");
+//        configuration.addExposedHeader("*");
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","https://our-umbrella.vercel.app/"));
+        configuration.setAllowedHeaders(Arrays.asList(
+                "Accept",
+                "Accept-Encoding",
+                "Accept-Language",
+                "Access-Control-Request-Headers",
+                "Access-Control-Request-Method",
+                "Connection",
+                "Host",
+                "Origin",
+                "Referer",
+                "Sec-Fetch-Mode",
+                "User-Agent",
+                "Authorization"
+        ));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList(
+                "Accept",
+                "Accept-Encoding",
+                "Accept-Language",
+                "Access-Control-Request-Headers",
+                "Access-Control-Request-Method",
+                "Connection",
+                "Host",
+                "Origin",
+                "Referer",
+                "Sec-Fetch-Mode",
+                "User-Agent",
+                "Authorization"
+        ));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
