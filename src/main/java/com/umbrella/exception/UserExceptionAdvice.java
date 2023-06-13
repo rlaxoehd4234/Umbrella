@@ -33,7 +33,7 @@ public class UserExceptionAdvice {
     private static final String WORKSPACE_DESCRIPTION_BLANK_ERROR_MESSAGE = "workspace_description must not be blank";
     private static final String ALREADY_ENTERED_WORKSPACE_ERROR_MESSAGE = "이미 입장한 워크스페이스 입니다.";
 
-    @ExceptionHandler(UserException.class)
+    @ExceptionHandler(BaseException.class)
     public ResponseEntity MainExceptionHandler(UserException exception){
 
         return new ResponseEntity(new ExceptionDto(exception.getBaseExceptionType().getErrorCode(),
@@ -41,39 +41,6 @@ public class UserExceptionAdvice {
                 exception.getBaseExceptionType().getHttpStatus());
     }
 
-    @ExceptionHandler(PostException.class)
-    public ResponseEntity MainExceptionHandler(PostException exception){
-
-        return new ResponseEntity(new ExceptionDto(exception.getBaseExceptionType().getErrorCode(),
-                exception.getBaseExceptionType().getErrorMessage()),
-                exception.getBaseExceptionType().getHttpStatus());
-    }
-
-
-    @ExceptionHandler(CommentException.class)
-    public ResponseEntity MainExceptionHandler(CommentException exception){
-
-        return new ResponseEntity(new ExceptionDto(exception.getBaseExceptionType().getErrorCode(),
-                exception.getBaseExceptionType().getErrorMessage()),
-                exception.getBaseExceptionType().getHttpStatus());
-    }
-
-
-    @ExceptionHandler(WorkspaceException.class)
-    public ResponseEntity WorkspaceExceptionHandler(WorkspaceException exception){
-
-        return new ResponseEntity(new ExceptionDto(exception.getBaseExceptionType().getErrorCode(),
-                exception.getBaseExceptionType().getErrorMessage()),
-                exception.getBaseExceptionType().getHttpStatus());
-    }
-
-    @ExceptionHandler(WhenToMeetException.class)
-    public ResponseEntity When2MeetExceptionHandler(WhenToMeetException exception){
-
-        return new ResponseEntity(new ExceptionDto(exception.getBaseExceptionType().getErrorCode(),
-                exception.getBaseExceptionType().getErrorMessage()),
-                exception.getBaseExceptionType().getHttpStatus());
-    }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity IllegalArgumentHandler(IllegalArgumentException exception) {
