@@ -34,7 +34,7 @@ public class UserExceptionAdvice {
     private static final String ALREADY_ENTERED_WORKSPACE_ERROR_MESSAGE = "이미 입장한 워크스페이스 입니다.";
 
     @ExceptionHandler(BaseException.class)
-    public ResponseEntity MainExceptionHandler(UserException exception){
+    public ResponseEntity MainExceptionHandler(BaseException exception){
 
         return new ResponseEntity(new ExceptionDto(exception.getBaseExceptionType().getErrorCode(),
                 exception.getBaseExceptionType().getErrorMessage()),

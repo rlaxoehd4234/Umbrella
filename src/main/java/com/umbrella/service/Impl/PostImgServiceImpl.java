@@ -80,7 +80,7 @@ public class PostImgServiceImpl {
     // 2. for문 돌아가면서 AwsS3에 삭제 요청 날리기
     // 3. DB에 삭제 쿼리 날리기
     public void postImgDeletedByPostId(Long postId){
-        List<PostImg> postImgList = postImgRepository.findAllByPost_Id(postId);
+        List<PostImg> postImgList = postImgRepository.findAllByPostId(postId);
 
         for(PostImg postImg : postImgList){
             awsS3UploadService.deleteFile(postImg.getImgName());
