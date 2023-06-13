@@ -31,6 +31,9 @@ public enum UserExceptionType implements BaseExceptionType {
     /* Json Processing Filter */
     UNSUPPORTED_HTTP_METHOD(612, HttpStatus.UNAUTHORIZED, "올바르지 않은 요청 형식입니다."),
 
+    /* Login */
+    UNMATCHED_LOGIN_INFO_ERROR(613, HttpStatus.BAD_REQUEST, "로그인에 실패하였습니다. 이메일 주소 혹은 비밀번호를 다시 확인해주세요."),
+
     /* OAuth2 User Info Factory */
     UNSUPPORTED_PLATFORM(620, HttpStatus.BAD_REQUEST, "소셜 로그인을 지원하지 않는 플랫폼입니다."),
 

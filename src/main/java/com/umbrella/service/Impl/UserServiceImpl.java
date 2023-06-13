@@ -12,7 +12,10 @@ import com.umbrella.domain.User.UserRepository;
 import com.umbrella.dto.workspace.WorkspaceRequestCreateDto;
 import com.umbrella.dto.workspace.WorkspaceRequestEnterAndExitDto;
 import com.umbrella.dto.workspace.WorkspaceResponseDto;
+import com.umbrella.security.userDetails.UserContext;
 import com.umbrella.security.utils.SecurityUtil;
+import com.umbrella.service.JwtService;
+import com.umbrella.service.LoginService;
 import com.umbrella.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -22,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletResponse;
 
 import java.util.Optional;
 
@@ -42,6 +46,10 @@ public class UserServiceImpl implements UserService {
     private final WorkspaceUserRepository workspaceUserRepository;
 
     private final WorkSpaceRepository workSpaceRepository;
+
+    private final LoginService loginService;
+
+    private final JwtService jwtService;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -92,6 +100,39 @@ public class UserServiceImpl implements UserService {
         });
 
         return userRepository.save(signUpUser);
+    }
+
+    @Override
+    public UserResponseLoginDto login(UserRequestLoginDto request, HttpServletResponse response) {
+        String email = request.getEmail();
+        String password = request.getPassword();
+
+        UserContext theUser = (UserContext) loginService.loadUserByUsername(email);
+        if (!passwordEncoder.matches(password, theUser.getPassword())) {
+            throw new UserException(UNMATCHED_LOGIN_INFO_ERROR);
+        }
+
+        String accessToken = jwtService.createAccessToken(email, theUser.getNickName());
+        String refreshToken = jwtService.createRefreshToken(email);
+
+        userRepository.findByEmail(email).ifPresent(user -> user.updateRefreshToken(refreshToken));
+
+        jwtService.setRefreshTokenInCookie(response, refreshToken);
+        jwtService.sendAccessToken(response, accessToken);
+
+        logSuccess(email, accessToken, refreshToken);
+
+        return UserResponseLoginDto.builder()
+                                        .userId(theUser.getId())
+                                        .nickName(theUser.getNickName())
+                                        .email(email)
+                                        .build();
+    }
+
+    private void logSuccess(String email, String accessToken, String refreshToken) {
+        log.info( "로그인에 성공합니다. email: {}", email);
+        log.info( "AccessToken 을 발급합니다. AccessToken: {}", accessToken);
+        log.info( "RefreshToken 을 발급합니다. RefreshToken: {}", refreshToken);
     }
 
     @Override

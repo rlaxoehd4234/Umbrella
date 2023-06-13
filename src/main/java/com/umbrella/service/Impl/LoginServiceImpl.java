@@ -2,6 +2,7 @@ package com.umbrella.service.Impl;
 
 import com.umbrella.domain.User.User;
 import com.umbrella.domain.User.UserRepository;
+import com.umbrella.domain.exception.UserException;
 import com.umbrella.security.userDetails.UserContext;
 import com.umbrella.security.utils.RoleUtil;
 import com.umbrella.service.LoginService;
@@ -9,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import static com.umbrella.domain.exception.UserExceptionType.UNMATCHED_LOGIN_INFO_ERROR;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +25,7 @@ public class LoginServiceImpl implements LoginService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
                         .orElseThrow(
-                            () -> new UsernameNotFoundException("해당 이메일을 가진 계정이 존재하지 않습니다.")
+                            () -> new UserException(UNMATCHED_LOGIN_INFO_ERROR)
                         );
         return new UserContext(
                 user.getEmail(),
