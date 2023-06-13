@@ -18,7 +18,6 @@ public class MailController {
 
     private static final String SUBJECT = "[Umbrella] 인증을 위한 인증 코드 발급";
 
-    @CrossOrigin("*")
     @PostMapping("/send-email")
     public ResponseEntity sendEmail(@RequestBody EmailPostRequestDto emailPostRequestDto) {
         String authKey = emailService.sendAuthEmail(emailPostRequestDto, SUBJECT);
