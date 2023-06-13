@@ -46,6 +46,7 @@ public class ChildCommentServiceImpl {
                     .builder()
                     .nickName(childComment.getUser().getNickName())
                     .content(childComment.getContent())
+                    .childCommentId(childComment.getId())
                     .build();
 
             responseDtoList.add(childCommentResponseDto);
