@@ -1,5 +1,6 @@
 package com.umbrella.dto.comment;
 
+import com.umbrella.domain.Comment.Comment;
 import lombok.*;
 
 
@@ -9,12 +10,13 @@ public class CommentResponseDto {
 
     private Long commentId;
     private String content;
-    private String nickname; // userName -> 작성자
+    private String nickName; // userName -> 작성자
 
-    @Builder
-    public CommentResponseDto(Long commentId, String content, String nickname) {
-        this.commentId = commentId;
-        this.content = content;
-        this.nickname = nickname;
+
+
+    public CommentResponseDto(Comment comment) {
+        this.commentId = comment.getId();
+        this.content = comment.getContent();
+        this.nickName = comment.getUser().getNickName();
     }
 }
