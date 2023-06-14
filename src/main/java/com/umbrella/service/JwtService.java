@@ -17,7 +17,7 @@ public interface JwtService {
 
     void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) throws IOException;
 
-    void setRefreshTokenInCookie(HttpServletResponse response, String refreshToken);
+//    void setRefreshTokenInCookie(HttpServletResponse response, String refreshToken);
 
     void sendAccessToken(HttpServletResponse response, String accessToken);
 

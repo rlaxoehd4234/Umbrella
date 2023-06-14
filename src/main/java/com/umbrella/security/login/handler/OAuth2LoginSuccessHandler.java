@@ -99,7 +99,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         String refreshToken = jwtService.createRefreshToken(email);
         String accessToken = jwtService.createAccessToken(email, nickName);
 
-        jwtService.setRefreshTokenInCookie(response, refreshToken);
+//        jwtService.setRefreshTokenInCookie(response, refreshToken);
         jwtService.sendAccessToken(response, accessToken);
 
         User user = userRepository.findByEmail(email)

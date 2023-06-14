@@ -90,7 +90,7 @@ public class SecurityConfig {
                 .logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
-                .deleteCookies("refresh")
+//                .deleteCookies("refresh")
                 .logoutSuccessHandler(logoutSuccessHandler())
         .and()
                 .exceptionHandling()

@@ -116,14 +116,14 @@ public class UserServiceImpl implements UserService {
         }
 
         String accessToken = jwtService.createAccessToken(email, theUser.getNickName());
-        String refreshToken = jwtService.createRefreshToken(email);
+//        String refreshToken = jwtService.createRefreshToken(email);
 
-        userRepository.findByEmail(email).ifPresent(user -> user.updateRefreshToken(refreshToken));
+//        userRepository.findByEmail(email).ifPresent(user -> user.updateRefreshToken(refreshToken));
 
-        jwtService.setRefreshTokenInCookie(response, refreshToken);
+//        jwtService.setRefreshTokenInCookie(response, refreshToken);
         jwtService.sendAccessToken(response, accessToken);
 
-        logSuccess(email, accessToken, refreshToken);
+        logSuccess(email, accessToken);
 
         return UserResponseLoginDto.builder()
                                         .userId(theUser.getId())
@@ -132,10 +132,10 @@ public class UserServiceImpl implements UserService {
                                         .build();
     }
 
-    private void logSuccess(String email, String accessToken, String refreshToken) {
+    private void logSuccess(String email, String accessToken) {
         log.info( "로그인에 성공합니다. email: {}", email);
         log.info( "AccessToken 을 발급합니다. AccessToken: {}", accessToken);
-        log.info( "RefreshToken 을 발급합니다. RefreshToken: {}", refreshToken);
+//        log.info( "RefreshToken 을 발급합니다. RefreshToken: {}", refreshToken);
     }
 
     @Override
