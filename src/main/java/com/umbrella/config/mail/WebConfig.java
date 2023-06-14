@@ -13,29 +13,16 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOriginPatterns(
-                        "http://ec2-3-39-93-217.ap-northeast-2.compute.amazonaws.com:8800",
-                        "http://localhost:3000",
-                        "https://our-umbrella.vercel.app/"
+                        "*"
                 )
-                .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+                .allowedMethods("*")
                 .allowedHeaders(
-                        "Accept",
-                        "Accept-Encoding",
-                        "Accept-Language",
-                        "Access-Control-Request-Headers",
-                        "Access-Control-Request-Method",
-                        "Connection",
-                        "Host",
-                        "Origin",
-                        "Referer",
-                        "Sec-Fetch-Mode",
-                        "User-Agent",
-                        "Authorization"
+                        "*"
                 )
                 .exposedHeaders(
-                        "Authorization"
+                        "*"
                 )
-                .allowCredentials(true)
+                .allowCredentials(false)
                 .maxAge(3000);
     }
 }
