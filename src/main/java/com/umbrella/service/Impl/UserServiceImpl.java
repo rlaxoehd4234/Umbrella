@@ -1,5 +1,7 @@
 package com.umbrella.service.Impl;
 
+import com.umbrella.domain.Board.Board;
+import com.umbrella.domain.Board.BoardRepository;
 import com.umbrella.domain.User.User;
 import com.umbrella.domain.WorkSpace.WorkSpace;
 import com.umbrella.domain.WorkSpace.WorkSpaceRepository;
@@ -40,6 +42,7 @@ import static com.umbrella.domain.exception.WorkspaceExceptionType.NOT_FOUND_WOR
 @Transactional
 @Log4j2
 public class UserServiceImpl implements UserService {
+    private final BoardRepository boardRepository;
 
     private final EntityManager entityManager;
 
@@ -203,10 +206,14 @@ public class UserServiceImpl implements UserService {
         User theUser = getLoginUserByEmail();
         WorkSpace theWorkspace = workspaceDtoToEntity(workspaceCreateDto);
 
+        Board board = Board.builder().
+                        title("공지 사항").
+                        workSpace(theWorkspace).build();
+
         WorkspaceUser theWorkspaceUser = new WorkspaceUser();
 
         entityManager.persist(theWorkspace);
-
+        boardRepository.save(board);
         theUser.enterWorkspaceUser(theWorkspaceUser);
         theWorkspaceUser.takeWorkspace(theWorkspace);
         workspaceUserRepository.save(theWorkspaceUser);

@@ -31,7 +31,7 @@ public class PostController {
     public ResponseEntity<Long> update(@PathVariable Long board_id,@PathVariable Long post_id, @Validated @RequestBody PostUpdateRequestDto requestDto){
         return ResponseEntity.ok().body(postService.update(board_id, post_id, requestDto));
     }
-    @GetMapping("/{board_id}/{post_id}")
+    @GetMapping("/{board_id}/{post_id}/findOne")
     public ResponseEntity<PostResponseDto> findById(@PathVariable Long board_id, @PathVariable Long post_id){
         return ResponseEntity.ok().body(postService.findById(board_id,post_id));
     }
