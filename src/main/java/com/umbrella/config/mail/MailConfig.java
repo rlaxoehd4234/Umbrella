@@ -11,7 +11,7 @@ import java.util.Properties;
 public class MailConfig {
 
     private static final String HOST = "smtp.gmail.com";
-    private static final int PORT  = 587;
+    private static final int PORT  = 465;
     private static final String EMAIL_FOR_SEND = "umbrella.on.your.hand@gmail.com";
     private static final String APP_PASSWORD_FOR_SMTP = "iudfdxwjtxmuhwpt";
     private static final String TIMEOUT = "5000";
@@ -35,13 +35,12 @@ public class MailConfig {
 
         properties.setProperty("mail.transport.protocol", "smtp");
         properties.setProperty("mail.smtp.auth", "true");
-        properties.setProperty("mail.smtp.starttls.enable", "true");
         properties.setProperty("mail.debug", "true");
         properties.setProperty("mail.smtp.ssl.trust",HOST);
         properties.setProperty("mail.smtp.connection-timeout", TIMEOUT);
         properties.setProperty("mail.smtp.timeout", TIMEOUT);
         properties.setProperty("mail.smtp.write-timeout", TIMEOUT);
-//        properties.setProperty("mail.smtp.ssl.enable","true");
+        properties.setProperty("mail.smtp.ssl.enable","true");
 
         return properties;
     }
