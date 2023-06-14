@@ -217,11 +217,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public WorkspaceResponseDto enterWorkspace(WorkspaceRequestEnterAndExitDto workspaceRequestEnterDto) {
         User theUser = getLoginUserByEmail();
-        if (theUser.getWorkspaceUsers().stream().anyMatch( workspaceUser ->
-                workspaceUser.getWorkspace().getId() == workspaceRequestEnterDto.getId() &&
-                workspaceUser.getWorkspace().getTitle().equals(workspaceRequestEnterDto.getTitle()))) {
-            throw new WorkspaceException(ALREADY_ENTERED_WORKSPACE_ERROR);
-        }
+//        if (theUser.getWorkspaceUsers().stream().anyMatch( workspaceUser ->
+//                workspaceUser.getWorkspace().getId() == workspaceRequestEnterDto.getId() &&
+//                workspaceUser.getWorkspace().getTitle().equals(workspaceRequestEnterDto.getTitle()))) {
+//            throw new WorkspaceException(ALREADY_ENTERED_WORKSPACE_ERROR);
+//        }
         Optional<WorkSpace> existWorkspace = workSpaceRepository
                 .findByIdAndTitle(workspaceRequestEnterDto.getId(), workspaceRequestEnterDto.getTitle());
         if (existWorkspace.isEmpty()) {
