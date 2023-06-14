@@ -79,8 +79,9 @@ public class WorkSpaceServiceImpl implements WorkSpaceService {
     public void validateWorkSpaceValidUser()  {
         User user = userRepository.findById(securityUtil.getLoginUserId()).orElseThrow(() -> new UserException(UserExceptionType.NOT_FOUND_ERROR));
 
-        if(workspaceUserRepository.findByWorkspaceUser(user).isEmpty()){
-            throw new UserException(UserExceptionType.UN_AUTHORIZE_ERROR);
-        }
+        // TODO: 이거 이 상태로 두면 유저 처음 가입했을 때, 소속된 Workspace 가 존재하지 않아서 권한 없음 에러뜨니까 수정 부탁드립니다. -승빈
+//        if(workspaceUserRepository.findByWorkspaceUser(user).isEmpty()){
+//            throw new UserException(UserExceptionType.UN_AUTHORIZE_ERROR);
+//        }
     }
 }

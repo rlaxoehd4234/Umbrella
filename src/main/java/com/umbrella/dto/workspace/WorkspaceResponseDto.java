@@ -1,7 +1,5 @@
 package com.umbrella.dto.workspace;
 
-import com.umbrella.domain.User.User;
-import com.umbrella.domain.WhenToMeet.Event;
 import com.umbrella.domain.WorkSpace.WorkSpace;
 import com.umbrella.dto.board.BoardResponseDto;
 import com.umbrella.dto.user.UserInWorkspaceDTO;
@@ -21,7 +19,7 @@ public class WorkspaceResponseDto {
     private List<BoardResponseDto> boards;
     private List<EventResponseDto> events;
 
-    public WorkspaceResponseDto(WorkSpace workSpace){
+    public WorkspaceResponseDto(WorkSpace workSpace) {
         this.title = workSpace.getTitle();
         this.description = workSpace.getDescription();
         this.userListInWorkspace = workSpace.getWorkspaceUsers().stream().map(user -> new UserInWorkspaceDTO(user.getWorkspaceUser())).collect(Collectors.toList());
