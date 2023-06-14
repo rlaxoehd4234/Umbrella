@@ -44,10 +44,10 @@ public class CommentController {
     }
 
     // 댓글 삭제
-    @DeleteMapping("/{post_id}/comments/delete")
+    @DeleteMapping("/{post_id}/comments/{comment_id}")
     public ResponseEntity<?> deleteComment(@PathVariable Long post_id, @PageableDefault(size = 10) Pageable pageable,
-                                           @Valid @RequestBody CommentDeleteDto commentDeleteDto){
-       return ResponseEntity.ok().body(commentService.deleteComment(post_id, commentDeleteDto, pageable));
+                                           @PathVariable Long comment_id){
+       return ResponseEntity.ok().body(commentService.deleteComment(post_id, comment_id, pageable));
     }
 
 

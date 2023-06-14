@@ -77,14 +77,14 @@ public class CommentServiceImpl {
         return findAllComments(postId, pageable);
     }
 
-    public Page<CommentResponseDto> deleteComment(Long postId, CommentDeleteDto commentDeleteDto, Pageable pageable){
+    public Page<CommentResponseDto> deleteComment(Long postId, Long commentId, Pageable pageable){
 
         User findUser = userRepository.findById(securityUtil.getLoginUserId())
                 .orElseThrow(() -> new UserException(UserExceptionType.NOT_FOUND_ERROR));
 
         validateUser(findUser);
 
-        Comment comment = validateComment(commentDeleteDto.getCommentId());
+        Comment comment = validateComment(commentId);
         validateUser(comment.getUser()); // 유저 검증
 
         commentRepository.delete(comment);
