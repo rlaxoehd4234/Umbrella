@@ -57,9 +57,9 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
             return;
         }
 
-        String extractRefreshToken = jwtService.extractRefreshToken(request).orElseThrow(
-                () -> new JwtException(REFRESH_TOKEN_ERROR_M)
-        );
+//        String extractRefreshToken = jwtService.extractRefreshToken(request).orElseThrow(
+//                () -> new JwtException(REFRESH_TOKEN_ERROR_M)
+//        );
         String extractAccessToken = jwtService.extractAccessToken(request).orElseThrow(
                 () -> new JwtException(ACCESS_TOKEN_ERROR_M)
         );
@@ -67,13 +67,15 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         try {
             String email = jwtService.extractEmail(extractAccessToken).get();
             String nickName = jwtService.extractNickName(extractAccessToken).get();
+            checkAccessToken(response, extractAccessToken, email, nickName);
+            checkAndSaveAuthentication(email, nickName);
 
-            if (jwtService.isTokenValid(extractRefreshToken) == PASS) {
-                checkAccessToken(response, extractAccessToken, email, nickName);
-                checkAndSaveAuthentication(email, nickName);
-            } else {
-                throw new JwtException(REFRESH_TOKEN_ERROR_M);
-            }
+//            if (jwtService.isTokenValid(extractRefreshToken) == PASS) {
+//                checkAccessToken(response, extractAccessToken, email, nickName);
+//                checkAndSaveAuthentication(email, nickName);
+//            } else {
+//                throw new JwtException(REFRESH_TOKEN_ERROR_M);
+//            }
 
             doFilter(request, response, filterChain);
         } catch (NoSuchElementException e) {
