@@ -8,11 +8,12 @@ spring:
     include: jwt, oauth2
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url:
-    username:
+    url: jdbc:mysql://localhost:3306/umbrella
+    :username:
     password:
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
+
     hibernate:
       ddl-auto: create
     properties:

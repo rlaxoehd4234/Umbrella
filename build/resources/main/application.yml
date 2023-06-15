@@ -9,7 +9,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/umbrella
-    username: root
+    :username: root
     password: 1234
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
@@ -23,10 +23,10 @@ spring:
 cloud:
   aws:
     credentials:
-      access-key: AKIA6FR5CNJTMAR5URIQ
-      secret-key: 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
+      access-key: AKIA6FR5CNJTGZNV32VE
+      secret-key: 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
     s3:
-      bucket: finalumbrella
+      bucket: umbrellabackend
     region:
       static: ap-northeast-2
     stack:
