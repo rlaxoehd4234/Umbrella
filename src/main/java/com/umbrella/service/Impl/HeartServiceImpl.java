@@ -11,7 +11,6 @@ import com.umbrella.domain.exception.PostExceptionType;
 import com.umbrella.domain.exception.UserException;
 import com.umbrella.domain.exception.UserExceptionType;
 import com.umbrella.dto.Heart.HeartRequestDto;
-import com.umbrella.dto.Heart.HeartResponseDto;
 import com.umbrella.security.utils.SecurityUtil;
 import com.umbrella.service.HeartService;
 import lombok.RequiredArgsConstructor;
@@ -31,54 +30,53 @@ public class HeartServiceImpl implements HeartService {
     private final SecurityUtil securityUtil;
 
     @Override
-    public HeartResponseDto insert(HeartRequestDto requestDto) {
+    public void insert(HeartRequestDto requestDto) {
         User user = searchUser();
         Post post = searchPost(requestDto.getPostId());
-        HeartResponseDto responseDto = validateInsertUser(user,post);
+        validateInsertUser(user,post);
+
         PostHeart postHeart =
                 PostHeart.builder()
                 .user(user)
                 .post(post)
                 .build();
         post.addHeart();
+
         postHeartRepository.save(postHeart);
 
-        return responseDto;
+
 
     }
 
     @Override
-    public HeartResponseDto delete(HeartRequestDto requestDto) {
+    public void delete(HeartRequestDto requestDto) {
         User user = searchUser();
         Post post = searchPost(requestDto.getPostId());
-        HeartResponseDto responseDto = validateDeleteUser(user,post);
+        validateDeleteUser(user,post);
         PostHeart postHeart = postHeartRepository.findByUserAndPost(user,post);
         post.popHeart();
         postHeartRepository.delete(postHeart);
-        return responseDto;
+
     }
 
-    public HeartResponseDto validateInsertUser(User user, Post post){
+    public void validateInsertUser(User user, Post post){
         PostHeart postHeart = postHeartRepository.findByUserAndPost(user,post);
         if(!Objects.equals(user.getId(), securityUtil.getLoginUserId())){
             throw new UserException(UserExceptionType.UN_AUTHORIZE_ERROR);
         }
-        else if(postHeart == null){
-            return new HeartResponseDto(true);
+        if(postHeart == null){
+            throw new PostException(PostExceptionType.ALREADY_PUSH_ERROR);
         }
-        else throw new PostException(PostExceptionType.ALREADY_PUSH_ERROR);
     }
 
-    public HeartResponseDto validateDeleteUser(User user, Post post){
+    public void validateDeleteUser(User user, Post post){
         PostHeart postHeart = postHeartRepository.findByUserAndPost(user,post);
         if(!Objects.equals(user.getId(), securityUtil.getLoginUserId())){
             throw new UserException(UserExceptionType.UN_AUTHORIZE_ERROR);
         }
-        else if(postHeart == null){
+        if(postHeart != null){
             throw new PostException(PostExceptionType.NON_PUSH_ERROR);
         }
-
-        return new HeartResponseDto(false);
     }
 
 
