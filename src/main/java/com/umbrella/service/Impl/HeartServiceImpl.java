@@ -51,11 +51,11 @@ public class HeartServiceImpl implements HeartService {
     public HeartResponseDto delete(HeartRequestDto requestDto) {
         User user = searchUser();
         Post post = searchPost(requestDto.getPostId());
-        validateDeleteUser(user,post);
+        HeartResponseDto responseDto = validateDeleteUser(user,post);
         PostHeart postHeart = postHeartRepository.findByUserAndPost(user,post);
         post.popHeart();
         postHeartRepository.delete(postHeart);
-        return new HeartResponseDto(false);
+        return responseDto;
     }
 
     public HeartResponseDto validateInsertUser(User user, Post post){
@@ -74,10 +74,11 @@ public class HeartServiceImpl implements HeartService {
         if(!Objects.equals(user.getId(), securityUtil.getLoginUserId())){
             throw new UserException(UserExceptionType.UN_AUTHORIZE_ERROR);
         }
-        if(postHeart != null){
-            return new HeartResponseDto(false);
+        if(postHeart == null){
+            throw new PostException(PostExceptionType.NON_PUSH_ERROR);
         }
-        else throw new PostException(PostExceptionType.NON_PUSH_ERROR);
+
+        return new HeartResponseDto(false);
     }
 
 
