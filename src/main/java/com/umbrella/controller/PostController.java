@@ -27,7 +27,7 @@ public class PostController {
         return ResponseEntity.ok().body(postService.save(board_id,requestDto));
     }
 
-    @PutMapping("/{board_id}/{post_id}")
+    @PutMapping("/{board_id}/{post_id}/update")
     public ResponseEntity<Long> update(@PathVariable Long board_id,@PathVariable Long post_id, @Validated @RequestBody PostUpdateRequestDto requestDto){
         return ResponseEntity.ok().body(postService.update(board_id, post_id, requestDto));
     }
