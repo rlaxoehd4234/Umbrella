@@ -10,7 +10,7 @@ public class HeartResponseDto {
 
     private String status;
 
-    public enum likeStatus{
+    enum likeStatus{
         LIKE,UNLIKE;
     }
 

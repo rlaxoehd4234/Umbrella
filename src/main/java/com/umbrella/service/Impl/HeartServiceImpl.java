@@ -63,7 +63,7 @@ public class HeartServiceImpl implements HeartService {
         if(!Objects.equals(user.getId(), securityUtil.getLoginUserId())){
             throw new UserException(UserExceptionType.UN_AUTHORIZE_ERROR);
         }
-        if(postHeart == null){
+        else if(postHeart == null){
             return new HeartResponseDto(true);
         }
         else throw new PostException(PostExceptionType.ALREADY_PUSH_ERROR);
@@ -74,7 +74,7 @@ public class HeartServiceImpl implements HeartService {
         if(!Objects.equals(user.getId(), securityUtil.getLoginUserId())){
             throw new UserException(UserExceptionType.UN_AUTHORIZE_ERROR);
         }
-        if(postHeart == null){
+        else if(postHeart == null){
             throw new PostException(PostExceptionType.NON_PUSH_ERROR);
         }
 
