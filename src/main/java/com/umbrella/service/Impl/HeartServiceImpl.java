@@ -11,6 +11,7 @@ import com.umbrella.domain.exception.PostExceptionType;
 import com.umbrella.domain.exception.UserException;
 import com.umbrella.domain.exception.UserExceptionType;
 import com.umbrella.dto.Heart.HeartRequestDto;
+import com.umbrella.dto.Heart.HeartResponseDto;
 import com.umbrella.security.utils.SecurityUtil;
 import com.umbrella.service.HeartService;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class HeartServiceImpl implements HeartService {
     private final SecurityUtil securityUtil;
 
     @Override
-    public void insert(HeartRequestDto requestDto) {
+    public HeartResponseDto insert(HeartRequestDto requestDto) {
         User user = searchUser();
         Post post = searchPost(requestDto.getPostId());
         validateInsertUser(user,post);
@@ -42,16 +43,19 @@ public class HeartServiceImpl implements HeartService {
         post.addHeart();
         postHeartRepository.save(postHeart);
 
+        return new HeartResponseDto(true);
+
     }
 
     @Override
-    public void delete(HeartRequestDto requestDto) {
+    public HeartResponseDto delete(HeartRequestDto requestDto) {
         User user = searchUser();
         Post post = searchPost(requestDto.getPostId());
         validateDeleteUser(user,post);
         PostHeart postHeart = postHeartRepository.findByUserAndPost(user,post);
         post.popHeart();
         postHeartRepository.delete(postHeart);
+        return new HeartResponseDto(false);
     }
 
     public void validateInsertUser(User user, Post post){

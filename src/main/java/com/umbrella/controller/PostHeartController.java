@@ -1,6 +1,7 @@
 package com.umbrella.controller;
 
 import com.umbrella.dto.Heart.HeartRequestDto;
+import com.umbrella.dto.Heart.HeartResponseDto;
 import com.umbrella.service.HeartService;
 import com.umbrella.service.Impl.HeartServiceImpl;
 import lombok.Getter;
@@ -18,13 +19,13 @@ public class PostHeartController {
 
     private final HeartServiceImpl heartService;
     @PostMapping("/post/heart")
-    public ResponseEntity<?> insert(@RequestBody @Valid HeartRequestDto heartRequestDto){
+    public ResponseEntity<HeartResponseDto> insert(@RequestBody @Valid HeartRequestDto heartRequestDto){
         heartService.insert(heartRequestDto);
-        return ResponseEntity.ok().body("완료되었습니다.");
+        return ResponseEntity.ok().body(heartService.insert(heartRequestDto));
     }
     @DeleteMapping("/post/heart")
-    public ResponseEntity<?> delete(@RequestBody @Valid HeartRequestDto heartRequestDto){
+    public ResponseEntity<HeartResponseDto> delete(@RequestBody @Valid HeartRequestDto heartRequestDto){
         heartService.delete(heartRequestDto);
-        return ResponseEntity.ok().body("완료되었습니다.");
+        return ResponseEntity.ok().body(heartService.delete(heartRequestDto));
     }
 }
