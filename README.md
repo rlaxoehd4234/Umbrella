@@ -38,4 +38,10 @@
     - MySQL
 - 실시간 채팅
     - MongoDB
-    
+
+## ✈️ 배포 및 운영 
+- AWS EC2
+- AWS Route 53
+- AWS ALB
+- AWS CM
+- AWS API GATEWAY
