@@ -27,7 +27,7 @@ public class PostResponseDto {
         this.writer = post.getUser().getName();
         this.nickname = post.getUser().getNickName();
         this.content = post.getContent();
-        this.likeCount = getLikeCount();
+        this.likeCount = post.getLikeCount();
     }
 
 
