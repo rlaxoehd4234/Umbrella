@@ -9,11 +9,10 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/umbrella
-    :username:
+    username:
     password:
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
-
     hibernate:
       ddl-auto: create
     properties:

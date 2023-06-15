@@ -11,6 +11,7 @@ import com.umbrella.domain.exception.PostExceptionType;
 import com.umbrella.domain.exception.UserException;
 import com.umbrella.domain.exception.UserExceptionType;
 import com.umbrella.dto.Heart.HeartRequestDto;
+import com.umbrella.dto.Heart.HeartResponseDto;
 import com.umbrella.security.utils.SecurityUtil;
 import com.umbrella.service.HeartService;
 import lombok.RequiredArgsConstructor;
@@ -64,7 +65,8 @@ public class HeartServiceImpl implements HeartService {
         if(!Objects.equals(user.getId(), securityUtil.getLoginUserId())){
             throw new UserException(UserExceptionType.UN_AUTHORIZE_ERROR);
         }
-        if(postHeart == null){
+        if(postHeart != null){
+            System.out.println(postHeart);
             throw new PostException(PostExceptionType.ALREADY_PUSH_ERROR);
         }
     }
@@ -74,7 +76,7 @@ public class HeartServiceImpl implements HeartService {
         if(!Objects.equals(user.getId(), securityUtil.getLoginUserId())){
             throw new UserException(UserExceptionType.UN_AUTHORIZE_ERROR);
         }
-        if(postHeart != null){
+        if(postHeart == null){
             throw new PostException(PostExceptionType.NON_PUSH_ERROR);
         }
     }
