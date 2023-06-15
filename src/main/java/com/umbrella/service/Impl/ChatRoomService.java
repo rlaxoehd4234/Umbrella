@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
 
 import static com.umbrella.domain.exception.ChatRoomExceptionType.*;
 
@@ -72,6 +72,7 @@ public class ChatRoomService {
             ChatRoomDto chatRoomDto = ChatRoomDto.builder()
                     .chatRoomId(chatRoom.getId())
                     .roomName(chatRoom.getRoomName())
+                    .createdBy(chatRoom.getCreatedBy())
                     .build();
 
             chatRoomDtoList.add(chatRoomDto);
@@ -80,7 +81,7 @@ public class ChatRoomService {
     }
 
     // 채팅방 생성, 작성자는 자동 채팅방 참여
-    public List<ChatRoomDto> saveChatRoom(CreateChatRoomDto createChatRoomDto){
+    public List<ChatRoomDto> saveChatRoom(Long workspaceId, CreateChatRoomDto createChatRoomDto){
 
         // 채팅방 이름 중복 체크
         String chatRoomName = validateChatRoomName(createChatRoomDto.getRoomName());
@@ -89,7 +90,7 @@ public class ChatRoomService {
                 .orElseThrow(() -> new UserException(UserExceptionType.NOT_FOUND_ERROR));
 
         ChatRoom chatRoom = ChatRoom.builder()
-                .workSpace(validateWorkspace(createChatRoomDto.getWorkSpaceId()))
+                .workSpace(validateWorkspace(workspaceId))
                 .roomName(chatRoomName)
                 .createdBy(user.getNickName())
                 .build();
@@ -100,7 +101,10 @@ public class ChatRoomService {
                 .chatRoom(savedChatRoom)
                 .user(user)
                 .build(); // 채팅방 작성자는 바로 채팅방 생성시 채팅방에 들어가겠끔
-        return allChatRoomsInWorkSpace(createChatRoomDto.getWorkSpaceId());
+
+        chatRoomUserJoinRepository.save(chatRoomUserJoin);
+
+        return allChatRoomsInWorkSpace(workspaceId);
     }
 
     // 채팅방 참여 -> 어떤 유저가 어떤 채팅방에 참여했는지
@@ -122,19 +126,22 @@ public class ChatRoomService {
     }
 
     // 채팅방 이름 업데이트 -> 작성자만 가능
-    public void updateChatRoomName(UpdateChatRoomNameDto updateChatRoomNameDto){
+    public List<ChatRoomDto> updateChatRoomName(Long workSpaceId, UpdateChatRoomNameDto updateChatRoomNameDto){
         ChatRoom chatRoom = validateChatRoom(updateChatRoomNameDto.getChatRoomId());
 
         chatRoom.chatRoomNameUpdate(updateChatRoomNameDto.getUpdateChatRoomName());
 
         chatRoomRepository.save(chatRoom);
-
+        return allChatRoomsInWorkSpace(workSpaceId);
     }
 
     // 채팅방 삭제 -> 작성자만 가능, MongoDB에도 챗 기록 삭제 DTO 날려야 함
-    public void deleteChatRoom(UpdateChatRoomNameDto updateChatRoomNameDto){
-        ChatRoom chatRoom = validateChatRoom(updateChatRoomNameDto.getChatRoomId());
-        chatRoomRepository.deleteById(chatRoom.getId());
+    public List<ChatRoomDto> deleteChatRoom(Long workSpaceId, Long chatRoomId){
+        ChatRoom chatRoom = validateChatRoom(chatRoomId);
+
+        chatRoomRepository.delete(chatRoom);
+
+        return allChatRoomsInWorkSpace(workSpaceId);
     }
 
 

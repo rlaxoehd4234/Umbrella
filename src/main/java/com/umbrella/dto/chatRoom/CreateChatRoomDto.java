@@ -17,7 +17,4 @@ public class CreateChatRoomDto {
     @Size(min = 2, max = 500, message = "1자 이상, 500자 이하만 가능합니다.")
     private String roomName;
 
-    @NotNull
-    private Long workSpaceId;
-
 }
