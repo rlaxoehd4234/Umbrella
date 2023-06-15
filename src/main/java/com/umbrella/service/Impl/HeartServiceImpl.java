@@ -34,7 +34,7 @@ public class HeartServiceImpl implements HeartService {
     public HeartResponseDto insert(HeartRequestDto requestDto) {
         User user = searchUser();
         Post post = searchPost(requestDto.getPostId());
-        validateInsertUser(user,post);
+        HeartResponseDto responseDto = validateInsertUser(user,post);
         PostHeart postHeart =
                 PostHeart.builder()
                 .user(user)
@@ -43,7 +43,7 @@ public class HeartServiceImpl implements HeartService {
         post.addHeart();
         postHeartRepository.save(postHeart);
 
-        return new HeartResponseDto(true);
+        return responseDto;
 
     }
 
@@ -58,23 +58,26 @@ public class HeartServiceImpl implements HeartService {
         return new HeartResponseDto(false);
     }
 
-    public void validateInsertUser(User user, Post post){
-        PostHeart postHeart = postHeartRepository.findByUserAndPost(user,post);
-        if(!Objects.equals(user.getId(), securityUtil.getLoginUserId())){
-            throw new UserException(UserExceptionType.UN_AUTHORIZE_ERROR);
-        }
-        if(postHeart != null){
-            throw new PostException(PostExceptionType.ALREADY_PUSH_ERROR);
-        }
-    }
-    public void validateDeleteUser(User user, Post post){
+    public HeartResponseDto validateInsertUser(User user, Post post){
         PostHeart postHeart = postHeartRepository.findByUserAndPost(user,post);
         if(!Objects.equals(user.getId(), securityUtil.getLoginUserId())){
             throw new UserException(UserExceptionType.UN_AUTHORIZE_ERROR);
         }
         if(postHeart == null){
-            throw new PostException(PostExceptionType.NON_PUSH_ERROR);
+            return new HeartResponseDto(true);
         }
+        else throw new PostException(PostExceptionType.ALREADY_PUSH_ERROR);
+    }
+
+    public HeartResponseDto validateDeleteUser(User user, Post post){
+        PostHeart postHeart = postHeartRepository.findByUserAndPost(user,post);
+        if(!Objects.equals(user.getId(), securityUtil.getLoginUserId())){
+            throw new UserException(UserExceptionType.UN_AUTHORIZE_ERROR);
+        }
+        if(postHeart != null){
+            return new HeartResponseDto(false);
+        }
+        else throw new PostException(PostExceptionType.NON_PUSH_ERROR);
     }
 
 
