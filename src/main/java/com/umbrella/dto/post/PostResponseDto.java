@@ -16,6 +16,7 @@ public class PostResponseDto {
     private Long postId;
     private String title;
     private String writer;
+    private String nickname;
     private String content;
     private Integer likeCount;
 
@@ -24,6 +25,7 @@ public class PostResponseDto {
         this.postId = post.getId();
         this.title = post.getTitle();
         this.writer = post.getUser().getName();
+        this.nickname = post.getUser().getNickName();
         this.content = post.getContent();
         this.likeCount = getLikeCount();
     }
