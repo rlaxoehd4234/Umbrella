@@ -45,3 +45,5 @@
 - AWS ALB
 - AWS CM
 - AWS API GATEWAY
+- AWS S3
+
